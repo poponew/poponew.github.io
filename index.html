@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>泡泡牛-手做甜點</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-12">
+
+    <nav class="bg-white shadow-sm sticky top-0 z-50 px-6 py-4 flex justify-between items-center border-b border-stone-100">
+        <span class="text-xl font-bold text-amber-800 tracking-wider"></span>
+        <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-2 px-4 rounded-xl transition flex items-center gap-2 shadow-sm">
+            🛒 我的購物車 (<span id="cart-count">0</span>)
+        </a>
+    </nav>
+
+    <div class="max-w-5xl mx-auto px-4 my-8">
+        <header class="text-center py-10 bg-white rounded-2xl shadow-sm border border-stone-100 mb-8">
+            <h1 class="text-4xl font-extrabold text-amber-800 tracking-wider">泡泡牛。手做甜點</h1>
+            <p class="text-stone-500 mt-3 max-w-xl mx-auto text-sm px-4">全店手工現做，滿 NT$ 2,000 元即享免運費宅配！</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-list"></div>
+    </div>
+
+    <script>
+        const products = [
+    {
+        id: "group-2",
+        name: "抹茶柚子巴斯克",
+        price: "140 起",
+        img: "images/mcyobsk.png",
+        desc: "日本小山園抹茶的成熟微苦，撞上嚴選柚子的清新果香，濃郁綿密。宇治抹茶控必吃！",
+        url: "mcyobsk.html"
+    },
+    {
+        id: "group-1",
+        name: "美式軟餅乾",
+        price: "100 起",
+        img: "images/msbg.png",
+        desc: "紐約 Levain 風味復刻！外酥內軟的極致厚實療癒口感。",
+        url: "msbg.html"
+    },
+];
+
+        const listContainer = document.getElementById('product-list');
+        products.forEach(p => {
+            listContainer.innerHTML += `
+                <a href="${p.url}" class="bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                    <div class="h-48 bg-stone-200 overflow-hidden">
+                        <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </div>
+                    <div class="p-5 flex-grow flex flex-col justify-between">
+                        <div>
+                            <h2 class="text-lg font-bold text-stone-800 mb-1 group-hover:text-amber-800 transition">${p.name}</h2>
+                            <p class="text-stone-500 text-xs leading-relaxed mb-4">${p.desc}</p>
+                        </div>
+                        <div class="pt-3 border-t border-stone-100 flex justify-between items-center">
+                            <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700">NT$ ${p.price}</span></span>
+                            <span class="text-amber-700 font-medium text-xs flex items-center gap-1 group-hover:underline">
+                                前往選購 ➔
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            `;
+        });
+
+        function updateCartCount() {
+            let cart = JSON.parse(localStorage.getItem('poponew_cart')) || {};
+            const count = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+            document.getElementById('cart-count').innerText = count;
+        }
+        
+        updateCartCount();
+    </script>
+</body>
+</html>

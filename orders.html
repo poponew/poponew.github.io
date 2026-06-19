@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐄 泡泡牛甜點 - 線上訂單管理中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-stone-100 text-stone-800 font-sans p-6">
+
+    <div class="max-w-6xl mx-auto space-y-6">
+        <header class="bg-indigo-900 text-white p-6 rounded-2xl shadow-md flex justify-between items-center flex-wrap gap-4">
+            <div>
+                <h1 class="text-2xl font-bold tracking-wider">🐄 泡泡牛甜點 - 獨立訂單管理中心</h1>
+                <p class="text-xs text-indigo-200 mt-1">【本地防漏單歷史紀錄中心】客人在前台點擊送出，這裡就會自動收集！</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="admin.html" class="bg-indigo-800 hover:bg-indigo-700 text-white border border-indigo-600 font-medium py-2 px-4 rounded-xl transition text-xs">
+                    ⬅ 點此返回商品管理後台
+                </a>
+                <span class="bg-emerald-900/50 text-emerald-100 text-xs px-3 py-2 rounded-lg border border-emerald-700 font-mono">系統即時監控中</span>
+            </div>
+        </header>
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+            <div class="border-b border-stone-100 pb-4 mb-4 flex justify-between items-center flex-wrap gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-stone-800 flex items-center gap-1.5">📋 客人線上訂購明細看板</h2>
+                    <p class="text-xs text-stone-400 mt-0.5">依照收單時間由新到舊排序。如畫面沒更新，重新整理本頁即可。</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="exportOrdersToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl transition shadow-sm text-xs active:scale-95">
+                        📊 匯出訂單 Excel (CSV)
+                    </button>
+                    <button onclick="clearAllOrders()" class="bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 px-4 py-2 rounded-xl transition text-xs active:scale-95">
+                        🗑️ 清空歷史訂單
+                    </button>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto border border-stone-100 rounded-xl shadow-inner">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-stone-50 border-b border-stone-200 text-stone-600 font-bold">
+                            <th class="p-3 whitespace-nowrap">訂單編號 / 收單時間</th>
+                            <th class="p-3 whitespace-nowrap">客戶基本資料</th>
+                            <th class="p-3 whitespace-nowrap">寄送詳情與付款備註</th>
+                            <th class="p-3">訂購產品明細內容</th>
+                            <th class="p-3 whitespace-nowrap text-right">總計金額</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-table-body" class="divide-y divide-stone-100 text-stone-700">
+                        </tbody>
+                </table>
+            </div>
+            <div id="no-orders-tip" class="text-center py-12 text-stone-400 text-sm hidden">目前本地尚無客人建立線上訂單。</div>
+        </div>
+    </div>
+
+    <script>
+        // 渲染與讀取本地訂單
+        function renderOrderTable() {
+            const tbody = document.getElementById('order-table-body');
+            const noOrdersTip = document.getElementById('no-orders-tip');
+            tbody.innerHTML = '';
+            
+            // 抓取與 cart.html 共用的本地訂單資料
+            let orderHistory = JSON.parse(localStorage.getItem('poponew_order_history')) || [];
+            
+            if (orderHistory.length === 0) {
+                noOrdersTip.classList.remove('hidden');
+                return;
+            } else {
+                noOrdersTip.classList.add('hidden');
+            }
+            
+            // 從新到舊排列
+            // 使用 slice().reverse() 避免破壞原始陣列順序，造成 CSV 導出順序錯亂
+            orderHistory.slice().reverse().forEach(order => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-stone-50/80 border-b border-stone-100 transition";
+                
+                let formattedDetails = (order.order_details || '').replace(/\n/g, '<br>');
+                
+                tr.innerHTML = `
+                    <td class="p-3 font-mono leading-relaxed">
+                        <span class="text-indigo-900 desert-theme-color font-bold block text-sm">${order.order_id}</span>
+                        <span class="text-stone-400 text-[10px] block mt-0.5">${order.order_time}</span>
+                    </td>
+                    <td class="p-3 leading-relaxed">
+                        <span class="font-bold text-stone-800 block text-sm">${order.customer_name}</span>
+                        <span class="text-stone-600 block font-mono">${order.customer_phone}</span>
+                        <span class="text-stone-400 text-[11px] block max-w-xs truncate" title="${order.customer_email}">${order.customer_email}</span>
+                    </td>
+                    <td class="p-3 leading-relaxed">
+                        <span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded text-[10px] font-bold inline-block mb-1">${order.payment_method} (${order.account_last_five})</span>
+                        <span class="text-stone-600 block text-[11px] max-w-xs break-all">${order.customer_address}</span>
+                        <span class="text-amber-700 block text-[11px] mt-1 font-medium">📌 備註: ${order.customer_note}</span>
+                    </td>
+                    <td class="p-3 font-mono text-[11px] leading-relaxed text-stone-600">${formattedDetails}</td>
+                    <td class="p-3 text-right font-bold text-indigo-900 text-base font-mono">NT$ ${order.total_price}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 清空歷史訂單
+        function clearAllOrders() {
+            if (confirm("⚠️ 確定要永久清空所有收集到的訂單紀錄嗎？\n此操作會連同 Excel 的導出資料一起清除，不可還原唷！")) {
+                localStorage.removeItem('poponew_order_history');
+                renderOrderTable();
+                alert("已成功清空所有歷史訂單。");
+            }
+        }
+
+        // 一鍵導出訂單 Excel
+        function exportOrdersToCSV() {
+            let orderHistory = JSON.parse(localStorage.getItem('poponew_order_history')) || [];
+            if (orderHistory.length === 0) { alert("目前還沒有任何訂單可以匯出唷！"); return; }
+            
+            let csvRows = [];
+            csvRows.push('\uFEFF訂單編號,訂購時間,客戶姓名,聯絡電話,電子郵件,付款方式,帳號後五碼,外送/寄送地址,訂單產品明細,總金額,客戶備註');
+            
+            orderHistory.forEach(o => {
+                let cleanDetails = (o.order_details || '').replace(/"/g, '""').replace(/\n/g, ' / ');
+                let cleanAddr = (o.customer_address || '').replace(/"/g, '""');
+                let cleanNote = (o.customer_note || '').replace(/"/g, '""');
+                
+                csvRows.push(`"${o.order_id}","${o.order_time}","${o.customer_name}","${o.customer_phone}","${o.customer_email}","${o.payment_method}","${o.account_last_five}","${cleanAddr}","${cleanDetails}",${o.total_price},"${cleanNote}"`);
+            });
+            
+            let csvString = csvRows.join('\n');
+            let blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            
+            let today = new Date().toISOString().split('T')[0];
+            link.setAttribute("download", `泡泡牛訂單大補帖_${today}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // 初始化載入
+        renderOrderTable();
+    </script>
+</body>
+</html>

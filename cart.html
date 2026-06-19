@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>泡泡牛甜點 - 購物車結帳</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init("plo9UwCdQBE-7lT18");
+        })();
+    </script>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-24">
+
+    <div class="max-w-2xl mx-auto bg-white shadow-lg md:rounded-2xl overflow-hidden my-0 md:my-8 p-5 flex flex-col min-h-[90vh]">
+        <a href="index.html" class="text-amber-800 hover:text-amber-900 font-medium text-sm mb-5 inline-flex items-center gap-1 py-1">
+            ← 返回繼續選購甜點
+        </a>
+        
+        <h1 class="text-xl font-bold text-stone-800 border-b pb-3 mb-5 flex items-center gap-2">
+            🛒 您的購物清單
+        </h1>
+
+        <div id="cart-items" class="space-y-3 mb-5"></div>
+
+        <div class="p-4 bg-amber-50 rounded-xl border border-amber-100 mb-5 space-y-2 text-sm">
+            <div class="flex justify-between">
+                <span class="text-stone-600">商品小計：</span>
+                <span class="font-bold text-stone-800">NT$ <span id="subtotal-price">0</span></span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-stone-600">冷凍宅配運費：</span>
+                <span class="font-bold text-stone-800" id="shipping-fee-text">NT$ 80</span>
+            </div>
+            <div class="flex justify-between items-center pt-2 border-t border-amber-200 text-base">
+                <span class="font-medium text-amber-900">總計金額：</span>
+                <span class="text-xl font-bold text-amber-700">NT$ <span id="total-price">0</span></span>
+            </div>
+            <p id="free-shipping-tip" class="text-xs text-amber-600 text-right font-medium pt-1"></p><p id="bulk-order-tip" class="hidden text-xs text-red-600 font-bold pt-1"></p>
+        </div>
+
+        <form id="orderForm" onsubmit="submitOrder(event)" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-stone-600 mb-1">姓名 <span class="text-red-500">*</span></label>
+                    <input type="text" id="name" required class="w-full h-11 px-4 border border-stone-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-base">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-stone-600 mb-1">手機號碼 <span class="text-red-500">*</span></label>
+                    <input type="tel" id="phone" required pattern="^09\d{8}$" placeholder="例如: 0912345678" class="w-full h-11 px-4 border border-stone-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-base">
+                </div>
+            </div>
+
+            <p class="text-xs text-red-500 font-medium mb-1.5 flex items-center gap-1">
+                ⚠️ 目前僅限台灣本島冷凍寄送，暫不開放離島區域，敬請見諒。
+            </p>
+            
+            <div class="grid grid-cols-2 gap-4 bg-stone-50 p-3 rounded-xl border border-stone-200">
+                <div>
+                    <label class="block text-xs font-medium text-stone-500 mb-1">收件縣市 <span class="text-red-500">*</span></label>
+                    <select id="county-select" onchange="onCountyChange()" required class="w-full h-10 px-2 border border-stone-300 rounded-lg bg-white focus:outline-none text-sm">
+                        <option value="">請選擇縣市</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-stone-500 mb-1">收件區域 (郵遞區號) <span class="text-red-500">*</span></label>
+                    <select id="district-select" onchange="onDistrictChange()" required class="w-full h-10 px-2 border border-stone-300 rounded-lg bg-white focus:outline-none text-sm">
+                        <option value="">請先選擇縣市</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-stone-600 mb-1">收件詳細地址 <span class="text-red-500">*</span></label>
+                <input type="text" id="address" required class="w-full h-11 px-4 border border-stone-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-base" placeholder="請填寫路名、巷弄、門牌與樓層">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-stone-600 mb-1">Email <span class="text-red-500">*</span></label>
+                <input type="email" id="email" required class="w-full h-11 px-4 border border-stone-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-base">
+            </div>
+
+            <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-3">
+                <label class="block text-sm font-semibold text-stone-700 border-b border-stone-200 pb-1">付款方式 <span class="text-red-500">*</span></label>
+                <p class="text-xs text-amber-700 mt-2 mb-1">
+    💡 貼心提醒：單筆訂單金額達 NT$2,000 以上時，將不提供貨到付款服務，系統會自動隱藏貨到付款選項。
+</p>
+                <div class="flex gap-6 text-base py-1">
+                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                        <input type="radio" name="payment_method" value="轉帳匯款" checked onchange="togglePaymentInfo(this.value)" class="w-4 h-4 text-amber-700">
+                        <span>銀行轉帳匯款</span>
+                    </label>
+                    <label id="cod-option" class="flex items-center gap-2 cursor-pointer select-none">
+                        <input type="radio" name="payment_method" value="貨到付款" onchange="togglePaymentInfo(this.value)" class="w-4 h-4 text-amber-700">
+                        <span>貨到付款</span>
+                    </label>
+                </div>
+
+                <div id="transfer-info" class="bg-white p-3 rounded-lg border border-stone-100 text-xs text-stone-600 space-y-2">
+                    <div class="bg-stone-50 p-2.5 rounded-lg border border-stone-200 flex justify-between items-center flex-wrap gap-2">
+                        <div>
+                            <p class="font-medium text-amber-900 text-sm">🏦 中國信託 (822)</p>
+                            <p class="text-stone-700 font-mono text-sm mt-0.5" id="bank-account-num">439540154414</p>
+                            <p class="text-stone-500">戶名：吳宥蒼</p>
+                        </div>
+                        <button type="button" onclick="copyAccount()" class="bg-stone-200 hover:bg-stone-300 text-stone-700 px-3 py-1.5 rounded-md font-medium transition active:scale-95">
+                            📋 複製帳號
+                        </button>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-stone-700 mb-1">請輸入您的轉帳帳號後五碼 <span class="text-red-500">*</span></label>
+                        <input type="text" id="account_last_five" placeholder="例如: 12345" class="w-full md:w-1/2 h-9 px-3 border border-stone-300 rounded-md focus:outline-none text-base">
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-stone-600 mb-1">備註欄位</label>
+                <textarea id="note" rows="2" class="w-full p-3 border border-stone-300 rounded-xl focus:outline-none text-base" placeholder="有什麼想告訴我們的嗎？（本店免用統一發票，若需要收據請於此處備註唷！）"></textarea>
+            </div>
+
+            
+            <div class="flex items-center gap-2 bg-stone-50 p-3 rounded-xl border">
+                <input type="checkbox" id="not-robot" required class="w-4 h-4">
+                <label for="not-robot" class="text-sm">我不是機器人</label>
+            </div>
+
+            <button type="submit" id="submit-btn" class="w-full h-12 bg-amber-700 hover:bg-amber-800 text-white font-medium rounded-xl transition shadow-md mt-4 text-base">
+                確認送出訂單
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // 內建全台灣縣市區域與郵遞區號靜態資料庫（已移除離島區域）
+        const twZipData = {
+            "基隆市": {"仁愛區":"200","信義區":"201","中正區":"202","中山區":"203","安樂區":"204","暖暖區":"205","七堵區":"206"},
+            "臺北市": {"中正區":"100","大同區":"103","中山區":"104","鬆山區":"105","大安區":"106","萬華區":"108","信義區":"110","士林區":"111","北投區":"112","內湖區":"114","南港區":"115","文山區":"116"},
+            "新北市": {"萬里區":"207","金山區":"208","板橋區":"220","汐止區":"221","深坑區":"222","石碇區":"223","瑞芳區":"224","平溪區":"226","雙溪區":"227","貢寮區":"228","新店區":"231","坪林區":"232","烏來區":"233","永和區":"234","中和區":"235","土城區":"236","三峽區":"237","樹林區":"238","鶯歌區":"239","三重區":"241","新莊區":"242","泰山區":"243","五股區":"244","蘆洲區":"247","三芝區":"252","石門區":"253","八里區":"249","淡水區":"251"},
+            "桃園市": {"中壢區":"320","平鎮區":"324","龍潭區":"325","楊梅區":"326","新屋區":"327","觀音區":"328","桃園區":"330","龜山區":"333","八德區":"334","大溪區":"335","復興區":"336","大園區":"337","蘆竹區":"338"},
+            "新竹市": {"東區":"300","北區":"300","香山區":"300"},
+            "新竹縣": {"竹北市":"302","湖口鄉":"303","新豐鄉":"304","新埔鎮":"305","關西鎮":"306","芎林鄉":"307","寶山鄉":"308","竹東鎮":"310","五峰鄉":"311","橫山鄉":"312","尖石鄉":"313","北埔鄉":"314","峨眉鄉":"315"},
+            "苗栗縣": {"竹南鎮":"350","頭份市":"351","三灣鄉":"352","南莊鄉":"353","獅潭鄉":"354","後龍鎮":"356","通霄鎮":"357","苑裡鎮":"358","苗栗市":"360","造橋鄉":"361","頭屋鄉":"362","公館鄉":"363","大湖鄉":"364","泰安鄉":"365","銅鑼鄉":"366","三義鄉":"367","西湖鄉":"368","卓蘭鎮":"369"},
+            "臺中市": {"中區":"400","東區":"401","南區":"402","西區":"403","北區":"404","北屯區":"406","西屯區":"407","南屯區":"408","太平區":"411","大里區":"412","霧峰區":"413","烏日區":"414","豐原區":"420","後里區":"421","石岡區":"422","東勢區":"423","和平區":"424","新社區":"425","潭子區":"427","大雅區":"428","神岡區":"429","大肚區":"432","沙鹿區":"433","龍井區":"434","梧棲區":"435","清水區":"436","大甲區":"437","外埔區":"438","大安區":"439"},
+            "彰化縣": {"彰化市":"500","芬園鄉":"502","花壇鄉":"503","秀水鄉":"504","鹿港鎮":"505","福興鄉":"506","線西鄉":"507","伸港鄉":"508","和美鎮":"509","社頭鄉":"511","二水鄉":"512","田中鎮":"513","溪州鄉":"514","竹塘鄉":"515","二林鎮":"516","大城鄉":"517","芳苑鄉":"518","溪湖鎮":"522","埔心鄉":"523","埔鹽鄉":"524","永靖鄉":"525","員林市":"510","大村鄉":"515","北斗鎮":"521"},
+            "南投縣": {"南投市":"540","中寮鄉":"541","草屯鎮":"542","國姓鄉":"544","埔里鎮":"545","仁愛鄉":"546","名間鄉":"551","集集鎮":"552","水里鄉":"553","魚池鄉":"555","信義鄉":"556","竹山鎮":"557","鹿谷鄉":"558"},
+            "雲林縣": {"斗南鎮":"630","大埤鄉":"631","虎尾鎮":"632","土庫鎮":"633","褒忠鄉":"634","東勢鄉":"635","臺西鄉":"636","崙背鄉":"637","麥寮鄉":"638","斗六市":"640","林內鄉":"646","古坑鄉":"647","二長鄉":"648","西螺鎮":"648","水林鄉":"651","口湖鄉":"652","四湖鄉":"653","北港鎮":"651","元長鄉":"655","莿桐鄉":"643"},
+            "嘉義市": {"東區":"600","西區":"600"},
+            "嘉義縣": {"番路鄉":"602","梅山鄉":"603","竹崎鄉":"604","阿里山鄉":"605","中埔鄉":"606","大埔鄉":"607","水上鄉":"608","鹿草鄉":"609","太保市":"612","朴子市":"613","東石鄉":"614","六腳鄉":"615","新港鄉":"616","民雄鄉":"621","大林鎮":"622","溪口鄉":"623","義竹鄉":"624","布袋鎮":"625"},
+            "臺南市": {"中西區":"700","東區":"701","南區":"702","北區":"704","安平區":"708","安南區":"709","永康區":"710","歸仁區":"711","新化區":"712","左鎮區":"713","玉井區":"714","楠西區":"715","南化區":"716","仁德區":"717","關廟區":"718","龍崎區":"719","官田區":"720","麻豆區":"721","佳里區":"722","西港區":"723","七股區":"724","將軍區":"725","學甲區":"726","北門區":"727","新營區":"730","後壁區":"731","白河區":"732","東山區":"733","六甲區":"734","下營區":"735","柳營區":"736","鹽水區":"737","善化區":"741","大內區":"742","山上區":"743","新市區":"744","安定區":"745"},
+            "高雄市": {"新興區":"800","前金區":"801","苓雅區":"802","鹽埕區":"803","鼓山區":"804","旗津區":"805","前鎮區":"806","三民區":"807","楠梓區":"808","小港區":"809","左營區":"811","仁武區":"814","大社區":"815","岡山區":"820","路竹區":"821","阿蓮區":"822","田寮區":"823","燕巢區":"824","橋頭區":"825","梓官區":"826","彌陀區":"827","永安區":"828","湖內區":"829","鳳山區":"830","大寮區":"831","林園區":"832","鳥松區":"833","大樹區":"840","旗山區":"842","美濃區":"843","六龜區":"844","內門區":"845","杉林區":"846","甲仙區":"847","桃源區":"848","那瑪夏區":"849","茂林區":"851","茄萣區":"852"},
+            "屏東縣": {"屏東市":"900","三地門鄉":"901","霧臺鄉":"902","瑪家鄉":"903","九如鄉":"904","里港鄉":"905","高樹鄉":"906","鹽埔鄉":"907","長治鄉":"908","麟洛鄉":"909","竹田鄉":"911","內埔鄉":"912","萬丹鄉":"913","潮州鎮":"920","泰武鄉":"921","來義鄉":"922","萬巒鄉":"923","嵌頂鄉":"924","新埤鄉":"925","南州鄉":"926","林邊鄉":"927","東港鎮":"928","琉球鄉":"929","佳冬鄉":"931","新園鄉":"932","枋寮鄉":"940","枋山鄉":"941","春日鄉":"942","獅子鄉":"943","車城鄉":"944","牡丹鄉":"945","恆春鎮":"946","滿州鄉":"947"},
+            "臺東縣": {"臺東市":"950","綠島鄉":"951","蘭嶼鄉":"952","延平鄉":"953","卑南鄉":"954","鹿野鄉":"955","關山鎮":"956","海端鄉":"957","池上鄉":"958","東河鄉":"959","成功鎮":"961","長濱鄉":"962","太麻里鄉":"963","金峰鄉":"964","大武鄉":"965","達仁鄉":"966"},
+            "花蓮縣": {"花蓮市":"970","新城鄉":"971","秀林鄉":"972","吉安鄉":"973","壽豐鄉":"974","鳳林鎮":"975","光復鄉":"976","豐濱鄉":"977","瑞穗鄉":"978","萬榮鄉":"979","玉里鎮":"981","卓溪鄉":"982","富里鄉":"983"},
+            "宜蘭縣": {"宜蘭市":"260","頭城鎮":"261","礁溪鄉":"262","壯圍鄉":"263","員山鄉":"264","羅東鎮":"265","三星鄉":"266","大同鄉":"267","五結鄉":"268","冬山鄉":"269","蘇澳鎮":"270","南澳鄉":"272","釣魚臺":"290"}
+        };
+
+        const productsLookup = {
+            "1": { name: "經典核桃美式軟餅乾", weight: "120g", price: 100 },
+            "2": { name: "草莓棉花糖核桃巧克力軟餅乾", weight: "120g", price: 125 },
+            "3": { name: "杏仁片棉花糖苦甜巧克力", weight: "120g", price: 125 },
+            "4": { name: "Oreo 碎片棉花糖巧克力", weight: "120g", price: 125 },
+            "5": { name: "醇黑榛果巧克力", weight: "120g", price: 110 },
+            "6": { name: "柑橘奶酪", weight: "160g", price: 130 },
+            "7": { name: "經典Oreo奶酪", weight: "160g", price: 130 },
+            "8": { name: "酸甜綜合莓果奶酪", weight: "160g", price: 130 },
+            "9": { name: "抹茶柚子巴斯克 (6吋切片)", weight: "115g", price: 140 },
+            "10": { name: "抹茶柚子巴斯克 (6吋整顆)", weight: "690g", price: 840 },
+        };
+
+        let cart = JSON.parse(localStorage.getItem('poponew_cart')) || {};
+        let productSubtotal = 0;
+        let shippingFee = 80;
+
+        const countySelect = document.getElementById('county-select');
+        const districtSelect = document.getElementById('district-select');
+        let selectedZip = "";
+
+        // 用內建資料初始化縣市
+        function initTwZipcode() {
+            countySelect.innerHTML = '<option value="">請選擇縣市</option>';
+            for (const county in twZipData) {
+                countySelect.innerHTML += `<option value="${county}">${county}</option>`;
+            }
+            districtSelect.innerHTML = '<option value="">請先選擇縣市</option>';
+        }
+
+        // 當縣市改變時，動態帶入區域與郵遞區號
+        function onCountyChange() {
+            const county = countySelect.value;
+            districtSelect.innerHTML = '<option value="">請選擇區域</option>';
+            selectedZip = "";
+            
+            if (!county || !twZipData[county]) return;
+
+            const districts = twZipData[county];
+            for (const [distName, zipCode] of Object.entries(districts)) {
+                districtSelect.innerHTML += `<option value="${distName}" data-zip="${zipCode}">${zipCode} ${distName}</option>`;
+            }
+        }
+
+        function onDistrictChange() {
+            const selectedOption = districtSelect.options[districtSelect.selectedIndex];
+            selectedZip = selectedOption.getAttribute('data-zip') || "";
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items');
+            container.innerHTML = '';
+            productSubtotal = 0;
+            let hasItems = false;
+
+            for (const [id, qty] of Object.entries(cart)) {
+                if (qty <= 0) continue;
+                hasItems = true;
+                const p = productsLookup[id];
+                if (!p) continue;
+
+                productSubtotal += p.price * qty;
+
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-3 bg-stone-50 rounded-xl border border-stone-200">
+                        <div class="pr-2">
+                            <h3 class="font-medium text-stone-800 text-sm">${p.name}</h3>
+                            <p class="text-[12px] text-stone-400 mt-0.5"> 約 ${p.weight || '120g'}</p>
+                            <p class="text-xs text-amber-700 font-semibold mt-0.5">NT$ ${p.price} x ${qty}</p>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <button type="button" onclick="changeQty('${id}', -1)" class="w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold text-base shadow-sm active:bg-stone-100">-</button>
+                            <span class="w-5 text-center text-sm font-semibold">${qty}</span>
+                            <button type="button" onclick="changeQty('${id}', 1)" class="w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold text-base shadow-sm active:bg-stone-100">+</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (!hasItems) {
+                container.innerHTML = `<p class="text-center text-stone-400 py-8 text-sm">您的購物車空空的唷！</p>`;
+                document.getElementById('submit-btn').disabled = true;
+                document.getElementById('submit-btn').classList.add('bg-stone-300', 'cursor-not-allowed');
+            } else {
+                document.getElementById('submit-btn').disabled = false;
+                document.getElementById('submit-btn').classList.remove('bg-stone-300', 'cursor-not-allowed');
+            }
+
+            if (productSubtotal >= 2000) {
+                shippingFee = 0;
+                document.getElementById('shipping-fee-text').innerHTML = `<span class="text-green-600 font-bold">🎉 免運費</span>`;
+                document.getElementById('free-shipping-tip').innerText = `已達 NT$ 2,000 免運門檻！`;
+            } else {
+                shippingFee = 80;
+                document.getElementById('shipping-fee-text').innerText = `NT$ 80`;
+                document.getElementById('free-shipping-tip').innerText = `再買 NT$ ${2000 - productSubtotal} 元即享免運費宅配！`;
+            }
+
+            
+            const bulkTip=document.getElementById('bulk-order-tip');
+            if(productSubtotal>5000){
+                bulkTip.classList.remove('hidden');
+                bulkTip.innerText='您的訂購數量較大，屬於大宗/企業訂單。為了保障您的權益與確認出貨檔期，請直接透過網站下方聯絡方式聯繫我們由專人為您服務！';
+            } else {bulkTip.classList.add('hidden');}
+            const cod=document.getElementById('cod-option');
+            if(productSubtotal>2000){
+                cod.style.display='none';
+                document.querySelector('input[value="轉帳匯款"]').checked=true;
+            } else {cod.style.display='flex';}
+document.getElementById('subtotal-price').innerText = productSubtotal;
+            document.getElementById('total-price').innerText = productSubtotal + shippingFee;
+        }
+
+        function changeQty(id, change) {
+            cart[id] = (cart[id] || 0) + change;
+            if(cart[id]>20){cart[id]=20; alert('單品數量上限為20');}
+            if (cart[id] <= 0) delete cart[id];
+            localStorage.setItem('poponew_cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function copyAccount() {
+            const accountNum = document.getElementById('bank-account-num').innerText;
+            navigator.clipboard.writeText(accountNum).then(() => {
+                alert('已成功複製帳號：' + accountNum);
+            });
+        }
+
+        function togglePaymentInfo(method) {
+            const transferInfo = document.getElementById('transfer-info');
+            const lastFiveInput = document.getElementById('account_last_five');
+            if (method === '轉帳匯款') {
+                transferInfo.classList.remove('hidden');
+                lastFiveInput.required = true;
+            } else {
+                transferInfo.classList.add('hidden');
+                lastFiveInput.required = false;
+            }
+        }
+
+function submitOrder(event) {
+            event.preventDefault();
+            
+            const phoneInput = document.getElementById('phone');
+            const phoneValue = phoneInput.value.trim();
+            const phonePattern = /^09\d{8}$/;
+            
+            if (!phonePattern.test(phoneValue)) {
+                alert('❌ 請輸入正確的台灣手機號碼格式（例如：0912345678）');
+                phoneInput.focus();
+                return;
+            }
+
+            if (!countySelect.value || !districtSelect.value || !selectedZip) {
+                alert('❌ 請選擇完整的收件縣市與區域！');
+                countySelect.focus();
+                return;
+            }
+
+            if(!document.getElementById('not-robot').checked){alert('請勾選我不是機器人');return;}
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "訂單送出中...";
+
+            let orderDetailsText = "";
+            for (const [id, qty] of Object.entries(cart)) {
+                const p = productsLookup[id];
+                if (p) orderDetailsText += `${p.name} (約 ${p.weight || '120g'}) x ${qty} (NT$ ${p.price * qty})\n`;
+            }
+            orderDetailsText += `冷凍宅配運費：NT$ ${shippingFee}\n`;
+
+            // 組合完整的地址字串傳給原本的 customer_address
+            const fullCombinedAddress = `[${selectedZip}] ${countySelect.value}${districtSelect.value} ${document.getElementById('address').value}`;
+
+            // ⚡ 安全防護罩：抓取付款方式，若為空不當掉改填"未選擇"
+            let paymentMethodValue = "未選擇";
+            const checkedPayment = document.querySelector('input[name="payment_method"]:checked');
+            if (checkedPayment) {
+                paymentMethodValue = checkedPayment.value;
+            }
+
+            const templateParams = {
+                customer_name: document.getElementById('name').value,
+                customer_phone: phoneValue,
+                customer_address: fullCombinedAddress, 
+                customer_email: document.getElementById('email').value,
+                payment_method: paymentMethodValue,
+                account_last_five: document.getElementById('account_last_five').value || "貨到付款",
+                customer_note: document.getElementById('note').value || "無",
+                order_details: orderDetailsText,
+                total_price: productSubtotal + shippingFee,
+                admin_email: "hi.poponew@gmail.com"
+            };
+
+            // 這是 cart.html 裡面點擊送出訂單的 Function 內部
+            emailjs.send('service_urrdjuh', 'template_tlon58x', templateParams)
+                .then(function() {
+                    // ========== ⚡ 這裡新增：防漏單本地記憶機制 ==========
+                    try {
+                        // 抓出原本已經存下來的訂單歷史，如果沒有就建立空陣列
+                        let orderHistory = JSON.parse(localStorage.getItem('poponew_order_history')) || [];
+                        
+                        // 建立這筆新訂單的結構
+                        let newOrder = {
+                            order_id: "POPO-" + Date.now(), // 用時間戳記生成不重複的訂單編號
+                            order_time: new Date().toLocaleString('zh-TW'), // 訂購時間
+                            customer_name: templateParams.customer_name,
+                            customer_phone: templateParams.customer_phone,
+                            customer_address: templateParams.customer_address,
+                            customer_email: templateParams.customer_email,
+                            payment_method: templateParams.payment_method,
+                            account_last_five: templateParams.account_last_five,
+                            customer_note: templateParams.customer_note,
+                            order_details: templateParams.order_details, // 口味、規格與數量
+                            total_price: templateParams.total_price
+                        };
+                        
+                        // 推入歷史紀錄並存回 LocalStorage
+                        orderHistory.push(newOrder);
+                        localStorage.setItem('poponew_order_history', JSON.stringify(orderHistory));
+                    } catch (e) {
+                        console.error("本地存單失敗:", e);
+                    }
+                    // ===================================================
+
+                    // 1. 顯示剛剛加進去的自訂精美彈出視窗
+                    document.getElementById('custom-alert-modal').classList.remove('hidden');
+                    
+                    // 2. 清空購物車記憶
+                    localStorage.removeItem('poponew_cart');
+                }, function(error) {
+                    console.error(error);
+                    alert('發送失敗，請確認網頁代碼中的 EmailJS 設定是否正確！');
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "確認送出綜合訂單";
+                });
+        }
+        // 點擊我知道了，關閉彈出視窗並回首頁
+        function closeModalAndGoHome() {
+            document.getElementById('custom-alert-modal').classList.add('hidden');
+            window.location.href = 'index.html';
+        }
+
+        // 執行初始化
+        initTwZipcode();
+        renderCart();
+    </script>
+    <!-- 自訂精美訂單提示視窗 (Modal) -->
+    <div id="custom-alert-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-stone-100 transform scale-95 transition-all text-center">
+            <div class="text-4xl mb-3">🎉</div>
+            <h3 class="text-lg font-bold text-stone-800 mb-2">您的訂單已成功送出！</h3>
+            <p class="text-stone-500 text-sm leading-relaxed mb-5">
+                感謝您的訂購。<br>
+                💡 您的訂單郵件已寄出，如果沒收到訂購 email，請記得到<span class="text-red-500 font-extrabold text-base mx-0.5 underline decoration-2">垃圾郵件</span>看看唷！
+            </p>
+            <button onclick="closeModalAndGoHome()" class="w-full h-11 bg-amber-700 hover:bg-amber-800 text-white font-medium rounded-xl transition shadow-md text-sm active:scale-95">
+                我知道了，回首頁
+            </button>
+        </div>
+    </div>
+</body>
+</html>
