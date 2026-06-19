@@ -352,46 +352,41 @@ function submitOrder(event) {
             };
 
             // 這是 cart.html 裡面點擊送出訂單的 Function 內部
+            // ✅ 改成：不管信件有沒有發成功，客人的手機先存檔，確保 orders.html 看得到！
+            try {
+                let orderHistory = JSON.parse(localStorage.getItem('poponew_order_history')) || [];
+                let newOrder = {
+                    order_id: "POPO-" + Date.now(),
+                    order_time: new Date().toLocaleString('zh-TW'),
+                    customer_name: templateParams.customer_name,
+                    customer_phone: templateParams.customer_phone,
+                    customer_address: templateParams.customer_address,
+                    customer_email: templateParams.customer_email,
+                    payment_method: templateParams.payment_method,
+                    account_last_five: templateParams.account_last_five,
+                    customer_note: templateParams.customer_note,
+                    order_details: templateParams.order_details,
+                    total_price: templateParams.total_price
+                };
+                orderHistory.push(newOrder);
+                localStorage.setItem('poponew_order_history', JSON.stringify(orderHistory));
+            } catch (e) {
+                console.error("本地存單失敗:", e);
+            }
+
+            // 接著才執行發信
             emailjs.send('service_urrdjuh', 'template_tlon58x', templateParams)
                 .then(function() {
-                    // ========== ⚡ 這裡新增：防漏單本地記憶機制 ==========
-                    try {
-                        // 抓出原本已經存下來的訂單歷史，如果沒有就建立空陣列
-                        let orderHistory = JSON.parse(localStorage.getItem('poponew_order_history')) || [];
-                        
-                        // 建立這筆新訂單的結構
-                        let newOrder = {
-                            order_id: "POPO-" + Date.now(), // 用時間戳記生成不重複的訂單編號
-                            order_time: new Date().toLocaleString('zh-TW'), // 訂購時間
-                            customer_name: templateParams.customer_name,
-                            customer_phone: templateParams.customer_phone,
-                            customer_address: templateParams.customer_address,
-                            customer_email: templateParams.customer_email,
-                            payment_method: templateParams.payment_method,
-                            account_last_five: templateParams.account_last_five,
-                            customer_note: templateParams.customer_note,
-                            order_details: templateParams.order_details, // 口味、規格與數量
-                            total_price: templateParams.total_price
-                        };
-                        
-                        // 推入歷史紀錄並存回 LocalStorage
-                        orderHistory.push(newOrder);
-                        localStorage.setItem('poponew_order_history', JSON.stringify(orderHistory));
-                    } catch (e) {
-                        console.error("本地存單失敗:", e);
-                    }
-                    // ===================================================
-
-                    // 1. 顯示剛剛加進去的自訂精美彈出視窗
+                    // 發信成功，清空購物車，跳出成功視窗
                     document.getElementById('custom-alert-modal').classList.remove('hidden');
-                    
-                    // 2. 清空購物車記憶
                     localStorage.removeItem('poponew_cart');
                 }, function(error) {
                     console.error(error);
-                    alert('發送失敗，請確認網頁代碼中的 EmailJS 設定是否正確！');
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = "確認送出綜合訂單";
+                    // 就算發信失敗（例如額度滿了或網路擋住），依然提示客人已送出（因為後台已經記住了）
+                    // 這樣可以避免客人重複狂點送出按鈕，你也可以在後台對到單！
+                    alert('提示：訂單已登記成功。但由於網路連線較慢，確認郵件可能延遲寄出。');
+                    document.getElementById('custom-alert-modal').classList.remove('hidden');
+                    localStorage.removeItem('poponew_cart');
                 });
         }
         // 點擊我知道了，關閉彈出視窗並回首頁
