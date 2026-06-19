@@ -208,8 +208,8 @@
         ];
 
         const defaultGroups = [
-            { id: "group-1", name: "美式軟餅乾系列", price: "100 起", img: "images/msbg.png", desc: "紐約 Levain 風味復刻！外酥內軟的極致厚實療癒口感。", url: "msbg.html", isPinned: false },
-            { id: "group-2", name: "抹茶柚子巴斯克", price: "140 起", img: "images/mcyobsk.png", desc: "日本小山園抹茶的成熟微苦，撞上嚴選柚子的清新果香，濃郁綿密。宇治抹茶控必吃！", url: "mcyobsk.html", isPinned: false }
+            { id: "group-1", name: "美式軟餅乾系列", price: "100 起", img: "images/msbg.png", desc: "如果說法式甜點是精雕細琢的藝術品，那麼美式軟餅乾，就是生活中最溫暖厚實的擁抱。<br/>​我們以此為靈感，悉心復刻了紐約 Levain Bakery 的代表作 — Chocolate Chip Walnut Cookie。<br/>巧克力的微苦與核桃的溫潤堅果香，向來是烘焙界無需多言的絕配。在厚實、不規則的外表下，藏著極致的外酥內軟。<br/>​​微微加熱後，流淌的巧克力流心讓人驚豔；而冷藏過後的緊實風味，同樣出眾。沒有繁複的裝飾，只有純粹的美味。在每一個需要被撫慰的日常瞬間，為你補充最滿的能量。", url: "msbg.html", isPinned: false },
+            { id: "group-2", name: "抹茶柚子巴斯克", price: "140 起", img: "images/mcyobsk.png", desc: "悶熱的夏天需要一點清爽的溫柔。<br/>抹​茶柚子巴斯克<br/>​抹茶的微苦，遇上柚子的清甜，在舌尖優雅地化開。<br/>獨特的軟心質地，綿密順滑如雲朵般細緻。<br/>​每一口，都是剛剛好的甜，和撫平浮躁的高級大人味。", url: "mcyobsk.html", isPinned: false }
         ];
 
         let globalProducts = JSON.parse(localStorage.getItem('poponew_admin_products')) || defaultProducts;
@@ -473,14 +473,14 @@
             h.push('    <\/script>');
             
             h.push('    <style>');
-            h.push('        .flavor-img-box { width: 4rem; height: 4rem; background-color: #f5f5f4; border-radius: 0.75rem; overflow: hidden; flex-shrink: 0; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); cursor: zoom-in; }');
-            h.push('        .flavor-img-box img { width: 100%; height: 100%; object-fit: cover; }');
+            h.push('        .flavor-img-box { width: 50px; height: 50px; background-color: #f5f5f4; border-radius: 0.75rem; overflow: hidden; flex-shrink: 0; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); cursor: zoom-in; }');
+            h.push('        .flavor-img-box img { width: 50px; height: 50px; object-fit: cover; }');
             h.push('    <\/style>');
             
             h.push('<\/head>');
             h.push('<body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-24">');
-            h.push('    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl overflow-hidden my-0 md:my-8">');
-            h.push('        <div class="p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40">');
+            h.push('    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl my-0 md:my-8">');
+            h.push('        <div class="p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40 md:rounded-t-2xl">');
             h.push('            <a href="index.html" class="text-stone-600 hover:text-stone-900 font-medium text-sm flex items-center gap-1 py-1">← 返回首頁<\/a>');
             h.push('            <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0<\/span>)<\/a>');
             h.push('        <\/div>');
@@ -517,10 +517,11 @@
             h.push('            var noteHtml = p.note ? " <span class=\'text-xs text-amber-600 font-semibold bg-amber-100/60 px-1.5 py-0.5 rounded-md ml-1\'>" + p.note + "<\\/span>" : "";');
             
             // 加入缺貨與售完自動判定，並替換為按鈕鎖定的畫面
-            h.push('            var isOutOfStock = (p.note && (p.note.indexOf("缺貨") !== -1 || p.note.indexOf("售完") !== -1));');
+h.push('            var isOutOfStock = (p.note && (p.note.indexOf("缺貨") !== -1 || p.note.indexOf("售完") !== -1));');
             h.push('            var actionHtml = isOutOfStock ? "<span class=\'text-sm font-bold text-stone-400 bg-stone-100 px-3 py-1.5 rounded-lg border border-stone-200 shadow-inner\'>🚫 已售完<\\/span>" : "<div class=\'flex items-center gap-3\'><button type=\'button\' onclick=\'updateQty(" + p.id + ", -1)\' class=\'w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm\'>-<\\/button><input type=\'number\' id=\'qty-" + p.id + "\' value=\'" + currentQty + "\' min=\'0\' readonly class=\'w-6 text-center bg-transparent font-bold\'><button type=\'button\' onclick=\'updateQty(" + p.id + ", 1)\' class=\'w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm\'>+<\\/button><\\/div>";');
-            h.push('            itemDiv.innerHTML = "<div><h3 class=\'font-medium text-stone-800 text-sm\'>" + p.name + noteHtml + "<\\/h3><p class=\'text-xs text-stone-400 mt-0.5\'>約 " + p.weight + "<\\/p><p class=\'text-sm text-amber-700 font-semibold mt-0.5\'>NT$ " + p.price + "<\\/p><\\/div>" + actionHtml;');
-            
+            // 改版：將商品名稱抽出來放最上面，下方區塊做彈性佈局，使圖片、克數、價格能垂直靠左排列
+            h.push('            itemDiv.className = "p-4 bg-stone-50 rounded-xl border border-stone-200 hover:border-amber-200 transition space-y-2";');
+            h.push('            itemDiv.innerHTML = "<h3 class=\'font-medium text-stone-800 text-sm w-full\'>" + p.name + noteHtml + "</h3><div class=\'flex justify-between items-end w-full\'><div class=\'flex gap-3 items-center\' id=\'product-info-left-" + p.id + "\'><div><p class=\'text-xs text-stone-400\'>約 " + p.weight + "</p><p class=\'text-sm text-amber-700 font-semibold mt-0.5\'>NT$ " + p.price + "</p></div></div>" + actionHtml + "</div>";');            
             h.push('            container.appendChild(itemDiv);');
             h.push('        });');
 
@@ -539,21 +540,15 @@
             h.push('            window.products.forEach(function(p) {');
             h.push('                var imgUrl = "images/thumb/" + p.id + ".png";');
             h.push('                var imgTester = new Image();');
-            h.push('                imgTester.onload = function() {');
-            h.push('                    var itemDivs = container.children;');
-            h.push('                    for (var i = 0; i < itemDivs.length; i++) {');
-            h.push('                        var d = itemDivs[i];');
-            h.push('                        if (d.innerHTML.indexOf("updateQty(" + p.id + ",") !== -1 || d.innerHTML.indexOf("🚫 已售完") !== -1) {');
-            h.push('                            var leftPart = d.children[0];');
-            h.push('                            leftPart.className = "flex gap-3 items-center";');
-            h.push('                            var imgBox = document.createElement("div");');
-            h.push('                            imgBox.className = "flavor-img-box";');
-            h.push('                            imgBox.innerHTML = "<img src=\'" + imgUrl + "\' onclick=\'window.openFlavorLightbox(this.src)\'>";');
-            h.push('                            leftPart.insertBefore(imgBox, leftPart.firstChild);');
-            h.push('                            break;');
-            h.push('                        }');
-            h.push('                    }');
-            h.push('                };');
+h.push('                imgTester.onload = function() {');
+                h.push('                    var targetLeftPart = document.getElementById("product-info-left-" + p.id);');
+                h.push('                    if (targetLeftPart) {');
+                h.push('                        var imgBox = document.createElement("div");');
+                h.push('                        imgBox.className = "flavor-img-box";');
+                h.push('                        imgBox.innerHTML = "<img src=\'" + imgUrl + "\' onclick=\'window.openFlavorLightbox(this.src)\'>";');
+                h.push('                        targetLeftPart.insertBefore(imgBox, targetLeftPart.firstChild);');
+                h.push('                    }');
+                h.push('                };');
             h.push('                imgTester.src = imgUrl;');
             h.push('            });');
             h.push('            var lb = document.createElement("div");');
