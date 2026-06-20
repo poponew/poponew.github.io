@@ -351,35 +351,7 @@ function submitOrder(event) {
                 admin_email: "hi.poponew@gmail.com"
             };
 
-            // 這是 cart.html 裡面點擊送出訂單的 Function 內部
-            // 1. 先建立要存檔的訂單物件
-            let newOrder = {
-                order_id: "POPO-" + Date.now(),
-                order_time: new Date().toLocaleString('zh-TW'),
-                customer_name: templateParams.customer_name,
-                customer_phone: templateParams.customer_phone,
-                customer_address: templateParams.customer_address,
-                customer_email: templateParams.customer_email,
-                payment_method: templateParams.payment_method,
-                account_last_five: templateParams.account_last_five,
-                customer_note: templateParams.customer_note,
-                order_details: templateParams.order_details,
-                total_price: templateParams.total_price
-            };
-
-            // 2. 核心保險：直接寫入全站公共歷史紀錄庫（徹底解決手機分頁被系統凍結接不到廣播的問題）
-            try {
-                let orderHistory = JSON.parse(localStorage.getItem('poponew_order_history')) || [];
-                orderHistory.push(newOrder);
-                localStorage.setItem('poponew_order_history', JSON.stringify(orderHistory));
-            } catch (e) { console.error("本地存單失敗:", e); }
-
-            // 3. 順便發送廣播（供電腦端同時開啟多視窗時，即時闪烁更新畫面）
-            try {
-                const channel = new BroadcastChannel('order_channel');
-                channel.postMessage(newOrder);
-            } catch(e) { console.log("廣播不支援", e); }
-
+            
             // 4. 最後執行 EmailJS 發信，並觸發同步 Google 表單
             emailjs.send('service_urrdjuh', 'template_tlon58x', templateParams)
                 .then(function() {
