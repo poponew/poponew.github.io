@@ -364,66 +364,40 @@ function submitOrder(event) {
                 });
         }
 
- // 🚀 終極破解版：隱形 Iframe 雲端同步函數
+// 🚀 最終部署版：透過 Google Apps Script 雲端中轉站同步
         function sendToGoogleSheets(params) {
-            const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdhKwdtX9ZTFV8gklMcc9O0Gi7iapxsTBFBXZYKm-tN7Vwksw/formResponse";
-
-            // 1. 在背景建立一個隱藏的 iframe (用來接收 Google 的回傳畫面，避免網頁跳轉)
-            let iframe = document.createElement("iframe");
-            iframe.name = "hidden_iframe";
-            iframe.style.display = "none";
-            document.body.appendChild(iframe);
-
-            // 2. 建立一個隱藏的傳統表單
-            let form = document.createElement("form");
-            form.method = "POST";
-            form.action = googleFormUrl;
-            form.target = "hidden_iframe"; // 將送出後的結果導入剛剛建立的 iframe
-
-            // 3. 建立你的專屬欄位資料庫
-            const formData = {
-                "entry.2142375439": "POPO-" + Date.now(),
-                "entry.2034219552": new Date().toLocaleString('zh-TW'),
-                "entry.1477708940": params.customer_name,
-                "entry.258784750": params.customer_phone,
-                "entry.1772023120": params.customer_email,
-                "entry.1246140168": params.payment_method,
-                "entry.1239578817": params.account_last_five,
-                "entry.1410177732": params.customer_address,
-                "entry.1748549883": params.order_details,
-                "entry.1425524710": params.total_price,
-                "entry.867829560": params.customer_note
-            };
-
-            // 4. 將資料轉換成 input 標籤並塞入表單中
-            for (let key in formData) {
-                let input = document.createElement("input");
-                input.type = "hidden";
-                input.name = key;
-                input.value = formData[key];
-                form.appendChild(input);
-            }
-            document.body.appendChild(form);
-
-            // 5. 監聽 iframe，當它載入完成時代表資料已成功送達 Google 表單
-            iframe.onload = function() {
-                console.log("成功同步至 Google 試算表！(已繞過防護)");
-                
-                // 顯示成功訂單彈出視窗並清空購物車
+            const webAppUrl = "https://script.google.com/macros/s/AKfycbzhlXu0KRF5MrH8oBr6Q0rrRrxLAqh0BB3QjQxmoJFo4uCvaETBC9NVcVxNQBcvw4w00g/exec";
+            
+            fetch(webAppUrl, {
+                method: 'POST',
+                mode: 'no-cors', // 繞過跨域限制
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    order_id: "POPO-" + Date.now(),
+                    order_time: new Date().toLocaleString('zh-TW'),
+                    customer_name: params.customer_name,
+                    customer_phone: params.customer_phone,
+                    customer_email: params.customer_email,
+                    payment_method: params.payment_method,
+                    account_last_five: params.account_last_five,
+                    customer_address: params.customer_address,
+                    order_details: params.order_details,
+                    total_price: params.total_price,
+                    customer_note: params.customer_note
+                })
+            })
+            .then(() => {
+                console.log("訂單已透過中轉站寫入試算表！");
                 document.getElementById('custom-alert-modal').classList.remove('hidden');
                 localStorage.removeItem('poponew_cart');
-                
-                // 功成身退，清理剛剛建立的隱藏標籤
-                setTimeout(() => {
-                    document.body.removeChild(form);
-                    document.body.removeChild(iframe);
-                }, 1000);
-            };
-
-            // 6. 模擬真實人類點擊送出
-            form.submit();
+            })
+            .catch((error) => {
+                console.error("同步失敗:", error);
+                document.getElementById('custom-alert-modal').classList.remove('hidden');
+                localStorage.removeItem('poponew_cart');
+            });
         }
-        
+
         // 點擊我知道了，關閉彈出視窗並回首頁
         function closeModalAndGoHome() {
             document.getElementById('custom-alert-modal').classList.add('hidden');
