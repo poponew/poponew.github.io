@@ -364,40 +364,66 @@ function submitOrder(event) {
                 });
         }
 
-            // 🚀 這是全自動對應生成的雲端同步函數
-            function sendToGoogleSheets(params) {
-                const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdhKwdtX9ZTFV8gklMcC9OOGi7iapxsTBFBXZYKm-tN7Vwksw/formResponse";
-                const formData = new URLSearchParams();
-                
-                formData.append('entry.2142375439', "POPO-" + Date.now());
-                formData.append('entry.2034219552', new Date().toLocaleString('zh-TW'));
-                formData.append('entry.1477708940', params.customer_name);
-                formData.append('entry.258784750', params.customer_phone);
-                formData.append('entry.1772023120', params.customer_email);
-                formData.append('entry.1246140168', params.payment_method);
-                formData.append('entry.1239578817', params.account_last_five);
-                formData.append('entry.1410177732', params.customer_address);
-                formData.append('entry.1748549883', params.order_details);
-                formData.append('entry.1425524710', params.total_price);
-                formData.append('entry.867829560', params.customer_note);
+ // 🚀 終極破解版：隱形 Iframe 雲端同步函數
+        function sendToGoogleSheets(params) {
+            const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdhKwdtX9ZTFV8gklMcc9O0Gi7iapxsTBFBXZYKm-tN7Vwksw/formResponse";
 
-                fetch(googleFormUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: formData
-                })
-                .then(() => {
-                    console.log("成功同步至 Google 試算表！");
-                    document.getElementById('custom-alert-modal').classList.remove('hidden');
-                    localStorage.removeItem('poponew_cart');
-                })
-                .catch((error) => {
-                    console.error("同步至 Google 失敗:", error);
-                    document.getElementById('custom-alert-modal').classList.remove('hidden');
-                    localStorage.removeItem('poponew_cart');
-                });
+            // 1. 在背景建立一個隱藏的 iframe (用來接收 Google 的回傳畫面，避免網頁跳轉)
+            let iframe = document.createElement("iframe");
+            iframe.name = "hidden_iframe";
+            iframe.style.display = "none";
+            document.body.appendChild(iframe);
+
+            // 2. 建立一個隱藏的傳統表單
+            let form = document.createElement("form");
+            form.method = "POST";
+            form.action = googleFormUrl;
+            form.target = "hidden_iframe"; // 將送出後的結果導入剛剛建立的 iframe
+
+            // 3. 建立你的專屬欄位資料庫
+            const formData = {
+                "entry.2142375439": "POPO-" + Date.now(),
+                "entry.2034219552": new Date().toLocaleString('zh-TW'),
+                "entry.1477708940": params.customer_name,
+                "entry.258784750": params.customer_phone,
+                "entry.1772023120": params.customer_email,
+                "entry.1246140168": params.payment_method,
+                "entry.1239578817": params.account_last_five,
+                "entry.1410177732": params.customer_address,
+                "entry.1748549883": params.order_details,
+                "entry.1425524710": params.total_price,
+                "entry.867829560": params.customer_note
+            };
+
+            // 4. 將資料轉換成 input 標籤並塞入表單中
+            for (let key in formData) {
+                let input = document.createElement("input");
+                input.type = "hidden";
+                input.name = key;
+                input.value = formData[key];
+                form.appendChild(input);
             }
+            document.body.appendChild(form);
+
+            // 5. 監聽 iframe，當它載入完成時代表資料已成功送達 Google 表單
+            iframe.onload = function() {
+                console.log("成功同步至 Google 試算表！(已繞過防護)");
+                
+                // 顯示成功訂單彈出視窗並清空購物車
+                document.getElementById('custom-alert-modal').classList.remove('hidden');
+                localStorage.removeItem('poponew_cart');
+                
+                // 功成身退，清理剛剛建立的隱藏標籤
+                setTimeout(() => {
+                    document.body.removeChild(form);
+                    document.body.removeChild(iframe);
+                }, 1000);
+            };
+
+            // 6. 模擬真實人類點擊送出
+            form.submit();
+        }
+        
         // 點擊我知道了，關閉彈出視窗並回首頁
         function closeModalAndGoHome() {
             document.getElementById('custom-alert-modal').classList.add('hidden');
