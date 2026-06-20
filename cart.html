@@ -371,37 +371,43 @@ function submitOrder(event) {
 
 // 🚀 最終部署版：透過 Google Apps Script 雲端中轉站同步
         function sendToGoogleSheets(params) {
-            const webAppUrl = "https://script.google.com/macros/s/AKfycbxcCForIYEf0QVxp1eZnmihcVy3V61O9fRLGyrrNBv_v1i5XD8K6ZxX7FJ5CZltvFSd/exec";
-            
-            fetch(webAppUrl, {
-                method: 'POST',
-                mode: 'no-cors', // 繞過跨域限制
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    order_id: "POPO-" + Date.now(),
-                    order_time: new Date().toLocaleString('zh-TW'),
-                    customer_name: params.customer_name,
-                    customer_phone: params.customer_phone,
-                    customer_email: params.customer_email,
-                    payment_method: params.payment_method,
-                    account_last_five: params.account_last_five,
-                    customer_address: params.customer_address,
-                    order_details: params.order_details,
-                    total_price: params.total_price,
-                    customer_note: params.customer_note
-                })
-            })
-            .then(() => {
-                console.log("訂單已透過中轉站寫入試算表！");
-                document.getElementById('custom-alert-modal').classList.remove('hidden');
-                localStorage.removeItem('poponew_cart');
-            })
-            .catch((error) => {
-                console.error("同步失敗:", error);
-                document.getElementById('custom-alert-modal').classList.remove('hidden');
-                localStorage.removeItem('poponew_cart');
-            });
-        }
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbxcCForIYEf0QVxp1eZnmihcVy3V61O9fRLGyrrNBv_v1i5XD8K6ZxX7FJ5CZltvFSd/exec";
+    
+    // 處理：如果貨到付款則顯示為 "-"
+    const accountLastFive = (params.account_last_five && params.account_last_five.trim() !== "") ? params.account_last_five : "-";
+    
+    // 處理：移除訂單明細中的重量資訊
+    const cleanDetails = params.order_details.replace(/\s*\(約\s*\d+g\)/g, "");
+
+    fetch(webAppUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            order_id: "POPO-" + Date.now(),
+            order_time: new Date().toLocaleString('zh-TW'),
+            customer_name: params.customer_name,
+            customer_phone: params.customer_phone,
+            customer_email: params.customer_email,
+            payment_method: params.payment_method,
+            account_last_five: accountLastFive, // 使用處理過的 "-" 邏輯
+            customer_address: params.customer_address,
+            order_details: cleanDetails,        // 使用過濾後的乾淨明細
+            total_price: params.total_price,
+            customer_note: params.customer_note
+        })
+    })
+    .then(() => {
+        console.log("訂單已透過中轉站寫入試算表！");
+        document.getElementById('custom-alert-modal').classList.remove('hidden');
+        localStorage.removeItem('poponew_cart');
+    })
+    .catch((error) => {
+        console.error("同步失敗:", error);
+        document.getElementById('custom-alert-modal').classList.remove('hidden');
+        localStorage.removeItem('poponew_cart');
+    });
+}
 
         // 點擊我知道了，關閉彈出視窗並回首頁
         function closeModalAndGoHome() {
