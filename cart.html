@@ -338,6 +338,11 @@ function submitOrder(event) {
                 paymentMethodValue = checkedPayment.value;
             }
 
+            // 1. 先處理過濾邏輯：移除 (約 XXXg)
+            var rawDetails = orderDetailsText; // 這是你原本的原始資料
+            var cleanDetails = rawDetails.replace(/\s*\(約\s*\d+g\)/g, "");
+
+            // 2. 設定 EmailJS 的參數 (order_details 改用過濾後的 cleanDetails)
             const templateParams = {
                 customer_name: document.getElementById('name').value,
                 customer_phone: phoneValue,
@@ -346,20 +351,20 @@ function submitOrder(event) {
                 payment_method: paymentMethodValue,
                 account_last_five: document.getElementById('account_last_five').value || "貨到付款",
                 customer_note: document.getElementById('note').value || "無",
-                order_details: orderDetailsText,
+                order_details: cleanDetails, // 使用過濾後的版本！
                 total_price: productSubtotal + shippingFee,
                 admin_email: "hi.poponew@gmail.com"
             };
 
-            
-            // 4. 最後執行 EmailJS 發信，並觸發同步 Google 表單
+            // 3. 最後執行 EmailJS 發信，並觸發同步 Google 表單
             emailjs.send('service_urrdjuh', 'template_tlon58x', templateParams)
                 .then(function() {
                     // 信件發送成功後，默默將資料丟進 Google 表單 (試算表)
+                    // 這裡如果你希望寫入試算表的資料也不要重量，也可以傳 cleanDetails 進去
                     sendToGoogleSheets(templateParams);
                 }, function(error) {
                     console.error("EmailJS發送失敗:", error);
-                    // 萬一遇到連線問題，依然強制寫入 Google 試算表，確保老闆不漏單！
+                    // 強制寫入 Google 試算表
                     sendToGoogleSheets(templateParams);
                 });
         }
