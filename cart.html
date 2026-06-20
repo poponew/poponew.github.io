@@ -364,40 +364,40 @@ function submitOrder(event) {
                 });
         }
 
-        // 🚀 這是全自動對應生成的雲端同步函數
-        function sendToGoogleSheets(params) {
-            const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSex6ZXlvNjmjhrNJH7AB_hyyUX1w1CDylyjOZM3dpLCbXbnmw/formResponse";
-            const formData = new URLSearchParams();
-            
-            formData.append('entry.1353126753', "POPO-" + Date.now());
-            formData.append('entry.1820251743', new Date().toLocaleString('zh-TW'));
-            formData.append('entry.491047557', params.customer_name);
-            formData.append('entry.196944971', params.customer_phone);
-            formData.append('entry.1089190487', params.customer_email);
-            formData.append('entry.1957110348', params.payment_method);
-            formData.append('entry.2020657237', params.account_last_five);
-            formData.append('entry.392182558', params.customer_address);
-            formData.append('entry.1700894053', params.order_details);
-            formData.append('entry.1181000171', params.total_price);
-            formData.append('entry.2002660721', params.customer_note);
+            // 🚀 這是全自動對應生成的雲端同步函數
+            function sendToGoogleSheets(params) {
+                const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdhKwdtX9ZTFV8gklMcC9OOGi7iapxsTBFBXZYKm-tN7Vwksw/formResponse";
+                const formData = new URLSearchParams();
+                
+                formData.append('entry.2142375439', "POPO-" + Date.now());
+                formData.append('entry.2034219552', new Date().toLocaleString('zh-TW'));
+                formData.append('entry.1477708940', params.customer_name);
+                formData.append('entry.258784750', params.customer_phone);
+                formData.append('entry.1772023120', params.customer_email);
+                formData.append('entry.1246140168', params.payment_method);
+                formData.append('entry.1239578817', params.account_last_five);
+                formData.append('entry.1410177732', params.customer_address);
+                formData.append('entry.1748549883', params.order_details);
+                formData.append('entry.1425524710', params.total_price);
+                formData.append('entry.867829560', params.customer_note);
 
-            fetch(googleFormUrl, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: formData
-            })
-            .then(() => {
-                console.log("成功同步至 Google 試算表！");
-                document.getElementById('custom-alert-modal').classList.remove('hidden');
-                localStorage.removeItem('poponew_cart');
-            })
-            .catch((error) => {
-                console.error("同步至 Google 失敗:", error);
-                document.getElementById('custom-alert-modal').classList.remove('hidden');
-                localStorage.removeItem('poponew_cart');
-            });
-        }
+                fetch(googleFormUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData
+                })
+                .then(() => {
+                    console.log("成功同步至 Google 試算表！");
+                    document.getElementById('custom-alert-modal').classList.remove('hidden');
+                    localStorage.removeItem('poponew_cart');
+                })
+                .catch((error) => {
+                    console.error("同步至 Google 失敗:", error);
+                    document.getElementById('custom-alert-modal').classList.remove('hidden');
+                    localStorage.removeItem('poponew_cart');
+                });
+            }
         // 點擊我知道了，關閉彈出視窗並回首頁
         function closeModalAndGoHome() {
             document.getElementById('custom-alert-modal').classList.add('hidden');
