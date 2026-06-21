@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>職人手工司康系列線上訂購 - 泡泡牛甜點</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.products = [
+    {
+        "id": 22,
+        "group": "職人手工司康系列",
+        "url": "scone.html",
+        "name": "經典原味司康",
+        "weight": "120g",
+        "price": 55,
+        "note": ""
+    },
+    {
+        "id": 23,
+        "group": "職人手工司康系列",
+        "url": "scone.html",
+        "name": "核桃司康",
+        "weight": "120g",
+        "price": 70,
+        "note": ""
+    },
+    {
+        "id": 24,
+        "group": "職人手工司康系列",
+        "url": "scone.html",
+        "name": "伯爵柑橘司康",
+        "weight": "120g",
+        "price": 80,
+        "note": ""
+    },
+    {
+        "id": 25,
+        "group": "職人手工司康系列",
+        "url": "scone.html",
+        "name": "伯爵紅茶司康",
+        "weight": "120g",
+        "price": 70,
+        "note": ""
+    },
+    {
+        "id": 26,
+        "group": "職人手工司康系列",
+        "url": "scone.html",
+        "name": "抹茶司康",
+        "weight": "120g",
+        "price": 80,
+        "note": ""
+    },
+    {
+        "id": 27,
+        "group": "職人手工司康系列",
+        "url": "scone.html",
+        "name": "香濃乳酪丁司康",
+        "weight": "120g",
+        "price": 85,
+        "note": ""
+    },
+    {
+        "id": 28,
+        "group": "職人手工司康系列",
+        "url": "scone.html",
+        "name": "巧克力豆豆司康",
+        "weight": "120g",
+        "price": 75,
+        "note": ""
+    },
+    {
+        "id": 29,
+        "group": "職人手工司康系列",
+        "url": "scone.html",
+        "name": "萊姆葡萄司康",
+        "weight": "120g",
+        "price": 75,
+        "note": ""
+    },
+    {
+        "id": 30,
+        "group": "職人手工司康系列",
+        "url": "scone.html",
+        "name": "蔓越莓司康",
+        "weight": "120g",
+        "price": 70,
+        "note": ""
+    },
+    {
+        "id": 31,
+        "group": "職人手工司康系列",
+        "url": "scone.html",
+        "name": "養生司康",
+        "weight": "120g",
+        "price": 80,
+        "note": ""
+    },
+    {
+        "id": 32,
+        "group": "職人手工司康系列",
+        "url": "scone.html",
+        "name": "鹹蛋黃司康",
+        "weight": "120g",
+        "price": 75,
+        "note": ""
+    },
+    {
+        "id": 33,
+        "group": "職人手工司康系列",
+        "url": "scone.html",
+        "name": "迷你小司康",
+        "weight": "120g",
+        "price": 100,
+        "note": "10顆10種口味"
+    }
+];
+        window.allProductsLookup = {"1":100,"2":125,"3":125,"4":125,"5":110,"6":130,"7":130,"8":130,"9":140,"10":840,"11":140,"12":140,"13":840,"14":840,"15":60,"16":70,"17":70,"18":70,"19":70,"20":70,"21":100,"22":55,"23":70,"24":80,"25":70,"26":80,"27":85,"28":75,"29":75,"30":70,"31":80,"32":75,"33":100};
+    </script>
+    <style>
+        .flavor-img-box { width: 50px; height: 50px; background-color: #f5f5f4; border-radius: 0.75rem; overflow: hidden; flex-shrink: 0; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); cursor: zoom-in; }
+        .flavor-img-box img { width: 50px; height: 50px; object-fit: cover; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-24">
+    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl my-0 md:my-8">
+        <div class="p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40 md:rounded-t-2xl">
+            <a href="index.html" class="text-amber-700 text-[16px] font-bold">看看還有什麼好吃的＊☉౪ ⊙｡</a>
+            <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
+        </div>
+        <div class="w-full min-w-full aspect-square flex items-center justify-center bg-stone-100 shrink-0 relative overflow-hidden">
+            <img src="images/scone.png" alt="職人手工司康系列" class="w-full h-full object-cover" draggable="false">
+        </div>
+        <div class="p-6">
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold text-stone-800 mb-2">職人手工司康系列</h1>
+                <p class="text-stone-500 text-sm leading-relaxed">司康(Scone)的起源，訴說著一段遙遠的蘇格蘭歷史。<br/>​最初，它曾是蘇格蘭圓桌騎士們的能量來源，歷經時光的洗禮，如今它已成為英式下午茶桌上不可或缺的靈魂角色。<br/>​我們將這份悠久的傳統，不追求浮誇的裝飾，而是透過堅持每日手作，試圖還原那份質樸、溫暖的記憶。</p>
+            </div>
+            <div id="cookie-list" class="space-y-3 mb-8"></div>
+            <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100 flex justify-between items-center flex-wrap gap-4 shadow-sm">
+                <div class="flex flex-col">
+                    <span class="text-xs font-semibold text-amber-700 block mb-0.5">目前訂單累計總額 (包含其他商品)</span>
+                    <span class="text-3xl font-extrabold text-amber-700">NT$ <span id="entire-cart-total">0</span></span>
+                    <p id="free-shipping-tip" class="text-xs font-medium text-stone-500 mt-1"></p>
+                </div>
+                <button onclick="saveToCartAndGo()" class="h-12 px-6 bg-amber-700 hover:bg-amber-800 text-white font-medium rounded-xl transition shadow-md flex items-center justify-center gap-1 active:scale-95 text-xm h-auto md:h-12">前往結帳</button>
+            </div>
+        </div>
+    </div>
+    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl mt-3 md:-mt-3 p-5 md:p-6 flex items-center gap-4 md:gap-5 border border-stone-100">
+        <img src="images/poponew.jpg" alt="泡泡牛" class="w-[72px] h-[72px] object-cover rounded-xl flex-shrink-0 cursor-zoom-in shadow-sm border border-stone-500 hover:opacity-90 transition" onclick="window.openFlavorLightbox(this.src)">
+        <div>
+            <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">泡泡牛·手做甜點·黑糖珍珠</h4>
+            <p class="text-stone-500 text-[11px] md:text-xs leading-relaxed">地址：高雄市三民區自由一路8巷10號<br>服務專線：0900-769880<br>e-mail: <a href="mailto:hi.poponew@gmail.com" class="text-blue-600 hover:underline">hi.poponew@gmail.com</a></p>
+        </div>
+    </div>
+    <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 泡泡牛. All rights reserved.</p>
+    <script>
+        var cart = JSON.parse(localStorage.getItem("poponew_cart")) || {};
+        var container = document.getElementById("cookie-list");
+        window.products.forEach(function(p) {
+            var currentQty = cart[p.id] || 0;
+            var itemDiv = document.createElement("div");
+            itemDiv.className = "flex items-center justify-between p-4 bg-stone-50 rounded-xl border border-stone-200 hover:border-amber-200 transition";
+            var noteHtml = p.note ? " <span class='text-xs text-amber-600 font-semibold bg-amber-100/60 px-1.5 py-0.5 rounded-md ml-1'>" + p.note + "<\/span>" : "";
+            var isOutOfStock = (p.note && (p.note.indexOf("缺貨") !== -1 || p.note.indexOf("售完") !== -1));
+            var actionHtml = isOutOfStock ? "<span class='text-sm font-bold text-stone-400 bg-stone-100 px-3 py-1.5 rounded-lg border border-stone-200 shadow-inner'>🚫 已售完<\/span>" : "<div class='flex items-center gap-3'><button type='button' onclick='updateQty(" + p.id + ", -1)' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm'>-<\/button><input type='number' id='qty-" + p.id + "' value='" + currentQty + "' min='0' readonly class='w-6 text-center bg-transparent font-bold'><button type='button' onclick='updateQty(" + p.id + ", 1)' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm'>+<\/button><\/div>";
+            itemDiv.className = "p-4 bg-stone-50 rounded-xl border border-stone-200 hover:border-amber-200 transition space-y-2";
+            itemDiv.innerHTML = "<h3 class='font-medium text-stone-800 text-sm w-full'>" + p.name + noteHtml + "</h3><div class='flex justify-between items-end w-full'><div class='flex gap-3 items-center' id='product-info-left-" + p.id + "'><div><p class='text-xs text-stone-400'>約 " + p.weight + "</p><p class='text-sm text-amber-700 font-semibold mt-0.5'>NT$ " + p.price + "</p></div></div>" + actionHtml + "</div>";
+            container.appendChild(itemDiv);
+        });
+        function updateQty(id, change) { var input = document.getElementById("qty-" + id); var currentQty = parseInt(input.value) || 0; currentQty = Math.max(0, currentQty + change); input.value = currentQty; if (currentQty === 0) { delete cart[id]; } else { cart[id] = currentQty; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); calculatePageTotal(); updateCartCount(); }
+        function calculatePageTotal() { var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.allProductsLookup[id] || 0) * cart[id]; } document.getElementById("entire-cart-total").innerText = entireCartTotal; var tipElement = document.getElementById("free-shipping-tip"); if (entireCartTotal === 0) { tipElement.innerText = "⚠️ 本商店最低結帳金額為 NT$ 500 元唷！"; } else if (entireCartTotal >= 2000) { tipElement.innerHTML = "<span class='text-green-600 font-bold text-sm'>🎉 全店已達免運費門檻！直接結帳超划算！</span>"; } else { tipElement.innerText = "還差" + (2000 - entireCartTotal) + " 元就免運啦！"; } }
+        function saveToCartAndGo() { var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.allProductsLookup[id] || 0) * cart[id]; } if (entireCartTotal === 0) { alert("您目前尚未選擇任何數量唷！"); return; } if (entireCartTotal < 500) { alert("抱歉！本商店最低結帳金額為 NT$ 500 元，目前綜合累計為 NT$ " + entireCartTotal + " 元，請再多選購一些甜點唷！"); return; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); window.location.href = "cart.html"; }
+        function updateCartCount() { var count = 0; for (var id in cart) { count += cart[id]; } document.getElementById("cart-count").innerText = count; }
+        calculatePageTotal(); updateCartCount();
+        (function() {
+            window.products.forEach(function(p) {
+                var imgUrl = "images/thumb/" + p.id + ".png";
+                var imgTester = new Image();
+                imgTester.onload = function() {
+                    var targetLeftPart = document.getElementById("product-info-left-" + p.id);
+                    if (targetLeftPart) {
+                        var imgBox = document.createElement("div");
+                        imgBox.className = "flavor-img-box";
+                        imgBox.innerHTML = "<img src='" + imgUrl + "' onclick='window.openFlavorLightbox(this.src)'>";
+                        targetLeftPart.insertBefore(imgBox, targetLeftPart.firstChild);
+                    }
+                };
+                imgTester.src = imgUrl;
+            });
+            var lb = document.createElement("div");
+            lb.className = "fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-all duration-300 cursor-zoom-out";
+            lb.innerHTML = "<img id='lb-img' class='max-w-full max-h-[85vh] rounded-2xl shadow-2xl border-4 border-white/10 transform scale-95 transition-all duration-300'>";
+            lb.onclick = function() { lb.classList.add("opacity-0", "pointer-events-none"); lb.querySelector("img").classList.add("scale-95"); };
+            document.body.appendChild(lb);
+            window.openFlavorLightbox = function(src) {
+                var img = document.getElementById("lb-img"); img.src = src;
+                lb.classList.remove("opacity-0", "pointer-events-none");
+                setTimeout(function() { img.classList.remove("scale-95"); }, 10);
+            };
+        })();
+    </script>
+</body>
+</html>
