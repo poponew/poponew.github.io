@@ -46,7 +46,15 @@
 </footer>
 
     <script>
-        const products = [
+const products = [
+    {
+        id: "group-1",
+        name: "美式軟餅乾系列",
+        price: "100 起",
+        img: "images/msbg.png",
+        desc: "如果說法式甜點是精雕細琢的藝術品，那麼美式軟餅乾，就是生活中最溫暖厚實的擁抱。<br/>​我們以此為靈感，悉心復刻了紐約 Levain Bakery 的代表作 — Chocolate Chip Walnut Cookie。<br/>巧克力的微苦與核桃的溫潤堅果香，向來是烘焙界無需多言的絕配。在厚實、不規則的外表下，藏著極致的外酥內軟。<br/>​​微微加熱後，流淌的巧克力流心讓人驚豔；而冷藏過後的緊實風味，同樣出眾。沒有繁複的裝飾，只有純粹的美味。在每一個需要被撫慰的日常瞬間，為你補充最滿的能量。",
+        url: "msbg.html"
+    },
     {
         id: "group-2",
         name: "抹茶柚子巴斯克",
@@ -56,14 +64,15 @@
         url: "mcyobsk.html"
     },
     {
-        id: "group-1",
-        name: "美式軟餅乾",
-        price: "100 起",
-        img: "images/msbg.png",
-        desc: "如果說法式甜點是精雕細琢的藝術品，那麼美式軟餅乾，就是生活中最溫暖厚實的擁抱。<br/>​我們以此為靈感，悉心復刻了紐約 Levain Bakery 的代表作 — Chocolate Chip Walnut Cookie。<br/>巧克力的微苦與核桃的溫潤堅果香，向來是烘焙界無需多言的絕配。在厚實、不規則的外表下，藏著極致的外酥內軟。<br/>​​微微加熱後，流淌的巧克力流心讓人驚豔；而冷藏過後的緊實風味，同樣出眾。沒有繁複的裝飾，只有純粹的美味。在每一個需要被撫慰的日常瞬間，為你補充最滿的能量。",
-        url: "msbg.html"
+        id: "group-3",
+        name: "焙茶/鐵觀音巴斯克",
+        price: "140 起",
+        img: "images/bcbsk.png",
+        desc: "靜靜落入窗邊的午後陽光，最適合留給一口濃郁的茶香。<br/>​今天想和大家分享這款復刻的超人氣美味「焙茶軟心巴斯克」。如果你也著迷於香港 Hemma Cafe 每天大排長龍、讓人心甘情願等待的 Hojicha Basque，那你一定不能錯過這個味道。<br/>​我們特別選用的優質焙茶粉，一入口，率先迎來的是外層迷人的微焦香氣，隨之而來的是絲滑、醇厚的軟心質地。焙茶獨特的煙燻茶韻在舌尖緩緩散開，那是焦香與茶香的完美碰撞。<br/>​這樣綿密而深邃的滋味，彷彿有一種神奇的魔力。吃下一口，今天的煩惱好像就被溫柔地治癒了。",
+        url: "bcbsk.html"
     },
 ];
+
 
         const listContainer = document.getElementById('product-list');
         products.forEach(p => {

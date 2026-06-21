@@ -3,30 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>抹茶柚子巴斯克線上訂購 - 泡泡牛甜點</title>
+    <title>焙茶/鐵觀音巴斯克線上訂購 - 泡泡牛甜點</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.products = [
     {
-        "id": 9,
-        "group": "抹茶柚子巴斯克",
-        "url": "mcyobsk.html",
-        "name": "抹茶柚子巴斯克蛋糕 (6吋切片)",
+        "id": 11,
+        "group": "焙茶/鐵觀音巴斯克",
+        "url": "bcbsk.html",
+        "name": "焙茶巴斯克(6吋切片)",
         "weight": "120g",
         "price": 140,
         "note": ""
     },
     {
-        "id": 10,
-        "group": "抹茶柚子巴斯克",
-        "url": "mcyobsk.html",
-        "name": "抹茶柚子巴斯克蛋糕 (6吋整顆)",
+        "id": 12,
+        "group": "焙茶/鐵觀音巴斯克",
+        "url": "bcbsk.html",
+        "name": "鐵觀音巴斯克(6吋切片)",
+        "weight": "120g",
+        "price": 140,
+        "note": ""
+    },
+    {
+        "id": 13,
+        "group": "焙茶/鐵觀音巴斯克",
+        "url": "bcbsk.html",
+        "name": "焙茶巴斯克(6吋整顆)",
+        "weight": "720g",
+        "price": 840,
+        "note": "需5~7天出貨"
+    },
+    {
+        "id": 14,
+        "group": "焙茶/鐵觀音巴斯克",
+        "url": "bcbsk.html",
+        "name": "鐵觀音巴斯克(6吋整顆)",
         "weight": "720g",
         "price": 840,
         "note": "需5~7天出貨"
     }
 ];
-        window.allProductsLookup = {"1":100,"2":125,"3":125,"4":125,"5":110,"6":130,"7":130,"8":130,"9":140,"10":840};
+        window.allProductsLookup = {"1":100,"2":125,"3":125,"4":125,"5":110,"6":130,"7":130,"8":130,"9":140,"10":840,"11":140,"12":140,"13":840,"14":840};
     </script>
     <style>
         .flavor-img-box { width: 50px; height: 50px; background-color: #f5f5f4; border-radius: 0.75rem; overflow: hidden; flex-shrink: 0; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); cursor: zoom-in; }
@@ -40,12 +58,15 @@
             <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
         </div>
         <div class="w-full min-w-full aspect-square flex items-center justify-center bg-stone-100 shrink-0 relative overflow-hidden">
-            <img src="images/mcyobsk.png" alt="抹茶柚子巴斯克" class="w-full h-full object-cover" draggable="false">
+            <img src="images/bcbsk.png" alt="焙茶/鐵觀音巴斯克" class="w-full h-full object-cover" draggable="false">
         </div>
         <div class="p-6">
             <div class="mb-6">
-                <h1 class="text-2xl font-bold text-stone-800 mb-2">抹茶柚子巴斯克</h1>
-                <p class="text-stone-500 text-sm leading-relaxed">悶熱的夏天需要一點清爽的溫柔。<br/>抹​茶柚子巴斯克<br/>​抹茶的微苦，遇上柚子的清甜，在舌尖優雅地化開。<br/>獨特的軟心質地，綿密順滑如雲朵般細緻。<br/>​每一口，都是剛剛好的甜，和撫平浮躁的高級大人味。</p>
+                <h1 class="text-2xl font-bold text-stone-800 mb-2">焙茶/鐵觀音巴斯克</h1>
+                <p class="text-stone-500 text-sm leading-relaxed">靜靜落入窗邊的午後陽光，最適合留給一口濃郁的茶香。
+​今天想和大家分享這款復刻的超人氣美味「焙茶軟心巴斯克」。如果你也著迷於香港 Hemma Cafe 每天大排長龍、讓人心甘情願等待的 Hojicha Basque，那你一定不能錯過這個味道。
+​我們特別選用的優質焙茶粉，一入口，率先迎來的是外層迷人的微焦香氣，隨之而來的是絲滑、醇厚的軟心質地。焙茶獨特的煙燻茶韻在舌尖緩緩散開，那是焦香與茶香的完美碰撞。
+​這樣綿密而深邃的滋味，彷彿有一種神奇的魔力。吃下一口，今天的煩惱好像就被溫柔地治癒了。</p>
             </div>
             <div id="cookie-list" class="space-y-3 mb-8"></div>
             <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100 flex justify-between items-center flex-wrap gap-4 shadow-sm">
@@ -59,7 +80,7 @@
         </div>
     </div>
     <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl mt-3 md:-mt-3 p-5 md:p-6 flex items-center gap-4 md:gap-5 border border-stone-100">
-        <img src="images/poponew.jpg" alt="泡泡牛" class="w-[72px] h-[72px] object-cover rounded-xl flex-shrink-0 cursor-zoom-in shadow-sm border border-stone-200 hover:opacity-90 transition" onclick="window.openFlavorLightbox(this.src)">
+        <img src="images/poponew.jpg" alt="泡泡牛" class="w-[72px] h-[72px] object-cover rounded-xl flex-shrink-0 cursor-zoom-in shadow-sm border border-stone-500 hover:opacity-90 transition" onclick="window.openFlavorLightbox(this.src)">
         <div>
             <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">泡泡牛·手做甜點·黑糖珍珠</h4>
             <p class="text-stone-500 text-[11px] md:text-xs leading-relaxed">地址：高雄市三民區自由一路8巷10號<br>服務專線：0900-769880<br>e-mail: <a href="mailto:hi.poponew@gmail.com" class="text-blue-600 hover:underline">hi.poponew@gmail.com</a></p>
