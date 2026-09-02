@@ -3,48 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>焙茶/鐵觀音巴斯克線上訂購</title>
+    <title>日式焙茶/鐵觀音巴斯克線上訂購 - 泡泡牛甜點</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.products = [
     {
         "id": 11,
-        "group": "焙茶/鐵觀音巴斯克",
+        "group": "日式焙茶/鐵觀音巴斯克",
         "url": "bcbsk.html",
-        "name": "焙茶巴斯克(6吋切片)",
-        "weight": "120g",
-        "price": 140,
+        "name": "日式焙茶巴斯克(6吋切片)",
+        "weight": "120",
+        "price": 145,
         "note": ""
     },
     {
         "id": 12,
-        "group": "焙茶/鐵觀音巴斯克",
+        "group": "日式焙茶/鐵觀音巴斯克",
         "url": "bcbsk.html",
         "name": "鐵觀音巴斯克(6吋切片)",
-        "weight": "120g",
+        "weight": "120",
         "price": 140,
         "note": ""
     },
     {
         "id": 13,
-        "group": "焙茶/鐵觀音巴斯克",
+        "group": "日式焙茶/鐵觀音巴斯克",
         "url": "bcbsk.html",
-        "name": "焙茶巴斯克(6吋整顆)",
-        "weight": "720g",
-        "price": 840,
+        "name": "日式焙茶巴斯克(6吋整顆)",
+        "weight": "720",
+        "price": 870,
         "note": "需5~7工作天出貨"
     },
     {
         "id": 14,
-        "group": "焙茶/鐵觀音巴斯克",
+        "group": "日式焙茶/鐵觀音巴斯克",
         "url": "bcbsk.html",
         "name": "鐵觀音巴斯克(6吋整顆)",
-        "weight": "720g",
+        "weight": "720",
         "price": 840,
         "note": "需5~7工作天出貨"
     }
 ];
-        window.allProductsLookup = {"1":100,"2":125,"3":125,"4":125,"5":110,"6":130,"7":130,"8":130,"9":140,"10":840,"11":140,"12":140,"13":840,"14":840};
+        window.allProductsLookup = {"11":145,"12":140,"13":870,"14":840};
     </script>
     <style>
         .flavor-img-box { width: 50px; height: 50px; background-color: #f5f5f4; border-radius: 0.75rem; overflow: hidden; flex-shrink: 0; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); cursor: zoom-in; }
@@ -58,14 +58,14 @@
             <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
         </div>
         <div class="w-full min-w-full aspect-square flex items-center justify-center bg-stone-100 shrink-0 relative overflow-hidden">
-            <img src="images/bcbsk.png" alt="焙茶/鐵觀音巴斯克" class="w-full h-full object-cover" draggable="false">
+            <img src="images/bcbsk.png" alt="日式焙茶/鐵觀音巴斯克" class="w-full h-full object-cover" draggable="false">
         </div>
         <div class="p-6">
             <div class="mb-6">
-                <h1 class="text-2xl font-bold text-stone-800 mb-2">焙茶/鐵觀音巴斯克</h1>
-                <p class="text-stone-500 text-sm leading-relaxed">靜靜落入窗邊的午後陽光，最適合留給一口濃郁的茶香。
-​今天想和大家分享這款復刻的超人氣美味「焙茶軟心巴斯克」。如果你也著迷於香港 Hemma Cafe 每天大排長龍、讓人心甘情願等待的 Hojicha Basque，那你一定不能錯過這個味道。
-​我們特別選用的優質焙茶粉，一入口，率先迎來的是外層迷人的微焦香氣，隨之而來的是絲滑、醇厚的軟心質地。焙茶獨特的煙燻茶韻在舌尖緩緩散開，那是焦香與茶香的完美碰撞。
+                <h1 class="text-2xl font-bold text-stone-800 mb-2">日式焙茶/鐵觀音巴斯克</h1>
+                <p class="text-stone-500 text-sm leading-relaxed">靜靜落入窗邊的午後陽光，最適合留給一口濃郁的茶香。<br/>
+​今天想和大家分享這款復刻的超人氣美味「焙茶軟心巴斯克」。如果你也著迷於香港 Hemma Cafe 每天大排長龍、讓人心甘情願等待的 Hojicha Basque，那你一定不能錯過這個味道。<br/>
+​我們特別選用的優質焙茶粉，一入口，率先迎來的是外層迷人的微焦香氣，隨之而來的是絲滑、醇厚的軟心質地。焙茶獨特的煙燻茶韻在舌尖緩緩散開，那是焦香與茶香的完美碰撞。<br/>
 ​這樣綿密而深邃的滋味，彷彿有一種神奇的魔力。吃下一口，今天的煩惱好像就被溫柔地治癒了。</p>
             </div>
             <div id="cookie-list" class="space-y-3 mb-8"></div>
@@ -93,12 +93,12 @@
         window.products.forEach(function(p) {
             var currentQty = cart[p.id] || 0;
             var itemDiv = document.createElement("div");
-            itemDiv.className = "flex items-center justify-between p-4 bg-stone-50 rounded-xl border border-stone-200 hover:border-amber-200 transition";
-            var noteHtml = p.note ? " <span class='text-xs text-amber-600 font-semibold bg-amber-100/60 px-1.5 py-0.5 rounded-md ml-1'>" + p.note + "<\/span>" : "";
+            var noteHtml = p.note ? " <span class='text-xs text-amber-600 font-semibold bg-amber-100/60 px-1.5 py-0.5 rounded-md ml-1'>" + p.note + "</span>" : "";
             var isOutOfStock = (p.note && (p.note.indexOf("缺貨") !== -1 || p.note.indexOf("售完") !== -1));
-            var actionHtml = isOutOfStock ? "<span class='text-sm font-bold text-stone-400 bg-stone-100 px-3 py-1.5 rounded-lg border border-stone-200 shadow-inner'>🚫 已售完<\/span>" : "<div class='flex items-center gap-3'><button type='button' onclick='updateQty(" + p.id + ", -1)' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm'>-<\/button><input type='number' id='qty-" + p.id + "' value='" + currentQty + "' min='0' readonly class='w-6 text-center bg-transparent font-bold'><button type='button' onclick='updateQty(" + p.id + ", 1)' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm'>+<\/button><\/div>";
+            var actionHtml = isOutOfStock ? "<span class='text-sm font-bold text-stone-400 bg-stone-100 px-3 py-1.5 rounded-lg border border-stone-200 shadow-inner'>🚫 已售完</span>" : "<div class='flex items-center gap-3'><button type='button' onclick='updateQty(" + p.id + ", -1)' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm'>-</button><input type='number' id='qty-" + p.id + "' value='" + currentQty + "' min='0' readonly class='w-6 text-center bg-transparent font-bold'><button type='button' onclick='updateQty(" + p.id + ", 1)' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm'>+</button></div>";
             itemDiv.className = "p-4 bg-stone-50 rounded-xl border border-stone-200 hover:border-amber-200 transition space-y-2";
-            itemDiv.innerHTML = "<h3 class='font-medium text-stone-800 text-sm w-full'>" + p.name + noteHtml + "</h3><div class='flex justify-between items-end w-full'><div class='flex gap-3 items-center' id='product-info-left-" + p.id + "'><div><p class='text-xs text-stone-400'>約 " + p.weight + "</p><p class='text-sm text-amber-700 font-semibold mt-0.5'>NT$ " + p.price + "</p></div></div>" + actionHtml + "</div>";
+            var weightHtml = p.weight ? "<p class='text-xs text-stone-400'>約 " + p.weight + "g</p>" : "";
+            itemDiv.innerHTML = "<h3 class='font-medium text-stone-800 text-sm w-full mb-1'>" + p.name + noteHtml + "</h3><div class='flex justify-between items-center w-full'><div class='flex gap-3 items-center' id='product-info-left-" + p.id + "'><div>" + weightHtml + "<p class='text-sm text-amber-700 font-semibold mt-0.5'>NT$ " + p.price + "</p></div></div>" + actionHtml + "</div>";
             container.appendChild(itemDiv);
         });
         function updateQty(id, change) { var input = document.getElementById("qty-" + id); var currentQty = parseInt(input.value) || 0; currentQty = Math.max(0, currentQty + change); input.value = currentQty; if (currentQty === 0) { delete cart[id]; } else { cart[id] = currentQty; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); calculatePageTotal(); updateCartCount(); }
@@ -115,19 +115,22 @@
                     if (targetLeftPart) {
                         var imgBox = document.createElement("div");
                         imgBox.className = "flavor-img-box";
-                        imgBox.innerHTML = "<img src='" + imgUrl + "' onclick='window.openFlavorLightbox(this.src)'>";
+                        imgBox.innerHTML = "<img src='" + imgUrl + "' alt='" + p.name + "' onclick=\"window.openFlavorLightbox(this.src, '" + p.name.replace(/'/g, "\\'") + "')\">";
                         targetLeftPart.insertBefore(imgBox, targetLeftPart.firstChild);
                     }
                 };
                 imgTester.src = imgUrl;
             });
             var lb = document.createElement("div");
-            lb.className = "fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-all duration-300 cursor-zoom-out";
-            lb.innerHTML = "<img id='lb-img' class='max-w-full max-h-[85vh] rounded-2xl shadow-2xl border-4 border-white/10 transform scale-95 transition-all duration-300'>";
+            lb.className = "fixed inset-0 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-all duration-300 cursor-zoom-out";
+            lb.innerHTML = "<div class='relative flex flex-col items-center max-w-[90vw] max-h-[85vh]'><img id='lb-img' class='max-w-full max-h-[75vh] rounded-2xl shadow-2xl border-4 border-white/10 transform scale-95 transition-all duration-300 object-contain'><p id='lb-title' class='mt-3 text-white font-bold text-sm md:text-base tracking-wide bg-amber-900/90 border border-amber-500/30 px-4 py-1.5 rounded-full shadow-lg text-center max-w-full truncate'></p></div>";
             lb.onclick = function() { lb.classList.add("opacity-0", "pointer-events-none"); lb.querySelector("img").classList.add("scale-95"); };
             document.body.appendChild(lb);
-            window.openFlavorLightbox = function(src) {
-                var img = document.getElementById("lb-img"); img.src = src;
+            window.openFlavorLightbox = function(src, title) {
+                var img = document.getElementById("lb-img");
+                var titleEl = document.getElementById("lb-title");
+                img.src = src;
+                if (title) { titleEl.innerText = title; titleEl.style.display = "block"; } else { titleEl.style.display = "none"; }
                 lb.classList.remove("opacity-0", "pointer-events-none");
                 setTimeout(function() { img.classList.remove("scale-95"); }, 10);
             };
