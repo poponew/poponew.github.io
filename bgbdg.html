@@ -31,7 +31,7 @@
             <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
         </div>
         <div class="w-full min-w-full aspect-square flex items-center justify-center bg-stone-100 shrink-0 relative overflow-hidden">
-            <img src="images/bgbdg.png" alt="伯爵茶奶醬磅蛋糕" class="w-full h-full object-cover" draggable="false">
+            <img src="images/bgbdg.jpg" alt="伯爵茶奶醬磅蛋糕" class="w-full h-full object-cover" draggable="false">
         </div>
         <div class="p-6">
             <div class="mb-6">
@@ -79,7 +79,7 @@
         calculatePageTotal(); updateCartCount();
         (function() {
             window.products.forEach(function(p) {
-                var imgUrl = "images/thumb/" + p.id + ".png";
+                var imgUrl = "images/thumb/" + p.id + ".jpg";
                 var imgTester = new Image();
                 imgTester.onload = function() {
                     var targetLeftPart = document.getElementById("product-info-left-" + p.id);

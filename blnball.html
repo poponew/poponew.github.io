@@ -31,7 +31,7 @@
             <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
         </div>
  <div class="w-full bg-stone-100 flex items-center justify-center overflow-hidden">
- <img src="images/blnball.png" alt="布朗尼球球" class="w-full h-auto object-contain block" draggable="false">
+ <img src="images/blnball.jpg" alt="布朗尼球球" class="w-full h-auto object-contain block" draggable="false">
  </div>
         <div class="p-6">
             <div class="mb-6">
@@ -80,7 +80,7 @@
         calculatePageTotal(); updateCartCount();
         (function() {
             window.products.forEach(function(p) {
-                var imgUrl = "images/thumb/" + p.id + ".png";
+                var imgUrl = "images/thumb/" + p.id + ".jpg";
                 var imgTester = new Image();
                 imgTester.onload = function() {
                     var targetLeftPart = document.getElementById("product-info-left-" + p.id);
