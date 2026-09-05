@@ -3,17 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>泡泡牛-手做甜點</title>
+    <title>Poponew手做甜點</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face {
+            font-family: "CustomTitleFont";
+            src: url("fonts/poponew.woff2") format("woff2"),
+                 url("fonts/poponew.woff2") format("truetype");
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+        /* 讓首頁 h1 大標題套用此字型 */
+        h1 {
+            font-family: "CustomTitleFont", sans-serif !important;
+        }
+    </style>
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-12">
     <nav class="p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40 md:rounded-t-2xl">
-        <span class="text-xl font-bold text-amber-800 tracking-wider">泡泡牛甜點</span>
+        <span class="text-xl font-bold text-amber-800 tracking-wider"></span>
         <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
     </nav>
     <div class="max-w-5xl mx-auto px-4 my-8">
         <header class="text-center py-5 bg-white rounded-2xl shadow-sm border border-stone-100 mb-8">
-            <h1 class="text-4xl font-extrabold text-amber-800 tracking-wider">泡泡牛‧手做甜點</h1>
+            <h1 class="text-4xl font-extrabold text-amber-800 tracking-wider">Poponew手做甜點</h1>
             <p class="text-stone-500 mt-3 max-w-xl mx-auto text-sm px-4">全店手工現做，滿 NT$ 2,000 元即享免運費宅配！</p>
         </header>
         <div class="flex flex-wrap justify-center gap-2 mb-8" id="category-tags">
@@ -622,13 +636,13 @@
     </div>
     <footer class="max-w-2xl mx-auto px-4 pb-12">
         <div class="bg-white shadow-md rounded-2xl p-5 flex items-center gap-4 border border-stone-100 mt-8">
-            <img src="images/poponew.jpg" alt="泡泡牛" class="w-[84px] h-[84px] object-cover rounded-xl flex-shrink-0 cursor-zoom-in shadow-sm border border-stone-200 hover:opacity-90 transition" onclick="window.openFlavorLightbox(this.src)">
+            <img src="images/poponew.jpg" alt="Poponew" class="w-[84px] h-[84px] object-cover rounded-xl flex-shrink-0 cursor-zoom-in shadow-sm border border-stone-200 hover:opacity-90 transition" onclick="window.openFlavorLightbox(this.src)">
             <div class="text-left">
-                <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">泡泡牛·手做甜點·黑糖珍珠</h4>
+                <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">Poponew·手做甜點·黑糖珍珠</h4>
                 <p class="text-stone-500 text-[11px] md:text-xs leading-relaxed">地址：高雄市三民區自由一路8巷10號<br>服務專線：0900-769880<br>e-mail: <a href="mailto:hi.poponew@gmail.com" class="text-blue-600 hover:underline">hi.poponew@gmail.com</a></p>
             </div>
         </div>
-        <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 泡泡牛. All rights reserved.</p>
+        <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.</p>
     </footer>
     <script>
         // 1. 洗牌演算法 (Fisher-Yates)
