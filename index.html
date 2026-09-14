@@ -21,9 +21,17 @@
     </style>
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-12">
-    <nav class="p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40 md:rounded-t-2xl">
+    <nav class="relative p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40 md:rounded-t-2xl">
         <span class="text-xl font-bold text-amber-800 tracking-wider"></span>
-        <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
+        <div class="flex items-center gap-2 md:gap-3">
+            <a href="order-search.html" class="hover:bg-amber-50 text-amber-800 font-medium py-1.5 px-3 rounded-xl transition flex items-center gap-1 text-xs md:text-sm">🔍 訂單查詢</a>
+            <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
+        </div>
+        <div class="absolute top-[calc(100%+10px)] right-4 flex items-center bg-white/95 backdrop-blur-md rounded-xl p-1 border border-stone-200 shadow-md z-30">
+            <button type="button" onclick="changeFontSize(-1)" title="縮小字型" class="w-8 h-7 flex items-center justify-center text-xs font-bold text-stone-600 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A-</button>
+            <button type="button" onclick="resetFontSize()" title="重設字型" class="px-2 h-7 flex items-center justify-center text-xs font-medium text-stone-400 hover:text-amber-800 transition">預設</button>
+            <button type="button" onclick="changeFontSize(1)" title="放大字型" class="w-8 h-7 flex items-center justify-center text-sm font-bold text-stone-700 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A+</button>
+        </div>
     </nav>
     <div class="max-w-5xl mx-auto px-4 my-8">
         <header class="text-center py-5 bg-white rounded-2xl shadow-sm border border-stone-100 mb-8">
@@ -632,14 +640,32 @@
                     </div>
                 </div>
             </a>
+            <a href="fnc.html" data-tag="人氣單品" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <img src="images/fnc.jpg" alt="費南雪金磚蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-800 mb-1 group-hover:text-amber-800 transition">費南雪金磚蛋糕</h2>
+                        <p class="text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">微光下閃耀著細緻金黃光澤，這是來自法國的經典甜點-費南雪（Financier）。<br>
+費南雪的靈魂，源自精心熬煮的焦化奶油（Noisette）。帶著獨特的堅果沉香與奶香交織，比起瑪德蓮，它的口感更顯濕潤細緻、層次豐富。每咬一口，濃郁香氣便在齒頰間漫開，令人沉醉。<br>
+這款讓人相見恨晚的甜點，極致詮釋了常溫蛋糕的魅力。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700">NT$ 45 起</span></span>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
     <footer class="max-w-2xl mx-auto px-4 pb-12">
         <div class="bg-white shadow-md rounded-2xl p-5 flex items-center gap-4 border border-stone-100 mt-8">
-            <img src="images/poponew.jpg" alt="Poponew" class="w-[84px] h-[84px] object-cover rounded-xl flex-shrink-0 cursor-zoom-in shadow-sm border border-stone-200 hover:opacity-90 transition" onclick="window.openFlavorLightbox(this.src)">
             <div class="text-left">
-                <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">Poponew·手做甜點·黑糖珍珠</h4>
-                <p class="text-stone-500 text-[11px] md:text-xs leading-relaxed">地址：高雄市三民區自由一路8巷10號<br>服務專線：0900-769880<br>e-mail: <a href="mailto:hi.poponew@gmail.com" class="text-blue-600 hover:underline">hi.poponew@gmail.com</a></p>
+                <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">Poponew手做甜點</h4>
+                <p class="text-stone-500 text-[11px] md:text-xs leading-relaxed">服務專線：0900-769880｜e-mail：<a href="mailto:hi.poponew@gmail.com" class="text-blue-600 hover:underline">hi.poponew@gmail.com</a></p>
             </div>
         </div>
         <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.</p>
@@ -725,6 +751,22 @@
                 }
             }
         });
+    </script>
+    <script>
+        let currentFontSize = parseInt(localStorage.getItem("poponew_font_size")) || 16;
+        applyFontSize(currentFontSize);
+        function changeFontSize(delta) {
+            currentFontSize = Math.min(Math.max(currentFontSize + delta * 2, 14), 22);
+            applyFontSize(currentFontSize);
+        }
+        function resetFontSize() {
+            currentFontSize = 16;
+            applyFontSize(currentFontSize);
+        }
+        function applyFontSize(size) {
+            document.documentElement.style.fontSize = size + "px";
+            localStorage.setItem("poponew_font_size", size);
+        }
     </script>
 </body>
 </html>

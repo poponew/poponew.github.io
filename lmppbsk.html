@@ -14,7 +14,7 @@
         "name": "蘭姆鳳梨巴斯克(6吋切片)",
         "weight": "120",
         "price": 145,
-        "note": ""
+        "note": "\""
     },
     {
         "id": 42,
@@ -35,9 +35,17 @@
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-24">
     <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl my-0 md:my-8">
-        <div class="p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40 md:rounded-t-2xl">
+        <div class="relative p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40 md:rounded-t-2xl">
             <a href="index.html" class="text-amber-700 text-[16px] font-bold">看看還有什麼好吃的<br/>＊☉౪ ⊙｡</a>
-            <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
+            <div class="flex items-center gap-2">
+                <a href="order-search.html" class="hover:bg-amber-50 text-amber-800 font-medium py-1.5 px-3 rounded-xl transition flex items-center gap-1 text-xs md:text-sm">🔍 訂單查詢</a>
+                <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
+            </div>
+            <div class="absolute top-[calc(100%+10px)] right-4 flex items-center bg-white/95 backdrop-blur-md rounded-xl p-1 border border-stone-200 shadow-md z-30">
+                <button type="button" onclick="changeFontSize(-1)" title="縮小字型" class="w-8 h-7 flex items-center justify-center text-xs font-bold text-stone-600 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A-</button>
+                <button type="button" onclick="resetFontSize()" title="重設字型" class="px-2 h-7 flex items-center justify-center text-xs font-medium text-stone-400 hover:text-amber-800 transition">預設</button>
+                <button type="button" onclick="changeFontSize(1)" title="放大字型" class="w-8 h-7 flex items-center justify-center text-sm font-bold text-stone-700 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A+</button>
+            </div>
         </div>
         <div class="w-full min-w-full aspect-square flex items-center justify-center bg-stone-100 shrink-0 relative overflow-hidden">
             <img src="images/lmppbsk.jpg" alt="蘭姆鳳梨巴斯克" class="w-full h-full object-cover" draggable="false">
@@ -45,12 +53,12 @@
         <div class="p-6">
             <div class="mb-6">
                 <h1 class="text-2xl font-bold text-stone-800 mb-2">蘭姆鳳梨巴斯克</h1>
-                <p class="text-stone-500 text-sm leading-relaxed">微醺夏日｜蘭姆鳳梨巴斯克起司蛋糕<br/>
-​今天，給自己點一份清爽與甜香交織的優雅。<br/>
-​剛出爐的巴斯克，有著經典的迷人焦香外皮，切開是柔軟順滑的軟心乳酪。而最讓人驚豔的靈魂，是我們親自熬煮的「法式蘭姆香草鳳梨果醬」。<br/>
-​這次的食譜靈感，特別致敬了法國果醬女王 Christine Ferber 的經典配方。<br/>
-當蘭姆酒、香草與在地鳳梨在鍋中慢火熬煮，神奇的魔法就發生了——琥珀色的光澤裡，蘭姆酒的成熟木質香與鳳梨的熱帶酸甜互不搶戲，反而完美融合，華麗蛻變成一種極具層次、溫柔而獨特的甜美氣味。<br/>
-​乳酪的濃郁，夾帶著法式果醬的細緻香氣，每口都是味蕾的頂級享受。<br/>
+                <p class="text-stone-500 text-sm leading-relaxed">微醺夏日｜蘭姆鳳梨巴斯克起司蛋糕
+​今天，給自己點一份清爽與甜香交織的優雅。
+​剛出爐的巴斯克，有著經典的迷人焦香外皮，切開是柔軟順滑的軟心乳酪。而最讓人驚豔的靈魂，是我們親自熬煮的「法式蘭姆香草鳳梨果醬」。
+​這次的食譜靈感，特別致敬了法國果醬女王 Christine Ferber 的經典配方。
+當蘭姆酒、香草與在地鳳梨在鍋中慢火熬煮，神奇的魔法就發生了——琥珀色的光澤裡，蘭姆酒的成熟木質香與鳳梨的熱帶酸甜互不搶戲，反而完美融合，華麗蛻變成一種極具層次、溫柔而獨特的甜美氣味。
+​乳酪的濃郁，夾帶著法式果醬的細緻香氣，每口都是味蕾的頂級享受。
 ​獨特風味，限量製作，歡迎妳來品嚐這份法式浪漫。</p>
             </div>
             <div id="cookie-list" class="space-y-3 mb-8"></div>
@@ -65,25 +73,27 @@
         </div>
     </div>
     <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl mt-3 md:-mt-3 p-5 md:p-6 flex items-center gap-4 md:gap-5 border border-stone-100">
-        <img src="images/poponew.jpg" alt="泡泡牛" class="w-[72px] h-[72px] object-cover rounded-xl flex-shrink-0 cursor-zoom-in shadow-sm border border-stone-500 hover:opacity-90 transition" onclick="window.openFlavorLightbox(this.src)">
         <div>
-            <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">泡泡牛·手做甜點·黑糖珍珠</h4>
-            <p class="text-stone-500 text-[11px] md:text-xs leading-relaxed">地址：高雄市三民區自由一路8巷10號<br>服務專線：0900-769880<br>e-mail: <a href="mailto:hi.poponew@gmail.com" class="text-blue-600 hover:underline">hi.poponew@gmail.com</a></p>
+            <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">Poponew手做甜點</h4>
+            <p class="text-stone-500 text-[11px] md:text-xs leading-relaxed">服務專線：0900-769880｜e-mail：<a href="mailto:hi.poponew@gmail.com" class="text-blue-600 hover:underline">hi.poponew@gmail.com</a></p>
         </div>
     </div>
-    <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 泡泡牛. All rights reserved.</p>
+    <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.</p>
     <script>
         var cart = JSON.parse(localStorage.getItem("poponew_cart")) || {};
         var container = document.getElementById("cookie-list");
         window.products.forEach(function(p) {
             var currentQty = cart[p.id] || 0;
             var itemDiv = document.createElement("div");
-            var noteHtml = p.note ? " <span class='text-xs text-amber-600 font-semibold bg-amber-100/60 px-1.5 py-0.5 rounded-md ml-1'>" + p.note + "</span>" : "";
-            var isOutOfStock = (p.note && (p.note.indexOf("缺貨") !== -1 || p.note.indexOf("售完") !== -1));
-            var actionHtml = isOutOfStock ? "<span class='text-sm font-bold text-stone-400 bg-stone-100 px-3 py-1.5 rounded-lg border border-stone-200 shadow-inner'>🚫 已售完</span>" : "<div class='flex items-center gap-3'><button type='button' onclick='updateQty(" + p.id + ", -1)' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm'>-</button><input type='number' id='qty-" + p.id + "' value='" + currentQty + "' min='0' readonly class='w-6 text-center bg-transparent font-bold'><button type='button' onclick='updateQty(" + p.id + ", 1)' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm'>+</button></div>";
+            var rawName = String(p.name || "").replace(/"/g, "").replace(/&quot;/g, "").trim();
+            var rawNote = String(p.note || "").replace(/"/g, "").replace(/&quot;/g, "").trim();
+            var noteHtml = rawNote ? " <span class='text-xs text-amber-600 font-semibold bg-amber-100/60 px-1.5 py-0.5 rounded-md ml-1'>" + rawNote + "</span>" : "";
+            var isOutOfStock = (rawNote && (rawNote.indexOf("缺貨") !== -1 || rawNote.indexOf("售完") !== -1));
+            var actionHtml = isOutOfStock ? "<span class='text-sm font-bold text-stone-400 bg-stone-100 px-3 py-1.5 rounded-lg border border-stone-200 shadow-inner'>🚫 已售完</span>" : "<div class='flex items-center gap-3'><button type='button' onclick='updateQty(" + p.id + ", -1)' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm hover:bg-stone-50 active:scale-95'>-</button><input type='number' id='qty-" + p.id + "' value='" + currentQty + "' min='0' readonly class='w-6 text-center bg-transparent font-bold text-stone-800'><button type='button' onclick='updateQty(" + p.id + ", 1)' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm hover:bg-stone-50 active:scale-95'>+</button></div>";
             itemDiv.className = "p-4 bg-stone-50 rounded-xl border border-stone-200 hover:border-amber-200 transition space-y-2";
-            var weightHtml = p.weight ? "<p class='text-xs text-stone-400'>約 " + p.weight + "g</p>" : "";
-            itemDiv.innerHTML = "<h3 class='font-medium text-stone-800 text-sm w-full mb-1'>" + p.name + noteHtml + "</h3><div class='flex justify-between items-center w-full'><div class='flex gap-3 items-center' id='product-info-left-" + p.id + "'><div>" + weightHtml + "<p class='text-sm text-amber-700 font-semibold mt-0.5'>NT$ " + p.price + "</p></div></div>" + actionHtml + "</div>";
+            var cleanWeight = String(p.weight || "").replace(/"/g, "").replace(/&quot;/g, "").replace(/g/gi, "").trim();
+            var weightHtml = cleanWeight ? "<p class='text-xs text-stone-400'>約 " + cleanWeight + "g</p>" : "";
+            itemDiv.innerHTML = "<h3 class='font-medium text-stone-800 text-sm w-full mb-1'>" + rawName + noteHtml + "</h3><div class='flex justify-between items-center w-full'><div class='flex gap-3 items-center' id='product-info-left-" + p.id + "'><div>" + weightHtml + "<p class='text-sm text-amber-700 font-semibold mt-0.5'>NT$ " + p.price + "</p></div></div>" + actionHtml + "</div>";
             container.appendChild(itemDiv);
         });
         function updateQty(id, change) { var input = document.getElementById("qty-" + id); var currentQty = parseInt(input.value) || 0; currentQty = Math.max(0, currentQty + change); input.value = currentQty; if (currentQty === 0) { delete cart[id]; } else { cart[id] = currentQty; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); calculatePageTotal(); updateCartCount(); }
@@ -93,14 +103,15 @@
         calculatePageTotal(); updateCartCount();
         (function() {
             window.products.forEach(function(p) {
-                var imgUrl = "images/thumb/" + p.id + ".jpg";
+                var imgUrl = "images/thumb/" + p.id + ".png";
                 var imgTester = new Image();
                 imgTester.onload = function() {
                     var targetLeftPart = document.getElementById("product-info-left-" + p.id);
                     if (targetLeftPart) {
                         var imgBox = document.createElement("div");
                         imgBox.className = "flavor-img-box";
-                        imgBox.innerHTML = "<img src='" + imgUrl + "' alt='" + p.name + "' onclick=\"window.openFlavorLightbox(this.src, '" + p.name.replace(/'/g, "\\'") + "')\">";
+                        var safeName = String(p.name || "").replace(/"/g, "").replace(/&quot;/g, "").replace(/'/g, "\\'").trim();
+                        imgBox.innerHTML = "<img src='" + imgUrl + "' alt='" + safeName + "' onclick=\"window.openFlavorLightbox(this.src, '" + safeName + "')\">";
                         targetLeftPart.insertBefore(imgBox, targetLeftPart.firstChild);
                     }
                 };
@@ -120,6 +131,20 @@
                 setTimeout(function() { img.classList.remove("scale-95"); }, 10);
             };
         })();
+        let currentFontSize = parseInt(localStorage.getItem("poponew_font_size")) || 16;
+        applyFontSize(currentFontSize);
+        function changeFontSize(delta) {
+            currentFontSize = Math.min(Math.max(currentFontSize + delta * 2, 14), 22);
+            applyFontSize(currentFontSize);
+        }
+        function resetFontSize() {
+            currentFontSize = 16;
+            applyFontSize(currentFontSize);
+        }
+        function applyFontSize(size) {
+            document.documentElement.style.fontSize = size + "px";
+            localStorage.setItem("poponew_font_size", size);
+        }
     </script>
 </body>
 </html>

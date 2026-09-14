@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>訂單狀況查詢 - Poponew 手做甜點</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+<style>
+    @font-face {
+        font-family: "poponew";
+        src: url("fonts/poponew.woff2") format("woff2"),
+             url("fonts/poponew.ttf") format("truetype");
+        font-weight: bold;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    /* 讓大標題與左上角 Poponew 品牌標題皆套用自訂字型 */
+    h1, h2, nav a, nav span {
+        font-family: "poponew", sans-serif !important;
+    }
+</style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-12">
+
+    <!-- 頂部導覽列 -->
+<nav class="relative p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40 md:rounded-t-2xl">
+    <a href="index.html" class="text-xl font-bold text-amber-800 tracking-wider">Poponew甜點</a>
+    
+    <div class="flex items-center gap-3">
+        <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車</a>
+    </div>
+
+    <!-- 💡【浮動字級按鈕】精準浮動在「購物車」按鈕的正下方 -->
+<div class="absolute top-[calc(100%+10px)] right-4 flex items-center bg-white/95 backdrop-blur-md rounded-xl p-1 border border-stone-200 shadow-md z-30">
+    <button type="button" onclick="changeFontSize(-1)" title="縮小字型" class="w-8 h-7 flex items-center justify-center text-xs font-bold text-stone-600 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A-</button>
+    <button type="button" onclick="resetFontSize()" title="重設字型" class="px-2 h-7 flex items-center justify-center text-xs font-medium text-stone-400 hover:text-amber-800 transition">預設</button>
+    <button type="button" onclick="changeFontSize(1)" title="放大字型" class="w-8 h-7 flex items-center justify-center text-sm font-bold text-stone-700 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A+</button>
+</div>
+</nav>
+
+<div class="max-w-2xl mx-auto px-4 my-8">
+    <!-- 頁頭標題 (恢復乾淨無按鈕衝突) -->
+    <header class="text-center py-6 px-4 bg-white rounded-2xl shadow-sm border border-stone-100 mb-6">
+        <h1 class="text-3xl font-extrabold text-amber-800 tracking-wider">🔍 訂單進度查詢</h1>
+        <p class="text-stone-500 mt-2 text-sm px-4">請輸入您訂購時填寫的「手機號碼」即可查看對帳與出貨狀態</p>
+    </header>
+
+        <!-- 搜尋表單區塊 -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 mb-6">
+            <form onsubmit="searchOrder(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-1">手機號碼</label>
+                    <input type="tel" id="search-phone" placeholder="例如：0987430896" required
+                        class="w-full px-4 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-base">
+                </div>
+                <button type="submit" id="search-btn"
+                    class="w-full bg-amber-700 hover:bg-amber-800 text-white font-bold py-3 px-4 rounded-xl transition duration-200 shadow-md flex items-center justify-center gap-2">
+                    <span>🔍 查詢訂單狀況</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- 查詢結果區塊 -->
+        <div id="result-container" class="space-y-4"></div>
+
+        <!-- 頁尾聯絡資訊 -->
+        <div class="mt-8 text-center p-4 border-t border-stone-200 text-xs text-stone-500 space-y-2">
+            <p>💬 若查詢過程有任何疑問，歡迎私訊我們：</p>
+            <div class="flex justify-center gap-6 text-sm pt-1">
+                <a href="#" target="_blank" class="text-amber-800 hover:text-amber-900 font-medium transition">📸 Instagram 粉絲專頁 ↗</a>
+                <a href="#" target="_blank" class="text-emerald-700 hover:text-emerald-800 font-medium transition">💬 官方 LINE 客服 ↗</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS_Qhflwt5ZyJbCTpcwti_J43OoKvyXThwelqtlwMomwAlQ_yTriW6KtWsSqZMNvgffJr5eMxyBOSOt/pub?output=csv";
+
+        // CSV 解析函數
+        function parseCSVRow(str) {
+            let result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < str.length; i++) {
+                let char = str[i];
+                if (char === '"' && str[i+1] === '"') {
+                    current += '"'; i++;
+                } else if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current);
+            return result.map(s => s.trim().replace(/^"|"$/g, ''));
+        }
+
+        async function searchOrder(event) {
+            event.preventDefault();
+            const inputPhone = document.getElementById('search-phone').value.trim();
+            const resultContainer = document.getElementById('result-container');
+            const searchBtn = document.getElementById('search-btn');
+
+            if (!inputPhone) {
+                alert("請輸入手機號碼！");
+                return;
+            }
+
+            searchBtn.disabled = true;
+            searchBtn.innerText = "查詢中...";
+            resultContainer.innerHTML = `<div class="text-center text-stone-500 py-6 text-sm">⏳ 查詢中...請稍候</div>`;
+
+            try {
+                const response = await fetch(GOOGLE_SHEET_CSV_URL);
+                if (!response.ok) throw new Error("無法連結試算表");
+                const csvText = await response.text();
+
+                const rawLines = csvText.split('\n');
+                const lines = [];
+                let currentLine = "";
+                let insideQuotes = false;
+
+                for (let i = 0; i < rawLines.length; i++) {
+                    let chunk = rawLines[i];
+                    currentLine += (currentLine === "" ? "" : "\n") + chunk;
+                    let quotesCount = (chunk.match(/"/g) || []).length;
+                    if (quotesCount % 2 !== 0) insideQuotes = !insideQuotes;
+                    if (!insideQuotes) {
+                        if (currentLine.trim()) lines.push(currentLine.trim());
+                        currentLine = "";
+                    }
+                }
+
+                if (lines.length === 0) throw new Error("試算表無資料");
+
+                // 1. 動態抓取 Header 標頭
+                const headers = parseCSVRow(lines[0]).map(h => h.trim().toLowerCase());
+                const getIndex = (possibleNames) => {
+                    return headers.findIndex(h => possibleNames.some(name => h.includes(name.toLowerCase())));
+                };
+
+                // 智慧辨識欄位位置（最優先精準匹配中文）
+                const idxDate = getIndex(['時間', 'timestamp', '日期']);
+                const idxName = getIndex(['姓名', 'customer_name', '訂購人']);
+                const idxPhone = getIndex(['電話', 'customer_phone', '手機']);
+                const idxEmail = getIndex(['email', '信箱']);
+                const idxAddress = getIndex(['地址', 'customer_address', '收件地址']);
+                const idxPayment = getIndex(['付款方式', 'payment_method']);
+                const idxLastFive = getIndex(['後五碼', 'account_last_five', '末五碼']);
+                const idxDetails = getIndex(['明細', 'order_details', '品項']);
+                const idxTotal = getIndex(['總金額', 'total_price', '金額', '合計']);
+                const idxNote = getIndex(['備註', 'customer_note']);
+                const idxPayStatus = getIndex(['對帳狀態', 'payment_status']);
+                const idxOrderStatus = getIndex(['訂單狀態', 'order_status']);
+                const idxShipDate = getIndex(['出貨日', 'ship_date', '預計出貨']);
+                const idxTracking = getIndex(['tracking_no', '物流單號', '單號', '追蹤碼']);
+
+                const cleanInput = inputPhone.replace(/-/g, '').replace(/^0+/, '');
+                const matchedOrders = [];
+
+                // 2. 逐行比對搜尋
+                for (let i = 1; i < lines.length; i++) {
+                    const row = parseCSVRow(lines[i]);
+                    if (row.length === 0) continue;
+
+                    const rawPhone = idxPhone !== -1 ? (row[idxPhone] || '') : '';
+                    const cleanRowPhone = rawPhone.replace(/-/g, '').trim().replace(/^0+/, '');
+
+                if (cleanInput !== '' && cleanRowPhone === cleanInput) {
+                    const payMethod = idxPayment !== -1 ? (row[idxPayment] || '') : '未指定';
+                    
+                    // 取出對應數值並去除前後空白
+                    const payStat = idxPayStatus !== -1 ? (row[idxPayStatus] || '').trim() : '';
+                    const orderStat = idxOrderStatus !== -1 ? (row[idxOrderStatus] || '').trim() : '';
+
+                    matchedOrders.push({
+                        date: idxDate !== -1 ? (row[idxDate] || '未提供') : '未提供',
+                        name: idxName !== -1 ? (row[idxName] || '顧客') : '顧客',
+                        address: idxAddress !== -1 ? (row[idxAddress] || '') : '',
+                        paymentMethod: payMethod,
+                        lastFive: idxLastFive !== -1 ? (row[idxLastFive] || '') : '',
+                        details: idxDetails !== -1 ? (row[idxDetails] || '無品項明細') : '無品項明細',
+                        total: idxTotal !== -1 ? (row[idxTotal] || '0') : '0',
+                        customerNote: idxNote !== -1 ? (row[idxNote] || '') : '',
+                        
+                        // 只有當儲存格真正留白時才套用預設值
+                        payStatus: payStat !== '' ? payStat : (payMethod.includes('貨到付款') ? '貨到付款' : '待核款'),
+                        orderStatus: orderStat !== '' ? orderStat : '訂單處理中',
+                        
+                        shipDate: idxShipDate !== -1 ? (row[idxShipDate] || '') : '',
+                        trackingNo: idxTracking !== -1 ? (row[idxTracking] || '尚未出貨') : '尚未出貨'
+                    });
+                    }
+                }
+
+                searchBtn.disabled = false;
+                searchBtn.innerText = "🔍 查詢訂單狀況";
+
+                if (matchedOrders.length === 0) {
+                    resultContainer.innerHTML = `
+                        <div class="bg-amber-50 border border-amber-200 text-stone-700 p-6 rounded-2xl text-center space-y-2">
+                            <p class="text-base font-bold text-amber-800">查無對應的訂單紀錄 😅</p>
+                            <p class="text-xs text-stone-500">請確認輸入的手機號碼是否與下單時填寫的一致（例如：0987430896）。</p>
+                        </div>`;
+                } else {
+                    let html = `<p class="text-xs font-semibold text-stone-500 mb-2">找到 ${matchedOrders.length} 筆相關訂單紀錄：</p>`;
+                    matchedOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                    matchedOrders.forEach(order => {
+                        let payBadge = "bg-stone-100 text-stone-600 border-stone-200";
+                        if (order.payStatus.includes("已收") || order.payStatus.includes("完成")) {
+                            payBadge = "bg-emerald-100 text-emerald-800 border-emerald-200";
+                        } else if (order.payStatus.includes("待")) {
+                            payBadge = "bg-amber-100 text-amber-800 border-amber-200";
+                        }
+
+                        let orderBadge = "bg-stone-100 text-stone-600 border-stone-200"; // 預設灰色
+
+                        if (order.orderStatus.includes("出貨") || order.orderStatus.includes("完成") || order.orderStatus.includes("結案")) {
+                            // 藍色標籤：代表「已出貨」
+                            orderBadge = "bg-sky-100 text-sky-800 border-sky-200"; 
+                        } else if (order.orderStatus.includes("製作")) {
+                            // 紫藍色標籤：代表「製作中」
+                            orderBadge = "bg-purple-100 text-purple-800 border-purple-200"; 
+                        } else if (order.orderStatus.includes("處理") || order.orderStatus.includes("待")) {
+                            // 暖黃色標籤：代表「訂單處理中 / 待處理」
+                            orderBadge = "bg-amber-100 text-amber-800 border-amber-200"; 
+                        }
+
+                        html += `
+                            <div class="bg-white rounded-2xl p-5 shadow-sm border border-stone-200 space-y-3">
+                                <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+                                    <div>
+                                        <span class="text-xs text-stone-400 block">下單時間</span>
+                                        <span class="text-sm font-bold text-stone-700">${order.date}</span>
+                                    </div>
+                                    <div class="flex gap-1.5">
+                                        <span class="text-xs px-2.5 py-1 rounded-full border font-bold ${payBadge}">對帳：${order.payStatus}</span>
+                                        <span class="text-xs px-2.5 py-1 rounded-full border font-bold ${orderBadge}">進度：${order.orderStatus}</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <span class="text-xs text-stone-400 block mb-1">訂購品項</span>
+                                    <pre class="text-xs text-stone-700 font-sans whitespace-pre-wrap bg-stone-50 p-2.5 rounded-xl border border-stone-100 leading-relaxed">${order.details}</pre>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2 text-xs border-t border-stone-100 pt-3">
+                                    <div>
+                                        <span class="text-stone-400">付款方式：</span>
+                                        <span class="font-medium text-stone-700">${order.paymentMethod} ${order.lastFive ? '(' + order.lastFive + ')' : ''}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-stone-400">訂單總額：</span>
+                                        <span class="font-bold text-amber-700">NT$ ${order.total}</span>
+                                    </div>
+                                    ${order.customerNote ? `<div class="col-span-2"><span class="text-stone-400">備註：</span><span class="font-medium text-stone-700">${order.customerNote}</span></div>` : ''}
+                                    ${order.shipDate ? `
+                                    <div class="col-span-2 border-t border-dashed border-stone-100 pt-2 mt-1">
+                                        <span class="text-stone-400">📅 預計出貨日：</span>
+                                        <span class="font-bold text-amber-800">${order.shipDate}</span>
+                                    </div>
+                                    ` : ''}
+
+                                    <div class="col-span-2">
+                                        <span class="text-stone-400">📦 物流追蹤碼：</span>
+                                        <span class="font-mono font-bold ${order.trackingNo !== '尚未出貨' ? 'text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200' : 'text-stone-800'}">
+                                            ${order.trackingNo}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>`;
+                    });
+                    resultContainer.innerHTML = html;
+                }
+            } catch (err) {
+                console.error(err);
+                searchBtn.disabled = false;
+                searchBtn.innerText = "🔍 查詢訂單狀況";
+                resultContainer.innerHTML = `
+                    <div class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl text-center text-sm">
+                        ❌ 連線讀取資料失敗，請確認 Google 試算表已發布為 CSV 格式。
+                    </div>`;
+            }
+        }
+
+                // 💡 字級控制邏輯
+        let currentFontSize = parseInt(localStorage.getItem('poponew_font_size')) || 16;
+        applyFontSize(currentFontSize);
+
+        function changeFontSize(delta) {
+            // 限制字級範圍：最小 14px，最大 22px
+            currentFontSize = Math.min(Math.max(currentFontSize + delta * 2, 14), 22);
+            applyFontSize(currentFontSize);
+        }
+
+        function resetFontSize() {
+            currentFontSize = 16;
+            applyFontSize(currentFontSize);
+        }
+
+        function applyFontSize(size) {
+            document.documentElement.style.fontSize = size + 'px';
+            localStorage.setItem('poponew_font_size', size);
+        }
+    </script>
+</body>
+</html>
