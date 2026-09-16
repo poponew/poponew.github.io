@@ -47,8 +47,7 @@
         <div class="relative p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40 md:rounded-t-2xl">
             <a href="index.html" class="text-amber-700 text-[16px] font-bold">看看還有什麼好吃的<br/>＊☉౪ ⊙｡</a>
             <div class="flex items-center gap-2">
-                <a href="order-search.html" class="hover:bg-amber-50 text-amber-800 font-medium py-1.5 px-3 rounded-xl transition flex items-center gap-1 text-xs md:text-sm">🔍 訂單查詢</a>
-                <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
+                <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a><br/>
             </div>
             <div class="absolute top-[calc(100%+10px)] right-4 flex items-center bg-white/95 backdrop-blur-md rounded-xl p-1 border border-stone-200 shadow-md z-30">
                 <button type="button" onclick="changeFontSize(-1)" title="縮小字型" class="w-8 h-7 flex items-center justify-center text-xs font-bold text-stone-600 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A-</button>
@@ -108,7 +107,7 @@
         calculatePageTotal(); updateCartCount();
         (function() {
             window.products.forEach(function(p) {
-                var imgUrl = "images/thumb/" + p.id + ".png";
+                var imgUrl = "images/thumb/" + p.id + ".jpg";
                 var imgTester = new Image();
                 imgTester.onload = function() {
                     var targetLeftPart = document.getElementById("product-info-left-" + p.id);
