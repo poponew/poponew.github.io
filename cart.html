@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>泡泡牛甜點 - 購物車結帳</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/shop-settings.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
@@ -46,6 +47,7 @@
                 <div>
                     <label class="block text-sm font-medium text-stone-600 mb-1">姓名 <span class="text-red-500">*</span></label>
                     <input type="text" id="name" required class="w-full h-11 px-4 border border-stone-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-base">
+                    <p class="text-[11px] text-stone-400 mt-1">收件姓名、電話、地址會記在這台裝置，下次不用重填。</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-stone-600 mb-1">手機號碼 <span class="text-red-500">*</span></label>
@@ -84,7 +86,7 @@
 
             <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-3">
                 <label class="block text-sm font-semibold text-stone-700 border-b border-stone-200 pb-1">付款方式 <span class="text-red-500">*</span></label>
-                <p class="text-xs text-amber-700 mt-2 mb-1">
+                <p id="cod-limit-hint" class="text-xs text-amber-700 mt-2 mb-1">
     💡 貼心提醒：單筆訂單金額達 NT$2,000 以上時，將不提供貨到付款服務，系統會自動隱藏貨到付款選項。
 </p>
                 <div class="flex gap-6 text-base py-1">
@@ -570,9 +572,20 @@
     }
 };
 
+        function shopCfg() {
+            var s = window.shopSettings || {};
+            return {
+                shippingFee: parseInt(s.shippingFee, 10) || 80,
+                freeShipping: parseInt(s.freeShipping, 10) || 2000,
+                minOrder: parseInt(s.minOrder, 10) || 500,
+                codLimit: parseInt(s.codLimit, 10) || 2000,
+                bulkOrder: parseInt(s.bulkOrder, 10) || 5000
+            };
+        }
+
         let cart = JSON.parse(localStorage.getItem('poponew_cart')) || {};
         let productSubtotal = 0;
-        let shippingFee = 80;
+        let shippingFee = shopCfg().shippingFee;
 
         const countySelect = document.getElementById('county-select');
         const districtSelect = document.getElementById('district-select');
@@ -599,11 +612,50 @@
             for (const [distName, zipCode] of Object.entries(districts)) {
                 districtSelect.innerHTML += `<option value="${distName}" data-zip="${zipCode}">${zipCode} ${distName}</option>`;
             }
+            saveCustomerProfile();
         }
 
         function onDistrictChange() {
             const selectedOption = districtSelect.options[districtSelect.selectedIndex];
             selectedZip = selectedOption.getAttribute('data-zip') || "";
+            saveCustomerProfile();
+        }
+
+        function saveCustomerProfile() {
+            if (window._restoringProfile) return;
+            try {
+                localStorage.setItem('poponew_customer_profile', JSON.stringify({
+                    name: document.getElementById('name').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value,
+                    county: countySelect.value,
+                    district: districtSelect.value,
+                    zip: selectedZip,
+                    address: document.getElementById('address').value
+                }));
+            } catch (e) {}
+        }
+
+        function restoreCustomerProfile() {
+            var raw = localStorage.getItem('poponew_customer_profile');
+            if (!raw) return;
+            var p;
+            try { p = JSON.parse(raw); } catch (e) { return; }
+            window._restoringProfile = true;
+            if (p.name) document.getElementById('name').value = p.name;
+            if (p.phone) document.getElementById('phone').value = p.phone;
+            if (p.email) document.getElementById('email').value = p.email;
+            if (p.address) document.getElementById('address').value = p.address;
+            if (p.county) {
+                countySelect.value = p.county;
+                onCountyChange();
+                if (p.district) {
+                    districtSelect.value = p.district;
+                    const selectedOption = districtSelect.options[districtSelect.selectedIndex];
+                    selectedZip = (selectedOption && selectedOption.getAttribute('data-zip')) || p.zip || "";
+                }
+            }
+            window._restoringProfile = false;
         }
 
         function renderCart() {
@@ -645,27 +697,32 @@
                 document.getElementById('submit-btn').classList.remove('bg-stone-300', 'cursor-not-allowed');
             }
 
-            if (productSubtotal >= 2000) {
+            const cfg = shopCfg();
+            if (productSubtotal >= cfg.freeShipping) {
                 shippingFee = 0;
                 document.getElementById('shipping-fee-text').innerHTML = `<span class="text-green-600 font-bold">🎉 免運費</span>`;
-                document.getElementById('free-shipping-tip').innerText = `已達 NT$ 2,000 免運門檻！`;
+                document.getElementById('free-shipping-tip').innerText = `已達 NT$ ${cfg.freeShipping.toLocaleString()} 免運門檻！`;
             } else {
-                shippingFee = 80;
-                document.getElementById('shipping-fee-text').innerText = `NT$ 80`;
-                document.getElementById('free-shipping-tip').innerText = `再買 NT$ ${2000 - productSubtotal} 元即享免運費宅配！`;
+                shippingFee = cfg.shippingFee;
+                document.getElementById('shipping-fee-text').innerText = `NT$ ${cfg.shippingFee}`;
+                document.getElementById('free-shipping-tip').innerText = `再買 NT$ ${cfg.freeShipping - productSubtotal} 元即享免運費宅配！`;
             }
 
             
             const bulkTip=document.getElementById('bulk-order-tip');
-            if(productSubtotal>5000){
+            if(productSubtotal>cfg.bulkOrder){
                 bulkTip.classList.remove('hidden');
                 bulkTip.innerText='您的訂購數量較大，屬於大宗/企業訂單。為了保障您的權益與確認出貨檔期，請直接透過網站下方聯絡方式聯繫我們由專人為您服務！';
             } else {bulkTip.classList.add('hidden');}
             const cod=document.getElementById('cod-option');
-            if(productSubtotal>2000){
+            if(productSubtotal>cfg.codLimit){
                 cod.style.display='none';
                 document.querySelector('input[value="轉帳匯款"]').checked=true;
             } else {cod.style.display='flex';}
+            const codHint = document.getElementById('cod-limit-hint');
+            if (codHint) {
+                codHint.innerText = '💡 貼心提醒：單筆訂單金額達 NT$ ' + cfg.codLimit.toLocaleString() + ' 以上時，將不提供貨到付款服務，系統會自動隱藏貨到付款選項。';
+            }
 document.getElementById('subtotal-price').innerText = productSubtotal;
             document.getElementById('total-price').innerText = productSubtotal + shippingFee;
         }
@@ -717,6 +774,13 @@ function submitOrder(event) {
             }
 
             if(!document.getElementById('not-robot').checked){alert('請勾選我不是機器人');return;}
+            const cfg = shopCfg();
+            if (productSubtotal < cfg.minOrder) {
+                alert('抱歉！本商店最低結帳金額為 NT$ ' + cfg.minOrder + ' 元，目前小計為 NT$ ' + productSubtotal + ' 元。');
+                return;
+            }
+            saveCustomerProfile();
+            const orderId = 'POPO-' + Date.now();
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.disabled = true;
             submitBtn.innerText = "訂單送出中...";
@@ -753,6 +817,7 @@ function submitOrder(event) {
                 customer_note: document.getElementById('note').value || "無",
                 order_details: cleanDetails, // 使用過濾後的版本！
                 total_price: productSubtotal + shippingFee,
+                order_id: orderId,
                 admin_email: "hi.poponew@gmail.com"
             };
 
@@ -764,7 +829,6 @@ function submitOrder(event) {
                     sendToGoogleSheets(templateParams);
                 }, function(error) {
                     console.error("EmailJS發送失敗:", error);
-                    // 強制寫入 Google 試算表
                     sendToGoogleSheets(templateParams);
                 });
         }
@@ -778,7 +842,7 @@ function submitOrder(event) {
                 mode: 'no-cors', // 繞過跨域限制
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    order_id: "POPO-" + Date.now(),
+                    order_id: params.order_id || ("POPO-" + Date.now()),
                     order_time: new Date().toLocaleString('zh-TW'),
                     customer_name: params.customer_name,
                     customer_phone: params.customer_phone,
@@ -793,14 +857,19 @@ function submitOrder(event) {
             })
             .then(() => {
                 console.log("訂單已透過中轉站寫入試算表！");
-                document.getElementById('custom-alert-modal').classList.remove('hidden');
-                localStorage.removeItem('poponew_cart');
+                showOrderSuccess(params.order_id);
             })
             .catch((error) => {
                 console.error("同步失敗:", error);
-                document.getElementById('custom-alert-modal').classList.remove('hidden');
-                localStorage.removeItem('poponew_cart');
+                showOrderSuccess(params.order_id);
             });
+        }
+
+        function showOrderSuccess(orderId) {
+            var idEl = document.getElementById('success-order-id');
+            if (idEl) idEl.innerText = orderId || '';
+            document.getElementById('custom-alert-modal').classList.remove('hidden');
+            localStorage.removeItem('poponew_cart');
         }
 
         // 點擊我知道了，關閉彈出視窗並回首頁
@@ -811,15 +880,39 @@ function submitOrder(event) {
 
         // 執行初始化
         initTwZipcode();
+        restoreCustomerProfile();
+        ['name', 'phone', 'email', 'address'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('change', saveCustomerProfile);
+                el.addEventListener('blur', saveCustomerProfile);
+            }
+        });
         renderCart();
+        window.poponewRefreshCart = function(stored) {
+            if (stored) cart = stored;
+            else cart = JSON.parse(localStorage.getItem('poponew_cart')) || {};
+            renderCart();
+        };
+        window.addEventListener("pageshow", function() {
+            cart = JSON.parse(localStorage.getItem('poponew_cart')) || {};
+            renderCart();
+        });
+        document.addEventListener("visibilitychange", function() {
+            if (document.visibilityState === "visible") {
+                cart = JSON.parse(localStorage.getItem('poponew_cart')) || {};
+                renderCart();
+            }
+        });
     </script>
     <!-- 自訂精美訂單提示視窗 (Modal) -->
     <div id="custom-alert-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-stone-100 transform scale-95 transition-all text-center">
             <div class="text-4xl mb-3">🎉</div>
             <h3 class="text-lg font-bold text-stone-800 mb-2">您的訂單已成功送出！</h3>
+            <p class="text-amber-800 font-bold text-base mb-3">訂單編號：<span id="success-order-id" class="font-mono"></span></p>
             <p class="text-stone-500 text-sm leading-relaxed mb-5">
-                感謝您的訂購。<br>
+                感謝您的訂購，請保留上方編號方便查詢。<br>
                 💡 您的訂單郵件已寄出，如果沒收到訂購 email，請記得到<span class="text-red-500 font-extrabold text-base mx-0.5 underline decoration-2">垃圾郵件</span>看看唷！
             </p>
             <button onclick="closeModalAndGoHome()" class="w-full h-11 bg-amber-700 hover:bg-amber-800 text-white font-medium rounded-xl transition shadow-md text-sm active:scale-95">
@@ -827,5 +920,6 @@ function submitOrder(event) {
             </button>
         </div>
     </div>
+    <script src="js/cart-sync.js"></script>
 </body>
 </html>

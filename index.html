@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Poponew手做甜點</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/shop-settings.js"></script>
     <style>
         @font-face {
             font-family: "poponew";
-            src: url("fonts/poponew.woff2") format("woff2"),
-                 url("fonts/poponew.woff2") format("truetype");
+            src: url("fonts/poponew.woff2") format("woff2");
             font-weight: bold;
             font-style: normal;
             font-display: swap;
@@ -39,13 +39,13 @@
             <p class="text-stone-500 mt-3 max-w-xl mx-auto text-sm px-4">全店手工現做，滿 NT$ 2,000 元即享免運費宅配！</p>
         </header>
         <div class="flex flex-wrap justify-center gap-2 mb-8" id="category-tags">
-          <button onclick="filterCategory('all')" class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-amber-700 text-white shadow-sm transition">全部商品</button>
-          <button onclick="filterCategory('職人手工餅乾')" class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">職人手工餅乾</button>
-          <button onclick="filterCategory('手作司康')" class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">手作司康</button>
-          <button onclick="filterCategory('巴斯克乳酪蛋糕')" class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">巴斯克乳酪蛋糕</button>
-          <button onclick="filterCategory('生乳捲')" class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">生乳捲</button>
-          <button onclick="filterCategory('迷你一口系列')" class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">迷你一口系列</button>
-          <button onclick="filterCategory('人氣單品')" class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">人氣單品</button>
+          <button type="button" onclick="filterCategory('all', this)" class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-amber-700 text-white shadow-sm transition">全部商品</button>
+          <button type="button" onclick='filterCategory("職人手工餅乾", this)' class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">職人手工餅乾</button>
+          <button type="button" onclick='filterCategory("手作司康", this)' class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">手作司康</button>
+          <button type="button" onclick='filterCategory("巴斯克乳酪蛋糕", this)' class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">巴斯克乳酪蛋糕</button>
+          <button type="button" onclick='filterCategory("生乳捲", this)' class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">生乳捲</button>
+          <button type="button" onclick='filterCategory("迷你一口系列", this)' class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">迷你一口系列</button>
+          <button type="button" onclick='filterCategory("人氣單品", this)' class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">人氣單品</button>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-list">
             <a href="msbg.html" data-tag="職人手工餅乾" data-pinned="true" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
@@ -700,15 +700,21 @@
             document.getElementById("cart-count").innerText = count;
         }
         updateCartCount();
-        function filterCategory(selectedTag) {
+        window.addEventListener("pageshow", updateCartCount);
+        document.addEventListener("visibilitychange", function() {
+            if (document.visibilityState === "visible") updateCartCount();
+        });
+        function filterCategory(selectedTag, btn) {
             const cards = document.querySelectorAll(".product-card");
             const buttons = document.querySelectorAll("#category-tags button");
-            buttons.forEach(btn => {
-                btn.classList.remove("bg-amber-700", "text-white");
-                btn.classList.add("bg-white", "text-stone-600");
+            buttons.forEach(b => {
+                b.classList.remove("bg-amber-700", "text-white");
+                b.classList.add("bg-white", "text-stone-600");
             });
-            event.currentTarget.classList.remove("bg-white", "text-stone-600");
-            event.currentTarget.classList.add("bg-amber-700", "text-white");
+            if (btn) {
+                btn.classList.remove("bg-white", "text-stone-600");
+                btn.classList.add("bg-amber-700", "text-white");
+            }
             cards.forEach(card => {
                 const cardTags = card.dataset.tag ? card.dataset.tag.split(/[,，]/).map(t => t.trim()) : [];
                 if (selectedTag === "all" || cardTags.includes(selectedTag)) {
@@ -768,5 +774,6 @@
             localStorage.setItem("poponew_font_size", size);
         }
     </script>
+    <script src="js/cart-sync.js"></script>
 </body>
 </html>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>經典原味巴斯克線上訂購 - 泡泡牛甜點</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/shop-settings.js"></script>
     <script>
         window.products = [
     {
@@ -14,7 +15,8 @@
         "name": "經典原味巴斯克(6吋切片)",
         "weight": "120",
         "price": 110,
-        "note": ""
+        "note": "",
+        "soldOut": false
     },
     {
         "id": 48,
@@ -23,7 +25,8 @@
         "name": "經典原味巴斯克(6吋整顆)",
         "weight": "720",
         "price": 660,
-        "note": "需5~7工作天出貨"
+        "note": "需5~7工作天出貨",
+        "soldOut": false
     }
 ];
         window.allProductsLookup = {"1":100,"2":125,"3":130,"4":125,"5":120,"6":130,"7":130,"9":140,"10":840,"11":145,"12":140,"13":870,"14":840,"22":55,"23":70,"24":80,"25":70,"26":80,"27":85,"28":75,"29":75,"30":70,"32":75,"33":100,"34":60,"35":70,"36":70,"37":70,"38":70,"39":70,"40":100,"41":145,"42":870,"43":135,"44":810,"45":130,"46":780,"47":110,"48":660,"49":135,"50":810,"51":135,"52":810,"53":125,"54":750,"55":140,"56":840,"57":145,"58":870,"59":80,"60":85,"61":85,"62":100,"63":75,"64":75,"65":75,"66":100,"67":65,"68":100,"69":45,"70":50,"72":150,"73":185,"75":185,"76":45,"77":175,"78":145,"79":100,"80":100,"81":90,"82":115,"83":120,"84":110,"85":130,"86":130,"87":125,"88":130,"89":100,"90":90,"91":45,"92":55,"93":55};
@@ -61,6 +64,8 @@
                     <span class="text-xs font-semibold text-amber-700 block mb-0.5">目前訂單累計總額 (包含其他商品)</span>
                     <span class="text-3xl font-extrabold text-amber-700">NT$ <span id="entire-cart-total">0</span></span>
                     <p id="free-shipping-tip" class="text-xs font-medium text-stone-500 mt-1"></p>
+                    <p id="bulk-order-tip" class="hidden text-xs font-medium text-red-600 mt-1"></p>
+                    <p id="cod-limit-tip" class="hidden text-xs font-medium text-amber-800 mt-1"></p>
                 </div>
                 <button onclick="saveToCartAndGo()" class="h-12 px-6 bg-amber-700 hover:bg-amber-800 text-white font-medium rounded-xl transition shadow-md flex items-center justify-center gap-1 active:scale-95 text-xm h-auto md:h-12">前往結帳</button>
             </div>
@@ -74,6 +79,7 @@
     </div>
     <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.</p>
     <script>
+        function shop() { var s = window.shopSettings || {}; return { shippingFee: parseInt(s.shippingFee,10)||80, freeShipping: parseInt(s.freeShipping,10)||2000, minOrder: parseInt(s.minOrder,10)||500, codLimit: parseInt(s.codLimit,10)||2000, bulkOrder: parseInt(s.bulkOrder,10)||5000 }; }
         var cart = JSON.parse(localStorage.getItem("poponew_cart")) || {};
         var container = document.getElementById("cookie-list");
         window.products.forEach(function(p) {
@@ -82,7 +88,7 @@
             var rawName = String(p.name || "").replace(/"/g, "").replace(/&quot;/g, "").trim();
             var rawNote = String(p.note || "").replace(/"/g, "").replace(/&quot;/g, "").trim();
             var noteHtml = rawNote ? " <span class='text-xs text-amber-600 font-semibold bg-amber-100/60 px-1.5 py-0.5 rounded-md ml-1'>" + rawNote + "</span>" : "";
-            var isOutOfStock = (rawNote && (rawNote.indexOf("缺貨") !== -1 || rawNote.indexOf("售完") !== -1));
+            var isOutOfStock = !!(p.soldOut) || (rawNote && (rawNote.indexOf("缺貨") !== -1 || rawNote.indexOf("售完") !== -1));
             var actionHtml = isOutOfStock ? "<span class='text-sm font-bold text-stone-400 bg-stone-100 px-3 py-1.5 rounded-lg border border-stone-200 shadow-inner'>🚫 已售完</span>" : "<div class='flex items-center gap-3'><button type='button' onclick='updateQty(" + p.id + ", -1)' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm hover:bg-stone-50 active:scale-95'>-</button><input type='number' id='qty-" + p.id + "' value='" + currentQty + "' min='0' readonly class='w-6 text-center bg-transparent font-bold text-stone-800'><button type='button' onclick='updateQty(" + p.id + ", 1)' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm hover:bg-stone-50 active:scale-95'>+</button></div>";
             itemDiv.className = "p-4 bg-stone-50 rounded-xl border border-stone-200 hover:border-amber-200 transition space-y-2";
             var cleanWeight = String(p.weight || "").replace(/"/g, "").replace(/&quot;/g, "").replace(/g/gi, "").trim();
@@ -90,11 +96,13 @@
             itemDiv.innerHTML = "<h3 class='font-medium text-stone-800 text-sm w-full mb-1'>" + rawName + noteHtml + "</h3><div class='flex justify-between items-center w-full'><div class='flex gap-3 items-center' id='product-info-left-" + p.id + "'><div>" + weightHtml + "<p class='text-sm text-amber-700 font-semibold mt-0.5'>NT$ " + p.price + "</p></div></div>" + actionHtml + "</div>";
             container.appendChild(itemDiv);
         });
-        function updateQty(id, change) { var input = document.getElementById("qty-" + id); var currentQty = parseInt(input.value) || 0; currentQty = Math.max(0, currentQty + change); input.value = currentQty; if (currentQty === 0) { delete cart[id]; } else { cart[id] = currentQty; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); calculatePageTotal(); updateCartCount(); }
-        function calculatePageTotal() { var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.allProductsLookup[id] || 0) * cart[id]; } document.getElementById("entire-cart-total").innerText = entireCartTotal; var tipElement = document.getElementById("free-shipping-tip"); if (entireCartTotal === 0) { tipElement.innerText = "⚠️ 本商店最低結帳金額為 NT$ 500 元唷！"; } else if (entireCartTotal >= 2000) { tipElement.innerHTML = "<span class='text-green-600 font-bold text-sm'>🎉 全店已達免運費門檻！直接結帳超划算！</span>"; } else { tipElement.innerText = "還差" + (2000 - entireCartTotal) + " 元就免運啦！"; } }
-        function saveToCartAndGo() { var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.allProductsLookup[id] || 0) * cart[id]; } if (entireCartTotal === 0) { alert("您目前尚未選擇任何數量唷！"); return; } if (entireCartTotal < 500) { alert("抱歉！本商店最低結帳金額為 NT$ 500 元，目前綜合累計為 NT$ " + entireCartTotal + " 元，請再多選購一些甜點唷！"); return; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); window.location.href = "cart.html"; }
+        function updateQty(id, change) { var input = document.getElementById("qty-" + id); var currentQty = parseInt(input.value) || 0; currentQty = Math.max(0, currentQty + change); if (currentQty > 20) { currentQty = 20; alert("單品數量上限為20"); } input.value = currentQty; if (currentQty === 0) { delete cart[id]; } else { cart[id] = currentQty; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); calculatePageTotal(); updateCartCount(); }
+        function calculatePageTotal() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.allProductsLookup[id] || 0) * cart[id]; } document.getElementById("entire-cart-total").innerText = entireCartTotal; var tipElement = document.getElementById("free-shipping-tip"); if (entireCartTotal === 0) { tipElement.innerText = "⚠️ 本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元唷！"; } else if (entireCartTotal >= cfg.freeShipping) { tipElement.innerHTML = "<span class='text-green-600 font-bold text-sm'>🎉 全店已達免運費門檻！直接結帳超划算！</span>"; } else { tipElement.innerText = "還差" + (cfg.freeShipping - entireCartTotal) + " 元就免運啦！"; } var bulkTip = document.getElementById("bulk-order-tip"); if (bulkTip) { if (entireCartTotal > cfg.bulkOrder) { bulkTip.classList.remove("hidden"); bulkTip.innerText = "您的訂購數量較大，屬於大宗/企業訂單。為了保障您的權益與確認出貨檔期，請直接透過網站下方聯絡方式聯繫我們由專人為您服務！"; } else { bulkTip.classList.add("hidden"); bulkTip.innerText = ""; } } var codTip = document.getElementById("cod-limit-tip"); if (codTip) { if (entireCartTotal > cfg.codLimit) { codTip.classList.remove("hidden"); codTip.innerText = "單筆滿 NT$ " + cfg.codLimit.toLocaleString() + " 不提供貨到付款，結帳時請改用轉帳匯款。"; } else { codTip.classList.add("hidden"); codTip.innerText = ""; } } }
+        function saveToCartAndGo() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.allProductsLookup[id] || 0) * cart[id]; } if (entireCartTotal === 0) { alert("您目前尚未選擇任何數量唷！"); return; } if (entireCartTotal < cfg.minOrder) { alert("抱歉！本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元，目前綜合累計為 NT$ " + entireCartTotal + " 元，請再多選購一些甜點唷！"); return; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); window.location.href = "cart.html"; }
         function updateCartCount() { var count = 0; for (var id in cart) { count += cart[id]; } document.getElementById("cart-count").innerText = count; }
         calculatePageTotal(); updateCartCount();
+        window.addEventListener("pagehide", function() { localStorage.setItem("poponew_cart", JSON.stringify(cart)); });
+        window.addEventListener("pageshow", function() { cart = JSON.parse(localStorage.getItem("poponew_cart")) || {}; if (window.products) { window.products.forEach(function(p) { var input = document.getElementById("qty-" + p.id); if (input) input.value = cart[p.id] || 0; }); } calculatePageTotal(); updateCartCount(); });
         (function() {
             window.products.forEach(function(p) {
                 var imgUrl = "images/thumb/" + p.id + ".jpg";
@@ -140,5 +148,6 @@
             localStorage.setItem("poponew_font_size", size);
         }
     </script>
+    <script src="js/cart-sync.js"></script>
 </body>
 </html>
