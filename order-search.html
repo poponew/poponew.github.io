@@ -99,6 +99,44 @@
             return result.map(s => s.trim().replace(/^"|"$/g, ''));
         }
 
+        function parseOrderDate(value) {
+            if (value == null) return 0;
+            const raw = String(value).trim();
+            if (!raw || raw === '未提供') return 0;
+            const native = Date.parse(raw);
+            if (!isNaN(native)) return native;
+
+            let s = raw.replace(/年|月/g, '/').replace(/日/g, ' ');
+            const isPm = /下午|pm/i.test(s);
+            const isAm = /上午|am/i.test(s);
+            s = s.replace(/上午|下午|AM|PM/gi, ' ').replace(/\s+/g, ' ').trim();
+            const m = s.match(/^(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?/);
+            if (!m) return 0;
+            let hour = parseInt(m[4] || '0', 10);
+            const min = parseInt(m[5] || '0', 10);
+            const sec = parseInt(m[6] || '0', 10);
+            if (isPm && hour < 12) hour += 12;
+            if (isAm && hour === 12) hour = 0;
+            return new Date(
+                parseInt(m[1], 10),
+                parseInt(m[2], 10) - 1,
+                parseInt(m[3], 10),
+                hour, min, sec
+            ).getTime();
+        }
+
+        function pad2(n) {
+            return String(n).padStart(2, '0');
+        }
+
+        function formatOrderDate24h(value) {
+            const ts = parseOrderDate(value);
+            if (!ts) return String(value == null || value === '' ? '未提供' : value);
+            const d = new Date(ts);
+            return d.getFullYear() + '/' + pad2(d.getMonth() + 1) + '/' + pad2(d.getDate())
+                + ' ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes()) + ':' + pad2(d.getSeconds());
+        }
+
         async function searchOrder(event) {
             event.preventDefault();
             const inputPhone = document.getElementById('search-phone').value.trim();
@@ -144,7 +182,8 @@
                 };
 
                 // 智慧辨識欄位位置（最優先精準匹配中文）
-                const idxDate = getIndex(['時間', 'timestamp', '日期']);
+                const idxDate = getIndex(['時間戳記', '時間', 'timestamp', '日期']);
+                const idxOrderTime = getIndex(['下單時間', 'order_time']);
                 const idxName = getIndex(['姓名', 'customer_name', '訂購人']);
                 const idxPhone = getIndex(['電話', 'customer_phone', '手機']);
                 const idxEmail = getIndex(['email', '信箱']);
@@ -177,8 +216,11 @@
                     const payStat = idxPayStatus !== -1 ? (row[idxPayStatus] || '').trim() : '';
                     const orderStat = idxOrderStatus !== -1 ? (row[idxOrderStatus] || '').trim() : '';
 
+                    const dateFromStamp = idxDate !== -1 ? (row[idxDate] || '').trim() : '';
+                    const dateFromOrderTime = idxOrderTime !== -1 ? (row[idxOrderTime] || '').trim() : '';
                     matchedOrders.push({
-                        date: idxDate !== -1 ? (row[idxDate] || '未提供') : '未提供',
+                        sheetIndex: i,
+                        date: dateFromStamp || dateFromOrderTime || '未提供',
                         name: idxName !== -1 ? (row[idxName] || '顧客') : '顧客',
                         address: idxAddress !== -1 ? (row[idxAddress] || '') : '',
                         paymentMethod: payMethod,
@@ -208,7 +250,11 @@
                         </div>`;
                 } else {
                     let html = `<p class="text-xs font-semibold text-stone-500 mb-2">找到 ${matchedOrders.length} 筆相關訂單紀錄：</p>`;
-                    matchedOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    matchedOrders.sort((a, b) => {
+                        const diff = parseOrderDate(b.date) - parseOrderDate(a.date);
+                        if (diff !== 0) return diff;
+                        return b.sheetIndex - a.sheetIndex;
+                    });
 
                     matchedOrders.forEach(order => {
                         let payBadge = "bg-stone-100 text-stone-600 border-stone-200";
@@ -236,7 +282,7 @@
                                 <div class="flex justify-between items-center border-b border-stone-100 pb-3">
                                     <div>
                                         <span class="text-xs text-stone-400 block">下單時間</span>
-                                        <span class="text-sm font-bold text-stone-700">${order.date}</span>
+                                        <span class="text-sm font-bold text-stone-700">${formatOrderDate24h(order.date)}</span>
                                     </div>
                                     <div class="flex gap-1.5">
                                         <span class="text-xs px-2.5 py-1 rounded-full border font-bold ${payBadge}">對帳：${order.payStatus}</span>
@@ -256,18 +302,18 @@
                                     </div>
                                     <div>
                                         <span class="text-stone-400">訂單總額：</span>
-                                        <span class="font-bold text-amber-700">NT$ ${order.total}</span>
+                                        <span class="font-bold text-amber-700">NT$ ${order.total} 元</span>
                                     </div>
                                     ${order.customerNote ? `<div class="col-span-2"><span class="text-stone-400">備註：</span><span class="font-medium text-stone-700">${order.customerNote}</span></div>` : ''}
                                     ${order.shipDate ? `
                                     <div class="col-span-2 border-t border-dashed border-stone-100 pt-2 mt-1">
-                                        <span class="text-stone-400">📅 預計出貨日：</span>
+                                        <span class="text-stone-800">📅 預計出貨日：</span>
                                         <span class="font-bold text-amber-800">${order.shipDate}</span>
                                     </div>
                                     ` : ''}
 
                                     <div class="col-span-2">
-                                        <span class="text-stone-400">📦 物流追蹤碼：</span>
+                                        <span class="text-stone-800">📦 物流追蹤碼：</span>
                                         <span class="font-mono font-bold ${order.trackingNo !== '尚未出貨' ? 'text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200' : 'text-stone-800'}">
                                             ${order.trackingNo}
                                         </span>
