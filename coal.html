@@ -49,8 +49,10 @@
         <div class="p-6">
             <div class="mb-6">
                 <h1 class="text-2xl font-bold text-stone-800 mb-2">小煤炭布朗尼餅乾</h1>
+                <div class="font-zoom">
                 <p class="text-stone-500 text-sm leading-relaxed">👀 滿滿的巧克力能量！布朗尼化身超萌「黑黑小煤炭」！<br>​圓滾滾的無辜大眼睛，真的太可愛了啦！這款布朗尼餅乾不只好看還超百搭，直接吃、泡牛奶、配果汁，或是搭著冰淇淋一起入口，不管怎麼吃都絕配、都好好吃！<br>​趕快準備好你的甜點胃，跟小煤炭一起融化吧！✨</p>
                 <p class="mt-3"><a href="keep.html?mark=%E5%B0%8F%E7%85%A4%E7%82%AD%E5%B8%83%E6%9C%97%E5%B0%BC%E9%A4%85%E4%B9%BE#cookie" class="text-sm font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">本商品保存與享用方式</a></p>
+                </div>
             </div>
             <div id="cookie-list" class="space-y-3 mb-8"></div>
             <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100 flex justify-between items-center flex-wrap gap-4 shadow-sm">
@@ -168,8 +170,10 @@
             applyFontSize(currentFontSize);
         }
         function applyFontSize(size) {
-            document.documentElement.style.fontSize = size + "px";
+            document.documentElement.style.fontSize = "16px";
             localStorage.setItem("poponew_font_size", size);
+            var scale = (parseInt(size, 10) || 16) / 16;
+            document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
         }
     </script>
     <script src="js/cart-sync.js"></script>

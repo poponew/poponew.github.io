@@ -49,8 +49,10 @@
         <div class="p-6">
             <div class="mb-6">
                 <h1 class="text-2xl font-bold text-stone-800 mb-2">Lotus生乳酪棒棒糖蛋糕</h1>
+                <div class="font-zoom">
                 <p class="text-stone-500 text-sm leading-relaxed">單手就能享用的精緻美味！Lotus蓮花餅乾生乳酪棒棒糖蛋糕<br>一款兼具顏值與美味的造型甜點！<br>底層特別選用經典的 比利時 Lotus 蓮花薄脆餅，濃郁焦糖香搭配淡淡肉桂風味，薄脆又帶點微鹹甜感。搭配香濃細滑的生乳酪蛋糕基底，外層再淋上一層香濃巧克力，每一口都是多層次的幸福滋味！<br>​切片後插上小木棒，秒變可愛又方便的蛋糕棒棒糖<br>不沾手、好拿取，不論是生日派對、家庭聚會，還是作為精緻伴手禮都超級吸睛！<br>​大人小孩都無法抗拒的夢幻甜點，看完是不是也想來一支呢？</p>
                 <p class="mt-3"><a href="keep.html?mark=%E6%A3%92%E6%A3%92%E7%B3%96%E8%9B%8B%E7%B3%95#popular" class="text-sm font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">本商品保存與享用方式</a></p>
+                </div>
             </div>
             <div id="cookie-list" class="space-y-3 mb-8"></div>
             <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100 flex justify-between items-center flex-wrap gap-4 shadow-sm">
@@ -168,8 +170,10 @@
             applyFontSize(currentFontSize);
         }
         function applyFontSize(size) {
-            document.documentElement.style.fontSize = size + "px";
+            document.documentElement.style.fontSize = "16px";
             localStorage.setItem("poponew_font_size", size);
+            var scale = (parseInt(size, 10) || 16) / 16;
+            document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
         }
     </script>
     <script src="js/cart-sync.js"></script>

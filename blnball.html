@@ -49,8 +49,10 @@
         <div class="p-6">
             <div class="mb-6">
                 <h1 class="text-2xl font-bold text-stone-800 mb-2">布朗尼球球</h1>
+                <div class="font-zoom">
                 <p class="text-stone-500 text-sm leading-relaxed">特意挑選了 70% 巧克力打造，走的是「不顯張揚的低調微甜」路線。<br>​剛剛好的鬆軟，剛剛好的大小，放進嘴裡直接融化你的心。<br>吃它的時候必須很專心，因為一個不留神，整盤就會魔術般地消失，畢竟，誰能抗拒得了「再吃一球就好」的魔咒呢？</p>
                 <p class="mt-3"><a href="keep.html?mark=%E5%B8%83%E6%9C%97%E5%B0%BC%E7%90%83%E7%90%83#popular" class="text-sm font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">本商品保存與享用方式</a></p>
+                </div>
             </div>
             <div id="cookie-list" class="space-y-3 mb-8"></div>
             <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100 flex justify-between items-center flex-wrap gap-4 shadow-sm">
@@ -168,8 +170,10 @@
             applyFontSize(currentFontSize);
         }
         function applyFontSize(size) {
-            document.documentElement.style.fontSize = size + "px";
+            document.documentElement.style.fontSize = "16px";
             localStorage.setItem("poponew_font_size", size);
+            var scale = (parseInt(size, 10) || 16) / 16;
+            document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
         }
     </script>
     <script src="js/cart-sync.js"></script>

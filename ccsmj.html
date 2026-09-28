@@ -49,8 +49,10 @@
         <div class="p-6">
             <div class="mb-6">
                 <h1 class="text-2xl font-bold text-stone-800 mb-2">可可三明治蛋糕</h1>
+                <div class="font-zoom">
                 <p class="text-stone-500 text-sm leading-relaxed">厚實濃郁的可可香氣，包裹在極致鬆軟的蛋糕體中；轉身遇見輕盈的鮮奶油乳酪餡，完美平衡了巧克力的醇厚。<br>​減糖甜度、細緻不膩口，每一口都是剛剛好的幸福。🥰</p>
                 <p class="mt-3"><a href="keep.html?mark=%E5%8F%AF%E5%8F%AF%E4%B8%89%E6%98%8E%E6%B2%BB%E8%9B%8B%E7%B3%95#popular" class="text-sm font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">本商品保存與享用方式</a></p>
+                </div>
             </div>
             <div id="cookie-list" class="space-y-3 mb-8"></div>
             <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100 flex justify-between items-center flex-wrap gap-4 shadow-sm">
@@ -168,8 +170,10 @@
             applyFontSize(currentFontSize);
         }
         function applyFontSize(size) {
-            document.documentElement.style.fontSize = size + "px";
+            document.documentElement.style.fontSize = "16px";
             localStorage.setItem("poponew_font_size", size);
+            var scale = (parseInt(size, 10) || 16) / 16;
+            document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
         }
     </script>
     <script src="js/cart-sync.js"></script>

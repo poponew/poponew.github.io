@@ -59,8 +59,10 @@
         <div class="p-6">
             <div class="mb-6">
                 <h1 class="text-2xl font-bold text-stone-800 mb-2">蘭姆鳳梨巴斯克</h1>
+                <div class="font-zoom">
                 <p class="text-stone-500 text-sm leading-relaxed">微醺夏日｜蘭姆鳳梨巴斯克起司蛋糕<br>​今天，給自己點一份清爽與甜香交織的優雅。<br>​剛出爐的巴斯克，有著經典的迷人焦香外皮，切開是柔軟順滑的軟心乳酪。而最讓人驚豔的靈魂，是我們親自熬煮的「法式蘭姆香草鳳梨果醬」。<br>​這次的食譜靈感，特別致敬了法國果醬女王 Christine Ferber 的經典配方。<br>當蘭姆酒、香草與在地鳳梨在鍋中慢火熬煮，神奇的魔法就發生了——琥珀色的光澤裡，蘭姆酒的成熟木質香與鳳梨的熱帶酸甜互不搶戲，反而完美融合，華麗蛻變成一種極具層次、溫柔而獨特的甜美氣味。<br>​乳酪的濃郁，夾帶著法式果醬的細緻香氣，每口都是味蕾的頂級享受。<br>​獨特風味，限量製作，歡迎妳來品嚐這份法式浪漫。</p>
                 <p class="mt-3"><a href="keep.html?mark=%E5%B7%B4%E6%96%AF%E5%85%8B%E4%B9%B3%E9%85%AA%E8%9B%8B%E7%B3%95%E7%B3%BB%E5%88%97#basque" class="text-sm font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">本商品保存與享用方式</a></p>
+                </div>
             </div>
             <div id="cookie-list" class="space-y-3 mb-8"></div>
             <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100 flex justify-between items-center flex-wrap gap-4 shadow-sm">
@@ -178,8 +180,10 @@
             applyFontSize(currentFontSize);
         }
         function applyFontSize(size) {
-            document.documentElement.style.fontSize = size + "px";
+            document.documentElement.style.fontSize = "16px";
             localStorage.setItem("poponew_font_size", size);
+            var scale = (parseInt(size, 10) || 16) / 16;
+            document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
         }
     </script>
     <script src="js/cart-sync.js"></script>

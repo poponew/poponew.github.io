@@ -119,8 +119,10 @@
         <div class="p-6">
             <div class="mb-6">
                 <h1 class="text-2xl font-bold text-stone-800 mb-2">奶酪系列司康</h1>
+                <div class="font-zoom">
                 <p class="text-stone-500 text-sm leading-relaxed">輕盈系・奶酪司康 ✨<br>​不同於傳統司康的紮實感，<br>我們的奶酪司康打破你對司康的刻板印象！外皮香酥、口感蓬鬆，恰到好處的濕潤度。<br>​咬開的瞬間，裡頭包裹著的清爽奶油乳酪隨之綻放，搭配 7 款嚴選風味，滿足你的各種甜點胃！</p>
                 <p class="mt-3"><a href="keep.html?mark=%E5%A5%B6%E9%85%AA%E5%8F%B8%E5%BA%B7#scone" class="text-sm font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">本商品保存與享用方式</a></p>
+                </div>
             </div>
             <div id="cookie-list" class="space-y-3 mb-8"></div>
             <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100 flex justify-between items-center flex-wrap gap-4 shadow-sm">
@@ -238,8 +240,10 @@
             applyFontSize(currentFontSize);
         }
         function applyFontSize(size) {
-            document.documentElement.style.fontSize = size + "px";
+            document.documentElement.style.fontSize = "16px";
             localStorage.setItem("poponew_font_size", size);
+            var scale = (parseInt(size, 10) || 16) / 16;
+            document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
         }
     </script>
     <script src="js/cart-sync.js"></script>

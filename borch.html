@@ -49,8 +49,10 @@
         <div class="p-6">
             <div class="mb-6">
                 <h1 class="text-2xl font-bold text-stone-800 mb-2">布朗尼生巧克力</h1>
+                <div class="font-zoom">
                 <p class="text-stone-500 text-sm leading-relaxed">苦甜之間，藏著一抹柑橘清香。<br>​這不只是布朗尼，而是層層遞進的巧克力盛宴。外層是紮實濕潤的布朗尼蛋糕體，核心則裹入柔滑如絲的生巧克力。</p>
                 <p class="mt-3"><a href="keep.html?mark=%E5%B8%83%E6%9C%97%E5%B0%BC%E7%94%9F%E5%B7%A7%E5%85%8B%E5%8A%9B#popular" class="text-sm font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">本商品保存與享用方式</a></p>
+                </div>
             </div>
             <div id="cookie-list" class="space-y-3 mb-8"></div>
             <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100 flex justify-between items-center flex-wrap gap-4 shadow-sm">
@@ -168,8 +170,10 @@
             applyFontSize(currentFontSize);
         }
         function applyFontSize(size) {
-            document.documentElement.style.fontSize = size + "px";
+            document.documentElement.style.fontSize = "16px";
             localStorage.setItem("poponew_font_size", size);
+            var scale = (parseInt(size, 10) || 16) / 16;
+            document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
         }
     </script>
     <script src="js/cart-sync.js"></script>
