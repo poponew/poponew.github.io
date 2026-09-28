@@ -33,20 +33,20 @@
             <button type="button" onclick="changeFontSize(1)" title="放大字型" class="w-8 h-7 flex items-center justify-center text-sm font-bold text-stone-700 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A+</button>
         </div>
     </nav>
-    <div class="max-w-5xl mx-auto px-4 my-8">
-        <header class="text-center py-5 bg-white rounded-2xl shadow-sm border border-stone-100 mb-8">
-            <h2 class="text-3xl font-extrabold text-amber-800 tracking-wider">Poponew手做甜點</h2>
-            <p class="text-stone-500 mt-3 max-w-xl mx-auto text-sm px-4">全店手工現做，滿 NT$ 2,000 元即享免運費宅配！</p>
+    <div class="max-w-5xl mx-auto px-4 mt-[10px] mb-8">
+        <header class="text-left bg-white rounded-2xl shadow-sm border border-stone-100 px-4 pt-1.5 pb-3 mb-6">
+            <h2 class="text-2xl font-bold text-amber-800 leading-8 pr-28">Poponew手做甜點</h2>
+            <p class="text-stone-500 mt-1.5 text-sm leading-snug">全店滿 NT$ 2,000 元即享免運費宅配！</p>
+            <div class="flex flex-wrap items-center gap-1.5 mt-2.5" id="category-tags">
+          <button type="button" onclick="filterCategory('all', this)" class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-amber-700 text-white shadow-sm transition">全部商品</button>
+          <button type="button" onclick='filterCategory("職人手工餅乾", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">職人手工餅乾</button>
+          <button type="button" onclick='filterCategory("手作司康", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">手作司康</button>
+          <button type="button" onclick='filterCategory("巴斯克乳酪蛋糕", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">巴斯克乳酪蛋糕</button>
+          <button type="button" onclick='filterCategory("生乳捲", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">生乳捲</button>
+          <button type="button" onclick='filterCategory("迷你一口系列", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">迷你一口系列</button>
+          <button type="button" onclick='filterCategory("人氣單品", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">人氣單品</button>
+            </div>
         </header>
-        <div class="flex flex-wrap justify-center gap-2 mb-8" id="category-tags">
-          <button type="button" onclick="filterCategory('all', this)" class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-amber-700 text-white shadow-sm transition">全部商品</button>
-          <button type="button" onclick='filterCategory("職人手工餅乾", this)' class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">職人手工餅乾</button>
-          <button type="button" onclick='filterCategory("手作司康", this)' class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">手作司康</button>
-          <button type="button" onclick='filterCategory("巴斯克乳酪蛋糕", this)' class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">巴斯克乳酪蛋糕</button>
-          <button type="button" onclick='filterCategory("生乳捲", this)' class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">生乳捲</button>
-          <button type="button" onclick='filterCategory("迷你一口系列", this)' class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">迷你一口系列</button>
-          <button type="button" onclick='filterCategory("人氣單品", this)' class="tag-btn px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">人氣單品</button>
-        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-list">
             <a href="msbg.html" data-tag="職人手工餅乾" data-pinned="true" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
