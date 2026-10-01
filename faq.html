@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>常見問題 - Poponew手做甜點</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/shop-settings.js"></script>
+    <style>
+        @font-face {
+            font-family: "poponew";
+            src: url("fonts/poponew.woff2") format("woff2");
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+        .brand-mark { font-family: "poponew", sans-serif; }
+        .qa details { border: 1px solid #e7e5e4; border-radius: 1rem; background: #fff; }
+        .qa details + details { margin-top: 0.75rem; }
+        .qa summary {
+            cursor: pointer;
+            list-style: none;
+            font-weight: 700;
+            color: #292524;
+            padding: 1rem 1.1rem;
+        }
+        .qa summary::-webkit-details-marker { display: none; }
+        .qa summary::before { content: "▸ "; color: #b45309; }
+        .qa details[open] summary::before { content: "▾ "; }
+        .qa details[open] summary { border-bottom: 1px solid #f5f5f4; }
+        .qa .answer { padding: 0.9rem 1.1rem 1.15rem; color: #57534e; font-size: 0.9rem; line-height: 1.7; }
+        .qa .answer a { color: #b45309; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+        .qa .answer b { white-space: nowrap; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-12">
+    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl my-0 md:my-8">
+        <div class="sticky top-0 bg-white/90 backdrop-blur-md z-40 border-b md:rounded-t-2xl">
+            <div class="p-4 pb-2 flex justify-between items-center">
+                <a href="index.html" class="brand-mark text-amber-800 text-xl font-bold leading-tight">Poponew手做甜點</a>
+                <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
+            </div>
+            <div class="flex justify-end px-4 pb-3">
+                <div class="flex items-center bg-white/95 backdrop-blur-md rounded-xl p-1 border border-stone-200 shadow-md">
+                    <button type="button" onclick="changeFontSize(-1)" title="縮小字型" class="w-8 h-7 flex items-center justify-center text-xs font-bold text-stone-600 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A-</button>
+                    <button type="button" onclick="resetFontSize()" title="重設字型" class="px-2 h-7 flex items-center justify-center text-xs font-medium text-stone-400 hover:text-amber-800 transition">預設</button>
+                    <button type="button" onclick="changeFontSize(1)" title="放大字型" class="w-8 h-7 flex items-center justify-center text-sm font-bold text-stone-700 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6">
+            <header class="text-center mb-6">
+                <h1 class="brand-mark text-2xl font-bold text-amber-800">常見問題</h1>
+                <p class="text-stone-500 text-sm mt-2 leading-relaxed">訂購、宅配與保存的快速解答。更完整的開箱與食用方式，請看<a href="keep.html" class="font-semibold text-amber-700 underline underline-offset-2">保存及食用方式</a>。</p>
+            </header>
+
+            <div class="qa font-zoom">
+                <details open>
+                    <summary>要怎麼訂購？</summary>
+                    <div class="answer">
+                        <p>在首頁選商品、選口味與數量，按「前往結帳」。結帳頁填收件資料與付款方式後送出即可。</p>
+                        <p class="mt-2">全店最低結帳金額為 <b data-shop="minOrder">NT$ 500</b>。未達門檻時系統會提醒再加購。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>運費怎麼算？可以超商取貨嗎？</summary>
+                    <div class="answer">
+                        <p>全店一律<strong>低溫冷凍宅配</strong>，沒有超商取貨或常溫寄送。</p>
+                        <p class="mt-2">冷凍宅配實際運費 <b data-shop="shippingTotal">NT$ 160</b>，店家先幫您負擔一半，結帳只需支付 <b data-shop="shippingFee">NT$ 80</b>。</p>
+                        <p class="mt-2">全店滿 <b data-shop="freeShipping">NT$ 2,000</b> 免運。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>可以用貨到付款嗎？</summary>
+                    <div class="answer">
+                        <p>可以選銀行轉帳或貨到付款。單筆訂單達 <b data-shop="codLimit">NT$ 2,000</b> 以上時，不提供貨到付款，請改用轉帳。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>下單後多久會收到？可以指定到貨日嗎？</summary>
+                    <div class="answer">
+                        <p>商品皆為手工現做。下單完成（轉帳需完成對帳）後，預計 <strong>3～5 個工作天</strong>（不含例假日）依序排單出貨，出貨後會發簡訊。</p>
+                        <p class="mt-2">備註的指定到貨日與時段是「希望到貨時間」，實際配送依物流路線與司機安排為準。</p>
+                        <p class="mt-2">逢中秋、年節等物流高峰，可能順延 1～3 天，請提早預訂。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>收到包裹後要先做什麼？</summary>
+                    <div class="answer">
+                        <p>請立刻開箱檢查品項與數量。馬上要吃的依保存說明退冰或加熱；暫不吃的請立刻放入冷凍庫（-18℃）。</p>
+                        <p class="mt-2">請從<strong>未拆封外箱</strong>開始全程不間斷錄影。若有嚴重損壞或缺件，請於 <strong>24 小時內</strong>聯絡客服並提供開箱影片。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>甜點要怎麼保存和加熱？</summary>
+                    <div class="answer">
+                        <p>各系列退冰與加熱方式不同，請看商品頁的「本商品保存與享用方式」，或完整說明：<a href="keep.html">保存及食用方式</a>。</p>
+                        <p class="mt-2">夏季請勿讓商品離開冰箱超過 1 小時，吃不完請及時放回冷藏或冷凍。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>可以退換貨嗎？有 7 天鑑賞期嗎？</summary>
+                    <div class="answer">
+                        <p>生鮮、易腐敗食品依法<strong>不適用 7 天鑑賞期</strong>。</p>
+                        <p class="mt-2">如需取消或變更，請盡早告知。無故不取貨導致退回，商品只能報廢，恕無法補寄或退款。完整條款請見<a href="keep.html#terms">訂購與退換貨條款</a>。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>送禮或請別人代收，要注意什麼？</summary>
+                    <div class="answer">
+                        <p>送禮請事先與收件人確認時間。因未告知而拒收，恕不補寄或退款。訂單請另留訂購人聯絡方式，方便通知。</p>
+                        <p class="mt-2">若請管理室或親友代收，務必告知需<strong>低溫冷凍保存</strong>。代收保存不當導致失溫變質，本店無法賠償。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>有開發票嗎？對蛋奶過敏可以吃嗎？</summary>
+                    <div class="answer">
+                        <p>本店為免用統一發票之小規模營業人。</p>
+                        <p class="mt-2">商品為蛋奶素，含蛋與牛奶。產線另有麩質穀物及堅果。對上述成分過敏者不適合食用。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>如何查訂單？大量訂購怎麼辦？</summary>
+                    <div class="answer">
+                        <p>請到<a href="order-search.html">訂單查詢</a>，輸入訂購時填寫的手機號碼。</p>
+                        <p class="mt-2">大宗送禮或單筆超過 <b data-shop="bulkOrder">NT$ 5,000</b>，請先來電或私訊洽詢檔期。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>商品顯示缺貨，或還有其他問題？</summary>
+                    <div class="answer">
+                        <p>標示缺貨或售完的口味暫時無法加購，歡迎改選其他品項，或稍後再回來看看。</p>
+                        <p class="mt-2">其他問題請洽服務專線 <a href="tel:0900769880">0900-769880</a>，或來信 <a href="mailto:hi.poponew@gmail.com">hi.poponew@gmail.com</a>。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl mt-3 md:-mt-3 p-5 md:p-6 border border-stone-100">
+        <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">Poponew手做甜點</h4>
+        <p class="text-stone-500 text-[11px] md:text-xs leading-relaxed">服務專線：0900-769880｜e-mail：<a href="mailto:hi.poponew@gmail.com" class="text-blue-600 hover:underline">hi.poponew@gmail.com</a></p>
+        <p class="mt-2 text-[11px] md:text-xs leading-relaxed"><a href="keep.html#shipping" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">宅配配送與簽收須知</a><span class="text-stone-300"> ｜ </span><a href="keep.html#terms" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">訂購與退換貨條款</a><span class="text-stone-300"> ｜ </span><a href="faq.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">常見問題</a></p>
+    </div>
+    <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.</p>
+
+    <script>
+        (function() {
+            var s = window.shopSettings || {};
+            function money(n, fallback) {
+                var v = parseInt(n, 10);
+                if (!v) v = fallback;
+                return "NT$ " + v.toLocaleString();
+            }
+            var customerShip = parseInt(s.shippingFee, 10) || 80;
+            var map = {
+                shippingFee: money(customerShip, 80),
+                shippingTotal: money(customerShip * 2, 160),
+                freeShipping: money(s.freeShipping, 2000),
+                minOrder: money(s.minOrder, 500),
+                codLimit: money(s.codLimit, 2000),
+                bulkOrder: money(s.bulkOrder, 5000)
+            };
+            document.querySelectorAll("[data-shop]").forEach(function(el) {
+                var key = el.getAttribute("data-shop");
+                if (map[key]) el.textContent = map[key];
+            });
+        })();
+        let currentFontSize = parseInt(localStorage.getItem("poponew_font_size")) || 16;
+        applyFontSize(currentFontSize);
+        function changeFontSize(delta) {
+            currentFontSize = Math.min(Math.max(currentFontSize + delta * 2, 14), 22);
+            applyFontSize(currentFontSize);
+        }
+        function resetFontSize() {
+            currentFontSize = 16;
+            applyFontSize(currentFontSize);
+        }
+        function applyFontSize(size) {
+            document.documentElement.style.fontSize = "16px";
+            localStorage.setItem("poponew_font_size", size);
+            var scale = (parseInt(size, 10) || 16) / 16;
+            document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
+        }
+    </script>
+    <script src="js/cart-sync.js"></script>
+</body>
+</html>
