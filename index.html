@@ -11,7 +11,7 @@
     <meta property="og:title" content="Poponew手做甜點｜手工司康、巴斯克、美式軟餅乾、生乳捲、比利時鬆餅、布朗尼">
     <meta property="og:description" content="Poponew手做甜點提供手工司康、巴斯克乳酪蛋糕與餅乾。全店滿 NT$ 2,000 免運。">
     <meta property="og:image" content="https://poponew.github.io/images/msbg.jpg">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/tailwind.css">
     <script src="js/shop-settings.js"></script>
     <style>
         @font-face {
@@ -26,17 +26,46 @@
             font-family: "poponew", sans-serif !important;
         }
         .brand-mark { font-family: "poponew", sans-serif; }
+        .shop-search-layer { display: none; position: fixed; inset: 0; z-index: 70; }
+        .shop-search-layer.is-open { display: block; }
+        .shop-search-backdrop { position: absolute; inset: 0; background: rgba(28, 25, 23, 0.45); }
+        .shop-search-panel { position: relative; z-index: 1; margin: 0.75rem auto 0; width: calc(100% - 1.5rem); max-width: 32rem; max-height: min(80vh, 36rem); overflow: hidden; background: #fff; border-radius: 1rem; box-shadow: 0 16px 40px rgba(0,0,0,0.18); display: flex; flex-direction: column; }
+        .shop-search-bar { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; border-bottom: 1px solid #e7e5e4; }
+        .shop-search-bar input { flex: 1; min-width: 0; border: 1px solid #d6d3d1; border-radius: 0.75rem; padding: 0.55rem 0.75rem; font-size: 1rem; }
+        .shop-search-bar input:focus { outline: none; border-color: #b45309; }
+        .shop-search-close { flex-shrink: 0; font-size: 0.8rem; font-weight: 600; color: #78716c; padding: 0.4rem 0.55rem; }
+        .shop-search-results { overflow: auto; padding: 0.35rem 0.5rem 0.6rem; }
+        .shop-search-hint { color: #78716c; font-size: 0.85rem; padding: 0.85rem 0.6rem; }
+        .shop-search-item { display: block; padding: 0.7rem 0.65rem; border-radius: 0.75rem; text-decoration: none; }
+        .shop-search-item:hover, .shop-search-item:focus { background: #fffbeb; }
+        .shop-search-name { display: block; color: #292524; font-weight: 700; font-size: 0.9rem; }
+        .shop-search-meta { display: block; margin-top: 0.15rem; color: #78716c; font-size: 0.75rem; }
+        .shop-search-sold { color: #a8a29e; }
+        body.shop-search-open { overflow: hidden; }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-12">
     <nav class="border-b sticky top-0 bg-white/90 backdrop-blur-md z-40">
         <div class="max-w-5xl mx-auto px-4 py-3">
             <div class="flex justify-between items-center gap-3">
-                <h1 class="brand-mark text-xl font-bold text-amber-800 leading-tight">Poponew手做甜點</h1>
-                <a href="cart.html" class="shrink-0 bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
+                <h1 class="brand-mark text-xl font-bold text-amber-800 leading-tight min-w-0 truncate">Poponew手做甜點</h1>
+                <div class="flex items-center gap-2 shrink-0">
+                    <a href="cart.html" class="shrink-0 bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
+                    <button type="button" id="shop-search-open" title="搜尋商品" aria-label="搜尋商品" class="w-9 h-9 shrink-0 rounded-xl border border-stone-200 bg-white text-stone-700 shadow-sm flex items-center justify-center hover:bg-amber-50 hover:text-amber-800 active:scale-95">🔍</button>
+                </div>
             </div>
         </div>
     </nav>
+    <div id="shop-search-layer" class="shop-search-layer" hidden>
+        <div class="shop-search-backdrop" id="shop-search-backdrop"></div>
+        <div class="shop-search-panel" role="dialog" aria-label="搜尋商品">
+            <div class="shop-search-bar">
+                <input id="shop-search-input" type="search" placeholder="搜尋商品或口味" autocomplete="off" enterkeyhint="search">
+                <button type="button" id="shop-search-close" class="shop-search-close">關閉</button>
+            </div>
+            <div id="shop-search-results" class="shop-search-results"></div>
+        </div>
+    </div>
     <div class="fixed right-3 top-1/3 -translate-y-1/2 z-30 flex flex-col items-center bg-white/50 backdrop-blur-sm rounded-2xl p-1 border border-stone-200/70 shadow-md">
         <button type="button" onclick="changeFontSize(-1)" title="縮小字型" class="w-9 h-8 flex items-center justify-center text-xs font-bold text-stone-600 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A-</button>
         <button type="button" onclick="resetFontSize()" title="重設字型" class="w-9 h-8 flex items-center justify-center text-[10px] font-medium text-stone-400 hover:text-amber-800 transition">預設</button>
@@ -52,7 +81,7 @@
           <button type="button" onclick='filterCategory("生乳捲", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">生乳捲</button>
           <button type="button" onclick='filterCategory("迷你一口系列", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">迷你一口系列</button>
           <button type="button" onclick='filterCategory("人氣單品", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">人氣單品</button>
-          <a href="order-search.html" class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition">🔍 訂單查詢</a>
+          <a href="order-search.html" class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition">📋 訂單查詢</a>
           <a href="faq.html" class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition">常見問題</a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-list">
@@ -629,6 +658,7 @@
         </div>
         <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.</p>
     </footer>
+    <script>window.shopSearch = [{"name":"經典核桃巧克力美式軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":100,"soldOut":false},{"name":"草莓棉花糖核桃巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":125,"soldOut":false},{"name":"杏仁片棉花糖苦甜巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":130,"soldOut":false},{"name":"Oreo 碎片棉花糖巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":125,"soldOut":false},{"name":"醇黑榛果巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":120,"soldOut":false},{"name":"柑橘奶酪軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":130,"soldOut":false},{"name":"經典Oreo奶酪軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":130,"soldOut":false},{"name":"抹茶柚子巴斯克 (6吋切片)","group":"抹茶柚子巴斯克","url":"mcyobsk.html","price":140,"soldOut":false},{"name":"抹茶柚子巴斯克 (6吋整顆)","group":"抹茶柚子巴斯克","url":"mcyobsk.html","price":840,"soldOut":false},{"name":"日式焙茶巴斯克(6吋切片)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":145,"soldOut":false},{"name":"鐵觀音巴斯克(6吋切片)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":140,"soldOut":false},{"name":"日式焙茶巴斯克(6吋整顆)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":870,"soldOut":false},{"name":"鐵觀音巴斯克(6吋整顆)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":840,"soldOut":false},{"name":"經典原味司康","group":"職人手工司康系列","url":"scone.html","price":55,"soldOut":false},{"name":"核桃司康","group":"職人手工司康系列","url":"scone.html","price":70,"soldOut":false},{"name":"伯爵柑橘司康","group":"職人手工司康系列","url":"scone.html","price":80,"soldOut":false},{"name":"伯爵紅茶司康","group":"職人手工司康系列","url":"scone.html","price":70,"soldOut":false},{"name":"抹茶司康","group":"職人手工司康系列","url":"scone.html","price":80,"soldOut":false},{"name":"香濃乳酪丁司康","group":"職人手工司康系列","url":"scone.html","price":85,"soldOut":false},{"name":"巧克力豆豆司康","group":"職人手工司康系列","url":"scone.html","price":75,"soldOut":false},{"name":"萊姆葡萄司康","group":"職人手工司康系列","url":"scone.html","price":75,"soldOut":false},{"name":"蔓越莓司康","group":"職人手工司康系列","url":"scone.html","price":70,"soldOut":false},{"name":"鹹蛋黃司康","group":"職人手工司康系列","url":"scone.html","price":75,"soldOut":false},{"name":"迷你小司康","group":"職人手工司康系列","url":"scone.html","price":100,"soldOut":false},{"name":"經典原味列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":60,"soldOut":false},{"name":"抹茶白巧列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"巧克力豆列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"蔓越莓列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"蘭姆酒葡萄乾列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"鐵觀音柑橘列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"小星星迷你一口小鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":100,"soldOut":false},{"name":"蘭姆鳳梨巴斯克(6吋切片)","group":"蘭姆鳳梨巴斯克","url":"lmppbsk.html","price":145,"soldOut":false},{"name":"蘭姆鳳梨巴斯克(6吋整顆)","group":"蘭姆鳳梨巴斯克","url":"lmppbsk.html","price":870,"soldOut":false},{"name":"雙重巧克力巴斯克(6吋切片)","group":"雙重巧克力巴斯克","url":"cklbsk.html","price":135,"soldOut":false},{"name":"雙重巧克力巴斯克(6吋整顆)","group":"雙重巧克力巴斯克","url":"cklbsk.html","price":810,"soldOut":false},{"name":"皇家伯爵茶巴斯克(6吋切片)","group":"皇家伯爵茶巴斯克","url":"hjbjbsk.html","price":130,"soldOut":false},{"name":"皇家伯爵茶巴斯克(6吋整顆)","group":"皇家伯爵茶巴斯克","url":"hjbjbsk.html","price":780,"soldOut":false},{"name":"經典原味巴斯克(6吋切片)","group":"經典原味巴斯克","url":"classbsk.html","price":110,"soldOut":false},{"name":"經典原味巴斯克(6吋整顆)","group":"經典原味巴斯克","url":"classbsk.html","price":660,"soldOut":false},{"name":"鹹蛋黃巴斯克(6吋切片)","group":"鹹蛋黃巴斯克","url":"seggbsk.html","price":135,"soldOut":false},{"name":"鹹蛋黃巴斯克(6吋整顆)","group":"鹹蛋黃巴斯克","url":"seggbsk.html","price":810,"soldOut":false},{"name":"蘭姆葡萄巴斯克(6吋切片)","group":"蘭姆葡萄巴斯克","url":"lmptbsk.html","price":135,"soldOut":false},{"name":"蘭姆葡萄巴斯克(6吋整顆)","group":"蘭姆葡萄巴斯克","url":"lmptbsk.html","price":810,"soldOut":false},{"name":"太妃牛奶糖巴斯克(6吋切片)","group":"太妃牛奶糖巴斯克","url":"nntbsk.html","price":125,"soldOut":false},{"name":"太妃牛奶糖巴斯克(6吋整顆)","group":"太妃牛奶糖巴斯克","url":"nntbsk.html","price":750,"soldOut":false},{"name":"Oreo巧克力巴斯克(6吋切片)","group":"Oreo巧克力巴斯克","url":"oreobsk.html","price":140,"soldOut":false},{"name":"Oreo巧克力巴斯克(6吋整顆)","group":"Oreo巧克力巴斯克","url":"oreobsk.html","price":840,"soldOut":false},{"name":"日式抹茶巴斯克(6吋切片)","group":"日式抹茶巴斯克","url":"mcbsk.html","price":145,"soldOut":false},{"name":"日式抹茶巴斯克(6吋整顆)","group":"日式抹茶巴斯克","url":"mcbsk.html","price":870,"soldOut":false},{"name":"鹽之花布列塔尼酥餅","group":"布列塔尼酥餅","url":"bltn.html","price":80,"soldOut":false},{"name":"鹹蛋黃布列塔尼酥餅","group":"布列塔尼酥餅","url":"bltn.html","price":85,"soldOut":false},{"name":"巧克力豆布列塔尼酥餅","group":"布列塔尼酥餅","url":"bltn.html","price":85,"soldOut":false},{"name":"一口酥迷你布列塔尼","group":"布列塔尼酥餅","url":"bltn.html","price":100,"soldOut":false},{"name":"布朗尼恐龍寶貝蛋餅乾","group":"恐龍寶貝蛋餅乾","url":"bbegg.html","price":75,"soldOut":false},{"name":"柑橘恐龍寶貝蛋餅乾","group":"恐龍寶貝蛋餅乾","url":"bbegg.html","price":75,"soldOut":false},{"name":"奶油乳酪恐龍寶貝蛋餅乾","group":"恐龍寶貝蛋餅乾","url":"bbegg.html","price":75,"soldOut":false},{"name":"經典原味生乳捲","group":"經典原味生乳捲","url":"mkroll.html","price":100,"soldOut":false},{"name":"檸檬夾心餅乾","group":"檸檬夾心餅乾","url":"lmck.html","price":65,"soldOut":false},{"name":"香濃奶油餅乾球","group":"香濃奶油餅乾球","url":"btck.html","price":100,"soldOut":false},{"name":"香濃奶油棒棒餅乾-經典原味","group":"香濃奶油餅乾球","url":"btck.html","price":45,"soldOut":false},{"name":"香濃奶油棒棒餅乾-可可豆","group":"香濃奶油餅乾球","url":"btck.html","price":50,"soldOut":false},{"name":"布朗尼生巧克力","group":"布朗尼生巧克力","url":"borch.html","price":150,"soldOut":false},{"name":"Oreo巧克力生乳酪棒棒糖蛋糕","group":"Oreo巧克力生乳酪棒棒糖蛋糕","url":"obbt.html","price":185,"soldOut":false},{"name":"藍莓Oreo漸層生乳酪蛋糕","group":"藍莓Oreo漸層生乳酪蛋糕","url":"lmoreo.html","price":185,"soldOut":false},{"name":"小煤炭布朗尼餅乾","group":"小煤炭布朗尼餅乾","url":"coal.html","price":45,"soldOut":false},{"name":"海鹽焦糖生乳酪巧克力蛋糕","group":"海鹽焦糖生乳酪巧克力蛋糕","url":"hijt.html","price":175,"soldOut":false},{"name":"雙色Oreo乳酪球","group":"雙色Oreo乳酪球","url":"oreoball.html","price":145,"soldOut":false},{"name":"可可三明治蛋糕","group":"可可三明治蛋糕","url":"ccsmj.html","price":100,"soldOut":false},{"name":"迷你小司康","group":"迷你小司康(小歪歪)","url":"sscone.html","price":100,"soldOut":false},{"name":"經典原味奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":90,"soldOut":false},{"name":"70%巧克力奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":115,"soldOut":false},{"name":"Oreo巧克力奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":120,"soldOut":false},{"name":"伯爵茶柑橘奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":110,"soldOut":false},{"name":"草莓蔓越莓乾奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":130,"soldOut":false},{"name":"抹茶白巧蔓越莓奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":130,"soldOut":false},{"name":"金黃乳酪起司奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":125,"soldOut":false},{"name":"酷黑藍莓果醬奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":130,"soldOut":false},{"name":"一口酥迷你布列塔尼","group":"一口酥迷你布列塔尼","url":"sbltn.html","price":100,"soldOut":false},{"name":"布朗尼球球","group":"布朗尼球球","url":"blnball.html","price":90,"soldOut":false},{"name":"經典原味費南雪","group":"費南雪金磚蛋糕","url":"fnc.html","price":45,"soldOut":false},{"name":"抹茶費南雪","group":"費南雪金磚蛋糕","url":"fnc.html","price":55,"soldOut":false},{"name":"可可費南雪","group":"費南雪金磚蛋糕","url":"fnc.html","price":55,"soldOut":false},{"name":"Lotus生乳酪棒棒糖蛋糕","group":"Lotus生乳酪棒棒糖蛋糕","url":"Lotus.html","price":200,"soldOut":false},{"name":"肉桂焦糖蘋果核桃起司蛋糕","group":"肉桂焦糖蘋果核桃起司蛋糕","url":"rgapple.html","price":180,"soldOut":false}];</script>
     <script>
         // 1. 洗牌演算法 (Fisher-Yates)
         function shuffleArray(array) {
@@ -683,6 +713,35 @@
                 }
             });
         }
+        (function() {
+            var layer = document.getElementById("shop-search-layer");
+            var input = document.getElementById("shop-search-input");
+            var box = document.getElementById("shop-search-results");
+            var openBtn = document.getElementById("shop-search-open");
+            var items = window.shopSearch || [];
+            function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
+            function openSearch() { if (!layer) return; layer.hidden = false; layer.classList.add("is-open"); document.body.classList.add("shop-search-open"); if (input) { input.value = ""; renderSearch(""); setTimeout(function() { input.focus(); }, 40); } }
+            function closeSearch() { if (!layer) return; layer.hidden = true; layer.classList.remove("is-open"); document.body.classList.remove("shop-search-open"); }
+            function renderSearch(q) {
+                q = String(q || "").trim().toLowerCase();
+                if (!box) return;
+                if (!q) { box.innerHTML = "<p class='shop-search-hint'>輸入商品或口味，例如「伯爵柑橘」</p>"; return; }
+                var hits = items.filter(function(p) { return (p.name + " " + p.group).toLowerCase().indexOf(q) !== -1; }).slice(0, 12);
+                if (!hits.length) { box.innerHTML = "<p class='shop-search-hint'>找不到「" + esc(q) + "」</p>"; return; }
+                box.innerHTML = hits.map(function(p) {
+                    var extra = p.soldOut ? "<span class='shop-search-sold'>已售完</span>" : ("NT$ " + p.price);
+                    var meta = (p.group && p.group !== p.name) ? (esc(p.group) + " · " + extra) : extra;
+                    return "<a class='shop-search-item' href='" + esc(p.url) + "'><span class='shop-search-name'>" + esc(p.name) + "</span><span class='shop-search-meta'>" + meta + "</span></a>";
+                }).join("");
+            }
+            if (openBtn) openBtn.addEventListener("click", openSearch);
+            var closeBtn = document.getElementById("shop-search-close");
+            var backdrop = document.getElementById("shop-search-backdrop");
+            if (closeBtn) closeBtn.addEventListener("click", closeSearch);
+            if (backdrop) backdrop.addEventListener("click", closeSearch);
+            if (input) input.addEventListener("input", function() { renderSearch(input.value); });
+            document.addEventListener("keydown", function(e) { if (e.key === "Escape" && layer && !layer.hidden) closeSearch(); });
+        })();
     </script>
     <script>
         (function() {
