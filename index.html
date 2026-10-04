@@ -27,6 +27,10 @@
         }
         .brand-mark { font-family: "poponew", sans-serif; }
         .home-nav-brand { white-space: nowrap; overflow: hidden; min-width: 0; flex: 1 1 auto; font-size: clamp(0.95rem, 4.4vw, 1.25rem); }
+        .shop-search-open-btn { width: 2.375rem; height: 2.375rem; border-radius: 0.75rem; border: 1px solid #e7d4b8; background: linear-gradient(180deg, #fffdf8 0%, #f8efe3 100%); color: #92400e; box-shadow: 0 1px 2px rgba(120,53,15,0.08), inset 0 1px 0 rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease; }
+        .shop-search-open-btn:hover { background: linear-gradient(180deg, #fff7ed 0%, #fde8c8 100%); box-shadow: 0 3px 10px rgba(180,83,9,0.16), inset 0 1px 0 rgba(255,255,255,0.95); color: #78350f; }
+        .shop-search-open-btn:active { transform: scale(0.96); }
+        .shop-search-open-btn svg { width: 1.05rem; height: 1.05rem; stroke: currentColor; fill: none; }
         .shop-search-layer { display: none; position: fixed; inset: 0; z-index: 70; }
         .shop-search-layer.is-open { display: block; }
         .shop-search-backdrop { position: absolute; inset: 0; background: rgba(28, 25, 23, 0.45); }
@@ -54,7 +58,7 @@
                 <h1 id="home-nav-brand" class="brand-mark home-nav-brand font-bold text-amber-800 leading-tight">Poponew手做甜點</h1>
                 <div class="flex items-center gap-2 shrink-0">
                     <a href="cart.html" class="shrink-0 bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
-                    <button type="button" id="shop-search-open" title="搜尋商品" aria-label="搜尋商品" class="w-9 h-9 shrink-0 rounded-xl border border-stone-200 bg-white text-stone-700 shadow-sm flex items-center justify-center hover:bg-amber-50 hover:text-amber-800 active:scale-95">🔍</button>
+                    <button type="button" id="shop-search-open" class="shop-search-open-btn" title="搜尋商品" aria-label="搜尋商品"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke-width="2"/><path d="M16.2 16.2L21 21" stroke-width="2" stroke-linecap="round"/></svg></button>
                 </div>
             </div>
         </div>
