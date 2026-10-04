@@ -26,6 +26,7 @@
             font-family: "poponew", sans-serif !important;
         }
         .brand-mark { font-family: "poponew", sans-serif; }
+        .home-nav-brand { white-space: nowrap; overflow: hidden; min-width: 0; flex: 1 1 auto; font-size: clamp(0.95rem, 4.4vw, 1.25rem); }
         .shop-search-layer { display: none; position: fixed; inset: 0; z-index: 70; }
         .shop-search-layer.is-open { display: block; }
         .shop-search-backdrop { position: absolute; inset: 0; background: rgba(28, 25, 23, 0.45); }
@@ -50,7 +51,7 @@
     <nav class="border-b sticky top-0 bg-white/90 backdrop-blur-md z-40">
         <div class="max-w-5xl mx-auto px-4 py-3">
             <div class="flex justify-between items-center gap-3">
-                <h1 class="brand-mark text-xl font-bold text-amber-800 leading-tight min-w-0 truncate">Poponew手做甜點</h1>
+                <h1 id="home-nav-brand" class="brand-mark home-nav-brand font-bold text-amber-800 leading-tight">Poponew手做甜點</h1>
                 <div class="flex items-center gap-2 shrink-0">
                     <a href="cart.html" class="shrink-0 bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
                     <button type="button" id="shop-search-open" title="搜尋商品" aria-label="搜尋商品" class="w-9 h-9 shrink-0 rounded-xl border border-stone-200 bg-white text-stone-700 shadow-sm flex items-center justify-center hover:bg-amber-50 hover:text-amber-800 active:scale-95">🔍</button>
@@ -795,6 +796,27 @@
             var scale = (parseInt(size, 10) || 16) / 16;
             document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
         }
+        (function() {
+            function fitHomeBrand() {
+                var el = document.getElementById("home-nav-brand");
+                if (!el) return;
+                var max = 20, min = 12;
+                el.style.fontSize = max + "px";
+                if (el.scrollWidth <= el.clientWidth) return;
+                var lo = min, hi = max, best = min;
+                while (hi - lo > 0.2) {
+                    var mid = (lo + hi) / 2;
+                    el.style.fontSize = mid + "px";
+                    if (el.scrollWidth <= el.clientWidth) { best = mid; lo = mid; }
+                    else { hi = mid; }
+                }
+                el.style.fontSize = best + "px";
+            }
+            window.addEventListener("resize", fitHomeBrand);
+            if (document.readyState === "complete") fitHomeBrand();
+            else window.addEventListener("load", fitHomeBrand);
+            fitHomeBrand();
+        })();
     </script>
     <script src="js/cart-sync.js"></script>
 </body>

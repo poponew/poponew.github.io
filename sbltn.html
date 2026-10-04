@@ -35,12 +35,14 @@
         .flavor-img-box img { width: 50px; height: 50px; object-fit: cover; }
         .allergen-note { margin-top: 0.75rem; font-size: 0.75rem; line-height: 1.6; color: #78716c; }
         .allergen-note a { font-weight: 600; color: #b45309; text-decoration: underline; text-underline-offset: 2px; }
+        .product-page-title { font-weight: 700; color: #292524; margin-bottom: 0.5rem; line-height: 1.25; white-space: nowrap; overflow: hidden; width: 100%; font-size: clamp(0.9rem, 5.4vw, 1.5rem); }
+        .product-nav-brand { white-space: nowrap; font-size: clamp(0.95rem, 4.4vw, 1.25rem); }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-24">
     <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl my-0 md:my-8">
         <div class="relative p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40 md:rounded-t-2xl">
-            <a href="index.html" class="brand-mark text-amber-800 text-xl font-bold leading-tight">Poponew手做甜點</a>
+            <a href="index.html" class="brand-mark product-nav-brand text-amber-800 font-bold leading-tight min-w-0">Poponew手做甜點</a>
             <div class="flex items-center gap-2">
                 <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a><br/>
             </div>
@@ -57,7 +59,7 @@
         </div>
         <div class="p-6">
             <div class="mb-6">
-                <h1 class="text-2xl font-bold text-stone-800 mb-2">一口酥迷你布列塔尼</h1>
+                <h1 id="product-page-title" class="product-page-title">一口酥迷你布列塔尼</h1>
                 <div class="font-zoom">
                 <p class="text-stone-500 text-sm leading-relaxed">【法式午后的慵懶時光：布列塔尼酥餅】<br>​今天，想邀請你一同品味這份【迷你版】的法式經典。<br>在法國，布列塔尼酥餅（Palets Bretons）是每一位甜點控心中不可取代的存在。<br>​我們採用了厚燒做法，將高比例的優質發酵奶油與蛋黃完美融合。<br>隨着烤箱溫度升高，美麗的焦糖色漸顯，濃郁的奶蛋香氣瞬間盈滿整個空間，那是光聞味道就會讓人嘴角上揚的幸福感。<br>​生活就該如此愜意，在微光午后，為自己沏一壺熱茶或沖一杯咖啡，與這份酥脆相遇。</p>
                 <p class="allergen-note">⚠️ 含蛋、牛奶；產線另有麩質穀物及堅果。對上述成分過敏者不適合食用。<a href="faq.html">常見問題</a></p>
@@ -190,6 +192,27 @@
             var scale = (parseInt(size, 10) || 16) / 16;
             document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
         }
+        (function() {
+            function fitProductTitle() {
+                var el = document.getElementById("product-page-title");
+                if (!el) return;
+                var max = 24, min = 12;
+                el.style.fontSize = max + "px";
+                if (el.scrollWidth <= el.clientWidth) return;
+                var lo = min, hi = max, best = min;
+                while (hi - lo > 0.2) {
+                    var mid = (lo + hi) / 2;
+                    el.style.fontSize = mid + "px";
+                    if (el.scrollWidth <= el.clientWidth) { best = mid; lo = mid; }
+                    else { hi = mid; }
+                }
+                el.style.fontSize = best + "px";
+            }
+            window.addEventListener("resize", fitProductTitle);
+            if (document.readyState === "complete") fitProductTitle();
+            else window.addEventListener("load", fitProductTitle);
+            fitProductTitle();
+        })();
     </script>
     <script src="js/cart-sync.js"></script>
 </body>

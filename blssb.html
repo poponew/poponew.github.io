@@ -95,12 +95,14 @@
         .flavor-img-box img { width: 50px; height: 50px; object-fit: cover; }
         .allergen-note { margin-top: 0.75rem; font-size: 0.75rem; line-height: 1.6; color: #78716c; }
         .allergen-note a { font-weight: 600; color: #b45309; text-decoration: underline; text-underline-offset: 2px; }
+        .product-page-title { font-weight: 700; color: #292524; margin-bottom: 0.5rem; line-height: 1.25; white-space: nowrap; overflow: hidden; width: 100%; font-size: clamp(0.9rem, 5.4vw, 1.5rem); }
+        .product-nav-brand { white-space: nowrap; font-size: clamp(0.95rem, 4.4vw, 1.25rem); }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-24">
     <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl my-0 md:my-8">
         <div class="relative p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40 md:rounded-t-2xl">
-            <a href="index.html" class="brand-mark text-amber-800 text-xl font-bold leading-tight">Poponew手做甜點</a>
+            <a href="index.html" class="brand-mark product-nav-brand text-amber-800 font-bold leading-tight min-w-0">Poponew手做甜點</a>
             <div class="flex items-center gap-2">
                 <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a><br/>
             </div>
@@ -117,7 +119,7 @@
         </div>
         <div class="p-6">
             <div class="mb-6">
-                <h1 class="text-2xl font-bold text-stone-800 mb-2">比利時列日鬆餅</h1>
+                <h1 id="product-page-title" class="product-page-title">比利時列日鬆餅</h1>
                 <div class="font-zoom">
                 <p class="text-stone-500 text-sm leading-relaxed">午後的暖陽，與比利時列日的卡滋邂逅 ✨<br/>​不只是甜點，更是一場關於時間的發酵藝術。<br/>不同於一般的麵糊鬆餅，我們堅持使用酵母，讓麵糰經過一夜的慢活發酵，才有了這份紮實且充滿彈性的獨特靈魂。<br/>​最迷人的秘密，在於藏在麵糰裡的比利時珍珠糖。<br/>來自天然甜菜的清甜，在高溫烘烤下化作琥珀色的焦糖外殼。<br/>每一口咬下，都是「外酥、內Q、卡滋」的完美三重奏，這是我私心最著迷的驚喜。<br/>​新口味登場囉！<br/>🍷 蘭姆酒葡萄乾：酒香消散，只留下果乾的甘甜層次。<br/>🍊 鐵觀音柑橘：茶香控必試！茶韻與柑橘皮的完美調和。<br/>還有 抹茶白巧、巧克力豆、蔓越莓 以及 經典原味 同步供應中。<br/>​特別介紹：「小星星迷你鬆餅」🌟<br/>一顆口大小，超級「唰嘴」，是追劇或辦公室下午茶的最佳拍檔，真的好療癒…ヾ(*´∇`)ﾉ</p>
                 <p class="allergen-note">⚠️ 含蛋、牛奶；產線另有麩質穀物及堅果。對上述成分過敏者不適合食用。<a href="faq.html">常見問題</a></p>
@@ -256,6 +258,27 @@
             var scale = (parseInt(size, 10) || 16) / 16;
             document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
         }
+        (function() {
+            function fitProductTitle() {
+                var el = document.getElementById("product-page-title");
+                if (!el) return;
+                var max = 24, min = 12;
+                el.style.fontSize = max + "px";
+                if (el.scrollWidth <= el.clientWidth) return;
+                var lo = min, hi = max, best = min;
+                while (hi - lo > 0.2) {
+                    var mid = (lo + hi) / 2;
+                    el.style.fontSize = mid + "px";
+                    if (el.scrollWidth <= el.clientWidth) { best = mid; lo = mid; }
+                    else { hi = mid; }
+                }
+                el.style.fontSize = best + "px";
+            }
+            window.addEventListener("resize", fitProductTitle);
+            if (document.readyState === "complete") fitProductTitle();
+            else window.addEventListener("load", fitProductTitle);
+            fitProductTitle();
+        })();
     </script>
     <script src="js/cart-sync.js"></script>
 </body>

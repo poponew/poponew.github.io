@@ -95,12 +95,14 @@
         .flavor-img-box img { width: 50px; height: 50px; object-fit: cover; }
         .allergen-note { margin-top: 0.75rem; font-size: 0.75rem; line-height: 1.6; color: #78716c; }
         .allergen-note a { font-weight: 600; color: #b45309; text-decoration: underline; text-underline-offset: 2px; }
+        .product-page-title { font-weight: 700; color: #292524; margin-bottom: 0.5rem; line-height: 1.25; white-space: nowrap; overflow: hidden; width: 100%; font-size: clamp(0.9rem, 5.4vw, 1.5rem); }
+        .product-nav-brand { white-space: nowrap; font-size: clamp(0.95rem, 4.4vw, 1.25rem); }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-24">
     <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl my-0 md:my-8">
         <div class="relative p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40 md:rounded-t-2xl">
-            <a href="index.html" class="brand-mark text-amber-800 text-xl font-bold leading-tight">Poponew手做甜點</a>
+            <a href="index.html" class="brand-mark product-nav-brand text-amber-800 font-bold leading-tight min-w-0">Poponew手做甜點</a>
             <div class="flex items-center gap-2">
                 <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a><br/>
             </div>
@@ -117,7 +119,7 @@
         </div>
         <div class="p-6">
             <div class="mb-6">
-                <h1 class="text-2xl font-bold text-stone-800 mb-2">美式軟餅乾系列</h1>
+                <h1 id="product-page-title" class="product-page-title">美式軟餅乾系列</h1>
                 <div class="font-zoom">
                 <p class="text-stone-500 text-sm leading-relaxed">如果說法式甜點是精雕細琢的藝術品，那麼美式軟餅乾，就是生活中最溫暖厚實的擁抱。<br/>​我們以此為靈感，悉心復刻了紐約 Levain Bakery 的代表作 — Chocolate Chip Walnut Cookie。<br/>巧克力的微苦與核桃的溫潤堅果香，向來是烘焙界無需多言的絕配。在厚實、不規則的外表下，藏著極致的外酥內軟。<br/>​​微微加熱後，流淌的巧克力流心讓人驚豔；而冷藏過後的緊實風味，同樣出眾。沒有繁複的裝飾，只有純粹的美味。在每一個需要被撫慰的日常瞬間，為你補充最滿的能量。</p>
                 <p class="allergen-note">⚠️ 含蛋、牛奶；產線另有麩質穀物及堅果。對上述成分過敏者不適合食用。<a href="faq.html">常見問題</a></p>
@@ -256,6 +258,27 @@
             var scale = (parseInt(size, 10) || 16) / 16;
             document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
         }
+        (function() {
+            function fitProductTitle() {
+                var el = document.getElementById("product-page-title");
+                if (!el) return;
+                var max = 24, min = 12;
+                el.style.fontSize = max + "px";
+                if (el.scrollWidth <= el.clientWidth) return;
+                var lo = min, hi = max, best = min;
+                while (hi - lo > 0.2) {
+                    var mid = (lo + hi) / 2;
+                    el.style.fontSize = mid + "px";
+                    if (el.scrollWidth <= el.clientWidth) { best = mid; lo = mid; }
+                    else { hi = mid; }
+                }
+                el.style.fontSize = best + "px";
+            }
+            window.addEventListener("resize", fitProductTitle);
+            if (document.readyState === "complete") fitProductTitle();
+            else window.addEventListener("load", fitProductTitle);
+            fitProductTitle();
+        })();
     </script>
     <script src="js/cart-sync.js"></script>
 </body>
