@@ -42,6 +42,8 @@
         .shop-search-meta { display: block; margin-top: 0.15rem; color: #78716c; font-size: 0.75rem; }
         .shop-search-sold { color: #a8a29e; }
         body.shop-search-open { overflow: hidden; }
+        .card-new-mark { color: #b45309; font-weight: 700; margin-right: 0.25rem; }
+        .card-stock-note { margin-left: 0.4rem; font-size: 0.75rem; font-weight: 600; color: #78716c; }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-12">
@@ -85,7 +87,7 @@
           <a href="faq.html" class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition">常見問題</a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-list">
-            <a href="msbg.html" data-tag="職人手工餅乾" data-pinned="true" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="msbg.html" data-tag="職人手工餅乾" data-pinned="true" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/msbg.jpg" alt="美式軟餅乾系列" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -98,11 +100,11 @@
                         <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">如果說法式甜點是精雕細琢的藝術品，那麼美式軟餅乾，就是生活中最溫暖厚實的擁抱。<br/>​我們以此為靈感，悉心復刻了紐約 Levain Bakery 的代表作 — Chocolate Chip Walnut Cookie。<br/>巧克力的微苦與核桃的溫潤堅果香，向來是烘焙界無需多言的絕配。在厚實、不規則的外表下，藏著極致的外酥內軟。<br/>​​微微加熱後，流淌的巧克力流心讓人驚豔；而冷藏過後的緊實風味，同樣出眾。沒有繁複的裝飾，只有純粹的美味。在每一個需要被撫慰的日常瞬間，為你補充最滿的能量。</p>
                     </div>
                     <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
-                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700">NT$ 100 <span class="text-xs font-medium">起</span></span></span>
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700">NT$ 100 <span class="text-xs font-medium">起</span></span><span class="card-stock-note">（部分缺貨）</span></span>
                     </div>
                 </div>
             </a>
-            <a href="scone.html" data-tag="手作司康" data-pinned="true" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="scone.html" data-tag="手作司康" data-pinned="true" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/scone.jpg" alt="職人手工司康系列" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -119,7 +121,7 @@
                     </div>
                 </div>
             </a>
-            <a href="mcyobsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="mcyobsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/mcyobsk.jpg" alt="抹茶柚子巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -136,7 +138,7 @@
                     </div>
                 </div>
             </a>
-            <a href="bcbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="bcbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/bcbsk.jpg" alt="日式焙茶/鐵觀音巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -153,7 +155,7 @@
                     </div>
                 </div>
             </a>
-            <a href="blssb.html" data-tag="職人手工餅乾" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="blssb.html" data-tag="職人手工餅乾" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/blssb.jpg" alt="比利時列日鬆餅" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -170,7 +172,7 @@
                     </div>
                 </div>
             </a>
-            <a href="lmppbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="lmppbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/lmppbsk.jpg" alt="蘭姆鳳梨巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -187,7 +189,7 @@
                     </div>
                 </div>
             </a>
-            <a href="cklbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="cklbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/cklbsk.jpg" alt="雙重巧克力巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -204,7 +206,7 @@
                     </div>
                 </div>
             </a>
-            <a href="hjbjbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="hjbjbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/hjbjbsk.jpg" alt="皇家伯爵茶巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -221,7 +223,7 @@
                     </div>
                 </div>
             </a>
-            <a href="classbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="classbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/classbsk.jpg" alt="經典原味巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -238,7 +240,7 @@
                     </div>
                 </div>
             </a>
-            <a href="seggbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="seggbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/seggbsk.jpg" alt="鹹蛋黃巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -255,7 +257,7 @@
                     </div>
                 </div>
             </a>
-            <a href="lmptbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="lmptbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/lmptbsk.jpg" alt="蘭姆葡萄巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -272,7 +274,7 @@
                     </div>
                 </div>
             </a>
-            <a href="nntbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="nntbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/nntbsk.jpg" alt="太妃牛奶糖巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -289,7 +291,7 @@
                     </div>
                 </div>
             </a>
-            <a href="oreobsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="oreobsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/oreobsk.jpg" alt="Oreo巧克力巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -306,7 +308,7 @@
                     </div>
                 </div>
             </a>
-            <a href="mcbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="mcbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/mcbsk.jpg" alt="日式抹茶巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -323,7 +325,7 @@
                     </div>
                 </div>
             </a>
-            <a href="bltn.html" data-tag="職人手工餅乾" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="bltn.html" data-tag="職人手工餅乾" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/bltn.jpg" alt="布列塔尼酥餅" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -340,7 +342,7 @@
                     </div>
                 </div>
             </a>
-            <a href="bbegg.html" data-tag="職人手工餅乾" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="bbegg.html" data-tag="職人手工餅乾" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/bbegg.jpg" alt="恐龍寶貝蛋餅乾" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -357,7 +359,7 @@
                     </div>
                 </div>
             </a>
-            <a href="mkroll.html" data-tag="生乳捲" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="mkroll.html" data-tag="生乳捲" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/mkroll.jpg" alt="經典原味生乳捲" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -374,7 +376,7 @@
                     </div>
                 </div>
             </a>
-            <a href="lmck.html" data-tag="職人手工餅乾" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="lmck.html" data-tag="職人手工餅乾" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/lmck.jpg" alt="檸檬夾心餅乾" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -391,7 +393,7 @@
                     </div>
                 </div>
             </a>
-            <a href="btck.html" data-tag="職人手工餅乾, 迷你一口系列" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="btck.html" data-tag="職人手工餅乾, 迷你一口系列" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/btck.jpg" alt="香濃奶油餅乾球" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -408,7 +410,7 @@
                     </div>
                 </div>
             </a>
-            <a href="borch.html" data-tag="人氣單品" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="borch.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/borch.jpg" alt="布朗尼生巧克力" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -425,7 +427,7 @@
                     </div>
                 </div>
             </a>
-            <a href="obbt.html" data-tag="人氣單品" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="obbt.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/obbt.jpg" alt="Oreo巧克力生乳酪棒棒糖蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -442,7 +444,7 @@
                     </div>
                 </div>
             </a>
-            <a href="lmoreo.html" data-tag="人氣單品" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="lmoreo.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/lmoreo.jpg" alt="藍莓Oreo漸層生乳酪蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -459,7 +461,7 @@
                     </div>
                 </div>
             </a>
-            <a href="coal.html" data-tag="職人手工餅乾" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="coal.html" data-tag="職人手工餅乾" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/coal.jpg" alt="小煤炭布朗尼餅乾" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -476,7 +478,7 @@
                     </div>
                 </div>
             </a>
-            <a href="hijt.html" data-tag="人氣單品" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="hijt.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/hijt.jpg" alt="海鹽焦糖生乳酪巧克力蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -493,7 +495,7 @@
                     </div>
                 </div>
             </a>
-            <a href="oreoball.html" data-tag="人氣單品" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="oreoball.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/oreoball.jpg" alt="雙色Oreo乳酪球" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -510,7 +512,7 @@
                     </div>
                 </div>
             </a>
-            <a href="ccsmj.html" data-tag="人氣單品" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="ccsmj.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/ccsmj.jpg" alt="可可三明治蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -527,7 +529,7 @@
                     </div>
                 </div>
             </a>
-            <a href="sscone.html" data-tag="手作司康, 迷你一口系列" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="sscone.html" data-tag="手作司康, 迷你一口系列" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/sscone.jpg" alt="迷你小司康(小歪歪)" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -544,7 +546,7 @@
                     </div>
                 </div>
             </a>
-            <a href="mscone.html" data-tag="手作司康" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="mscone.html" data-tag="手作司康" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/mscone.jpg" alt="奶酪系列司康" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -561,7 +563,7 @@
                     </div>
                 </div>
             </a>
-            <a href="sbltn.html" data-tag="職人手工餅乾, 迷你一口系列" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="sbltn.html" data-tag="職人手工餅乾, 迷你一口系列" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/sbltn.jpg" alt="一口酥迷你布列塔尼" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -578,7 +580,7 @@
                     </div>
                 </div>
             </a>
-            <a href="blnball.html" data-tag="人氣單品, 迷你一口系列" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="blnball.html" data-tag="人氣單品, 迷你一口系列" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/blnball.jpg" alt="布朗尼球球" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -595,7 +597,7 @@
                     </div>
                 </div>
             </a>
-            <a href="fnc.html" data-tag="人氣單品" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="fnc.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/fnc.jpg" alt="費南雪金磚蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -612,7 +614,7 @@
                     </div>
                 </div>
             </a>
-            <a href="Lotus.html" data-tag="人氣單品" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="Lotus.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/Lotus.jpg" alt="Lotus生乳酪棒棒糖蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -629,7 +631,7 @@
                     </div>
                 </div>
             </a>
-            <a href="rgapple.html" data-tag="人氣單品" data-pinned="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="rgapple.html" data-tag="人氣單品" data-pinned="false" data-new="true" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <img src="images/rgapple.jpg" alt="肉桂焦糖蘋果核桃起司蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -639,7 +641,7 @@
                 <div class="p-4 flex-grow flex flex-col justify-between">
                     <div class="mt-auto">
                         <h2 class="text-lg font-bold text-stone-800 mb-1 group-hover:text-amber-800 transition">肉桂焦糖蘋果核桃起司蛋糕</h2>
-                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">秋意漸濃，最想念的就是那一抹暖心的肉桂香 ☕️<br>​肉桂焦糖蘋果核桃起司蛋糕<br>酥脆核桃頂層 x 滑順濃郁起司 x 焦糖酸甜蘋果，多重口感交織出絕妙好滋味。一口吃下超療癒，秋天的幸福就是這麼簡單！</p>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2"><span class="card-new-mark">【新品】</span>秋意漸濃，最想念的就是那一抹暖心的肉桂香 ☕️<br>​肉桂焦糖蘋果核桃起司蛋糕<br>酥脆核桃頂層 x 滑順濃郁起司 x 焦糖酸甜蘋果，多重口感交織出絕妙好滋味。一口吃下超療癒，秋天的幸福就是這麼簡單！</p>
                     </div>
                     <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
                         <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700">NT$ 180</span></span>
@@ -658,7 +660,7 @@
         </div>
         <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.</p>
     </footer>
-    <script>window.shopSearch = [{"name":"經典核桃巧克力美式軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":100,"soldOut":false},{"name":"草莓棉花糖核桃巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":125,"soldOut":false},{"name":"杏仁片棉花糖苦甜巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":130,"soldOut":false},{"name":"Oreo 碎片棉花糖巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":125,"soldOut":false},{"name":"醇黑榛果巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":120,"soldOut":false},{"name":"柑橘奶酪軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":130,"soldOut":false},{"name":"經典Oreo奶酪軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":130,"soldOut":false},{"name":"抹茶柚子巴斯克 (6吋切片)","group":"抹茶柚子巴斯克","url":"mcyobsk.html","price":140,"soldOut":false},{"name":"抹茶柚子巴斯克 (6吋整顆)","group":"抹茶柚子巴斯克","url":"mcyobsk.html","price":840,"soldOut":false},{"name":"日式焙茶巴斯克(6吋切片)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":145,"soldOut":false},{"name":"鐵觀音巴斯克(6吋切片)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":140,"soldOut":false},{"name":"日式焙茶巴斯克(6吋整顆)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":870,"soldOut":false},{"name":"鐵觀音巴斯克(6吋整顆)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":840,"soldOut":false},{"name":"經典原味司康","group":"職人手工司康系列","url":"scone.html","price":55,"soldOut":false},{"name":"核桃司康","group":"職人手工司康系列","url":"scone.html","price":70,"soldOut":false},{"name":"伯爵柑橘司康","group":"職人手工司康系列","url":"scone.html","price":80,"soldOut":false},{"name":"伯爵紅茶司康","group":"職人手工司康系列","url":"scone.html","price":70,"soldOut":false},{"name":"抹茶司康","group":"職人手工司康系列","url":"scone.html","price":80,"soldOut":false},{"name":"香濃乳酪丁司康","group":"職人手工司康系列","url":"scone.html","price":85,"soldOut":false},{"name":"巧克力豆豆司康","group":"職人手工司康系列","url":"scone.html","price":75,"soldOut":false},{"name":"萊姆葡萄司康","group":"職人手工司康系列","url":"scone.html","price":75,"soldOut":false},{"name":"蔓越莓司康","group":"職人手工司康系列","url":"scone.html","price":70,"soldOut":false},{"name":"鹹蛋黃司康","group":"職人手工司康系列","url":"scone.html","price":75,"soldOut":false},{"name":"迷你小司康","group":"職人手工司康系列","url":"scone.html","price":100,"soldOut":false},{"name":"經典原味列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":60,"soldOut":false},{"name":"抹茶白巧列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"巧克力豆列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"蔓越莓列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"蘭姆酒葡萄乾列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"鐵觀音柑橘列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"小星星迷你一口小鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":100,"soldOut":false},{"name":"蘭姆鳳梨巴斯克(6吋切片)","group":"蘭姆鳳梨巴斯克","url":"lmppbsk.html","price":145,"soldOut":false},{"name":"蘭姆鳳梨巴斯克(6吋整顆)","group":"蘭姆鳳梨巴斯克","url":"lmppbsk.html","price":870,"soldOut":false},{"name":"雙重巧克力巴斯克(6吋切片)","group":"雙重巧克力巴斯克","url":"cklbsk.html","price":135,"soldOut":false},{"name":"雙重巧克力巴斯克(6吋整顆)","group":"雙重巧克力巴斯克","url":"cklbsk.html","price":810,"soldOut":false},{"name":"皇家伯爵茶巴斯克(6吋切片)","group":"皇家伯爵茶巴斯克","url":"hjbjbsk.html","price":130,"soldOut":false},{"name":"皇家伯爵茶巴斯克(6吋整顆)","group":"皇家伯爵茶巴斯克","url":"hjbjbsk.html","price":780,"soldOut":false},{"name":"經典原味巴斯克(6吋切片)","group":"經典原味巴斯克","url":"classbsk.html","price":110,"soldOut":false},{"name":"經典原味巴斯克(6吋整顆)","group":"經典原味巴斯克","url":"classbsk.html","price":660,"soldOut":false},{"name":"鹹蛋黃巴斯克(6吋切片)","group":"鹹蛋黃巴斯克","url":"seggbsk.html","price":135,"soldOut":false},{"name":"鹹蛋黃巴斯克(6吋整顆)","group":"鹹蛋黃巴斯克","url":"seggbsk.html","price":810,"soldOut":false},{"name":"蘭姆葡萄巴斯克(6吋切片)","group":"蘭姆葡萄巴斯克","url":"lmptbsk.html","price":135,"soldOut":false},{"name":"蘭姆葡萄巴斯克(6吋整顆)","group":"蘭姆葡萄巴斯克","url":"lmptbsk.html","price":810,"soldOut":false},{"name":"太妃牛奶糖巴斯克(6吋切片)","group":"太妃牛奶糖巴斯克","url":"nntbsk.html","price":125,"soldOut":false},{"name":"太妃牛奶糖巴斯克(6吋整顆)","group":"太妃牛奶糖巴斯克","url":"nntbsk.html","price":750,"soldOut":false},{"name":"Oreo巧克力巴斯克(6吋切片)","group":"Oreo巧克力巴斯克","url":"oreobsk.html","price":140,"soldOut":false},{"name":"Oreo巧克力巴斯克(6吋整顆)","group":"Oreo巧克力巴斯克","url":"oreobsk.html","price":840,"soldOut":false},{"name":"日式抹茶巴斯克(6吋切片)","group":"日式抹茶巴斯克","url":"mcbsk.html","price":145,"soldOut":false},{"name":"日式抹茶巴斯克(6吋整顆)","group":"日式抹茶巴斯克","url":"mcbsk.html","price":870,"soldOut":false},{"name":"鹽之花布列塔尼酥餅","group":"布列塔尼酥餅","url":"bltn.html","price":80,"soldOut":false},{"name":"鹹蛋黃布列塔尼酥餅","group":"布列塔尼酥餅","url":"bltn.html","price":85,"soldOut":false},{"name":"巧克力豆布列塔尼酥餅","group":"布列塔尼酥餅","url":"bltn.html","price":85,"soldOut":false},{"name":"一口酥迷你布列塔尼","group":"布列塔尼酥餅","url":"bltn.html","price":100,"soldOut":false},{"name":"布朗尼恐龍寶貝蛋餅乾","group":"恐龍寶貝蛋餅乾","url":"bbegg.html","price":75,"soldOut":false},{"name":"柑橘恐龍寶貝蛋餅乾","group":"恐龍寶貝蛋餅乾","url":"bbegg.html","price":75,"soldOut":false},{"name":"奶油乳酪恐龍寶貝蛋餅乾","group":"恐龍寶貝蛋餅乾","url":"bbegg.html","price":75,"soldOut":false},{"name":"經典原味生乳捲","group":"經典原味生乳捲","url":"mkroll.html","price":100,"soldOut":false},{"name":"檸檬夾心餅乾","group":"檸檬夾心餅乾","url":"lmck.html","price":65,"soldOut":false},{"name":"香濃奶油餅乾球","group":"香濃奶油餅乾球","url":"btck.html","price":100,"soldOut":false},{"name":"香濃奶油棒棒餅乾-經典原味","group":"香濃奶油餅乾球","url":"btck.html","price":45,"soldOut":false},{"name":"香濃奶油棒棒餅乾-可可豆","group":"香濃奶油餅乾球","url":"btck.html","price":50,"soldOut":false},{"name":"布朗尼生巧克力","group":"布朗尼生巧克力","url":"borch.html","price":150,"soldOut":false},{"name":"Oreo巧克力生乳酪棒棒糖蛋糕","group":"Oreo巧克力生乳酪棒棒糖蛋糕","url":"obbt.html","price":185,"soldOut":false},{"name":"藍莓Oreo漸層生乳酪蛋糕","group":"藍莓Oreo漸層生乳酪蛋糕","url":"lmoreo.html","price":185,"soldOut":false},{"name":"小煤炭布朗尼餅乾","group":"小煤炭布朗尼餅乾","url":"coal.html","price":45,"soldOut":false},{"name":"海鹽焦糖生乳酪巧克力蛋糕","group":"海鹽焦糖生乳酪巧克力蛋糕","url":"hijt.html","price":175,"soldOut":false},{"name":"雙色Oreo乳酪球","group":"雙色Oreo乳酪球","url":"oreoball.html","price":145,"soldOut":false},{"name":"可可三明治蛋糕","group":"可可三明治蛋糕","url":"ccsmj.html","price":100,"soldOut":false},{"name":"迷你小司康","group":"迷你小司康(小歪歪)","url":"sscone.html","price":100,"soldOut":false},{"name":"經典原味奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":90,"soldOut":false},{"name":"70%巧克力奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":115,"soldOut":false},{"name":"Oreo巧克力奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":120,"soldOut":false},{"name":"伯爵茶柑橘奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":110,"soldOut":false},{"name":"草莓蔓越莓乾奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":130,"soldOut":false},{"name":"抹茶白巧蔓越莓奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":130,"soldOut":false},{"name":"金黃乳酪起司奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":125,"soldOut":false},{"name":"酷黑藍莓果醬奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":130,"soldOut":false},{"name":"一口酥迷你布列塔尼","group":"一口酥迷你布列塔尼","url":"sbltn.html","price":100,"soldOut":false},{"name":"布朗尼球球","group":"布朗尼球球","url":"blnball.html","price":90,"soldOut":false},{"name":"經典原味費南雪","group":"費南雪金磚蛋糕","url":"fnc.html","price":45,"soldOut":false},{"name":"抹茶費南雪","group":"費南雪金磚蛋糕","url":"fnc.html","price":55,"soldOut":false},{"name":"可可費南雪","group":"費南雪金磚蛋糕","url":"fnc.html","price":55,"soldOut":false},{"name":"Lotus生乳酪棒棒糖蛋糕","group":"Lotus生乳酪棒棒糖蛋糕","url":"Lotus.html","price":200,"soldOut":false},{"name":"肉桂焦糖蘋果核桃起司蛋糕","group":"肉桂焦糖蘋果核桃起司蛋糕","url":"rgapple.html","price":180,"soldOut":false}];</script>
+    <script>window.shopSearch = [{"name":"經典核桃巧克力美式軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":100,"soldOut":true},{"name":"草莓棉花糖核桃巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":125,"soldOut":false},{"name":"杏仁片棉花糖苦甜巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":130,"soldOut":false},{"name":"Oreo 碎片棉花糖巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":125,"soldOut":false},{"name":"醇黑榛果巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":120,"soldOut":false},{"name":"柑橘奶酪軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":130,"soldOut":false},{"name":"經典Oreo奶酪軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":130,"soldOut":false},{"name":"抹茶柚子巴斯克 (6吋切片)","group":"抹茶柚子巴斯克","url":"mcyobsk.html","price":140,"soldOut":false},{"name":"抹茶柚子巴斯克 (6吋整顆)","group":"抹茶柚子巴斯克","url":"mcyobsk.html","price":840,"soldOut":false},{"name":"日式焙茶巴斯克(6吋切片)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":145,"soldOut":false},{"name":"鐵觀音巴斯克(6吋切片)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":140,"soldOut":false},{"name":"日式焙茶巴斯克(6吋整顆)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":870,"soldOut":false},{"name":"鐵觀音巴斯克(6吋整顆)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":840,"soldOut":false},{"name":"經典原味司康","group":"職人手工司康系列","url":"scone.html","price":55,"soldOut":false},{"name":"核桃司康","group":"職人手工司康系列","url":"scone.html","price":70,"soldOut":false},{"name":"伯爵柑橘司康","group":"職人手工司康系列","url":"scone.html","price":80,"soldOut":false},{"name":"伯爵紅茶司康","group":"職人手工司康系列","url":"scone.html","price":70,"soldOut":false},{"name":"抹茶司康","group":"職人手工司康系列","url":"scone.html","price":80,"soldOut":false},{"name":"香濃乳酪丁司康","group":"職人手工司康系列","url":"scone.html","price":85,"soldOut":false},{"name":"巧克力豆豆司康","group":"職人手工司康系列","url":"scone.html","price":75,"soldOut":false},{"name":"萊姆葡萄司康","group":"職人手工司康系列","url":"scone.html","price":75,"soldOut":false},{"name":"蔓越莓司康","group":"職人手工司康系列","url":"scone.html","price":70,"soldOut":false},{"name":"鹹蛋黃司康","group":"職人手工司康系列","url":"scone.html","price":75,"soldOut":false},{"name":"迷你小司康","group":"職人手工司康系列","url":"scone.html","price":100,"soldOut":false},{"name":"經典原味列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":60,"soldOut":false},{"name":"抹茶白巧列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"巧克力豆列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"蔓越莓列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"蘭姆酒葡萄乾列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"鐵觀音柑橘列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"小星星迷你一口小鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":100,"soldOut":false},{"name":"蘭姆鳳梨巴斯克(6吋切片)","group":"蘭姆鳳梨巴斯克","url":"lmppbsk.html","price":145,"soldOut":false},{"name":"蘭姆鳳梨巴斯克(6吋整顆)","group":"蘭姆鳳梨巴斯克","url":"lmppbsk.html","price":870,"soldOut":false},{"name":"雙重巧克力巴斯克(6吋切片)","group":"雙重巧克力巴斯克","url":"cklbsk.html","price":135,"soldOut":false},{"name":"雙重巧克力巴斯克(6吋整顆)","group":"雙重巧克力巴斯克","url":"cklbsk.html","price":810,"soldOut":false},{"name":"皇家伯爵茶巴斯克(6吋切片)","group":"皇家伯爵茶巴斯克","url":"hjbjbsk.html","price":130,"soldOut":false},{"name":"皇家伯爵茶巴斯克(6吋整顆)","group":"皇家伯爵茶巴斯克","url":"hjbjbsk.html","price":780,"soldOut":false},{"name":"經典原味巴斯克(6吋切片)","group":"經典原味巴斯克","url":"classbsk.html","price":110,"soldOut":false},{"name":"經典原味巴斯克(6吋整顆)","group":"經典原味巴斯克","url":"classbsk.html","price":660,"soldOut":false},{"name":"鹹蛋黃巴斯克(6吋切片)","group":"鹹蛋黃巴斯克","url":"seggbsk.html","price":135,"soldOut":false},{"name":"鹹蛋黃巴斯克(6吋整顆)","group":"鹹蛋黃巴斯克","url":"seggbsk.html","price":810,"soldOut":false},{"name":"蘭姆葡萄巴斯克(6吋切片)","group":"蘭姆葡萄巴斯克","url":"lmptbsk.html","price":135,"soldOut":false},{"name":"蘭姆葡萄巴斯克(6吋整顆)","group":"蘭姆葡萄巴斯克","url":"lmptbsk.html","price":810,"soldOut":false},{"name":"太妃牛奶糖巴斯克(6吋切片)","group":"太妃牛奶糖巴斯克","url":"nntbsk.html","price":125,"soldOut":false},{"name":"太妃牛奶糖巴斯克(6吋整顆)","group":"太妃牛奶糖巴斯克","url":"nntbsk.html","price":750,"soldOut":false},{"name":"Oreo巧克力巴斯克(6吋切片)","group":"Oreo巧克力巴斯克","url":"oreobsk.html","price":140,"soldOut":false},{"name":"Oreo巧克力巴斯克(6吋整顆)","group":"Oreo巧克力巴斯克","url":"oreobsk.html","price":840,"soldOut":false},{"name":"日式抹茶巴斯克(6吋切片)","group":"日式抹茶巴斯克","url":"mcbsk.html","price":145,"soldOut":false},{"name":"日式抹茶巴斯克(6吋整顆)","group":"日式抹茶巴斯克","url":"mcbsk.html","price":870,"soldOut":false},{"name":"鹽之花布列塔尼酥餅","group":"布列塔尼酥餅","url":"bltn.html","price":80,"soldOut":false},{"name":"鹹蛋黃布列塔尼酥餅","group":"布列塔尼酥餅","url":"bltn.html","price":85,"soldOut":false},{"name":"巧克力豆布列塔尼酥餅","group":"布列塔尼酥餅","url":"bltn.html","price":85,"soldOut":false},{"name":"一口酥迷你布列塔尼","group":"布列塔尼酥餅","url":"bltn.html","price":100,"soldOut":false},{"name":"布朗尼恐龍寶貝蛋餅乾","group":"恐龍寶貝蛋餅乾","url":"bbegg.html","price":75,"soldOut":false},{"name":"柑橘恐龍寶貝蛋餅乾","group":"恐龍寶貝蛋餅乾","url":"bbegg.html","price":75,"soldOut":false},{"name":"奶油乳酪恐龍寶貝蛋餅乾","group":"恐龍寶貝蛋餅乾","url":"bbegg.html","price":75,"soldOut":false},{"name":"經典原味生乳捲","group":"經典原味生乳捲","url":"mkroll.html","price":100,"soldOut":false},{"name":"檸檬夾心餅乾","group":"檸檬夾心餅乾","url":"lmck.html","price":65,"soldOut":false},{"name":"香濃奶油餅乾球","group":"香濃奶油餅乾球","url":"btck.html","price":100,"soldOut":false},{"name":"香濃奶油棒棒餅乾-經典原味","group":"香濃奶油餅乾球","url":"btck.html","price":45,"soldOut":false},{"name":"香濃奶油棒棒餅乾-可可豆","group":"香濃奶油餅乾球","url":"btck.html","price":50,"soldOut":false},{"name":"布朗尼生巧克力","group":"布朗尼生巧克力","url":"borch.html","price":150,"soldOut":false},{"name":"Oreo巧克力生乳酪棒棒糖蛋糕","group":"Oreo巧克力生乳酪棒棒糖蛋糕","url":"obbt.html","price":185,"soldOut":false},{"name":"藍莓Oreo漸層生乳酪蛋糕","group":"藍莓Oreo漸層生乳酪蛋糕","url":"lmoreo.html","price":185,"soldOut":false},{"name":"小煤炭布朗尼餅乾","group":"小煤炭布朗尼餅乾","url":"coal.html","price":45,"soldOut":false},{"name":"海鹽焦糖生乳酪巧克力蛋糕","group":"海鹽焦糖生乳酪巧克力蛋糕","url":"hijt.html","price":175,"soldOut":false},{"name":"雙色Oreo乳酪球","group":"雙色Oreo乳酪球","url":"oreoball.html","price":145,"soldOut":false},{"name":"可可三明治蛋糕","group":"可可三明治蛋糕","url":"ccsmj.html","price":100,"soldOut":false},{"name":"迷你小司康","group":"迷你小司康(小歪歪)","url":"sscone.html","price":100,"soldOut":false},{"name":"經典原味奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":90,"soldOut":false},{"name":"70%巧克力奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":115,"soldOut":false},{"name":"Oreo巧克力奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":120,"soldOut":false},{"name":"伯爵茶柑橘奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":110,"soldOut":false},{"name":"草莓蔓越莓乾奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":130,"soldOut":false},{"name":"抹茶白巧蔓越莓奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":130,"soldOut":false},{"name":"金黃乳酪起司奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":125,"soldOut":false},{"name":"酷黑藍莓果醬奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":130,"soldOut":false},{"name":"一口酥迷你布列塔尼","group":"一口酥迷你布列塔尼","url":"sbltn.html","price":100,"soldOut":false},{"name":"布朗尼球球","group":"布朗尼球球","url":"blnball.html","price":90,"soldOut":false},{"name":"經典原味費南雪","group":"費南雪金磚蛋糕","url":"fnc.html","price":45,"soldOut":false},{"name":"抹茶費南雪","group":"費南雪金磚蛋糕","url":"fnc.html","price":55,"soldOut":false},{"name":"可可費南雪","group":"費南雪金磚蛋糕","url":"fnc.html","price":55,"soldOut":false},{"name":"Lotus生乳酪棒棒糖蛋糕","group":"Lotus生乳酪棒棒糖蛋糕","url":"Lotus.html","price":200,"soldOut":false},{"name":"肉桂焦糖蘋果核桃起司蛋糕","group":"肉桂焦糖蘋果核桃起司蛋糕","url":"rgapple.html","price":180,"soldOut":false}];</script>
     <script>
         // 1. 洗牌演算法 (Fisher-Yates)
         function shuffleArray(array) {
