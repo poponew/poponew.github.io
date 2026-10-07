@@ -65,7 +65,9 @@
         .flavor-img-box img { width: 50px; height: 50px; object-fit: cover; }
         .allergen-note { margin-top: 0.75rem; font-size: 0.75rem; line-height: 1.6; color: #78716c; }
         .allergen-note a { font-weight: 600; color: #b45309; text-decoration: underline; text-underline-offset: 2px; }
-        .product-page-title { font-weight: 700; color: #44403c; margin-bottom: 0.5rem; line-height: 1.25; white-space: nowrap; overflow: hidden; width: 100%; font-size: clamp(0.9rem, 5.4vw, 1.5rem); }
+        .product-title-row { display: flex; align-items: flex-start; gap: 0.2em; min-width: 0; margin-bottom: 0.5rem; }
+        .product-page-title { font-weight: 700; color: #44403c; line-height: 1.25; white-space: nowrap; overflow: hidden; min-width: 0; flex: 1; font-size: clamp(0.9rem, 5.4vw, 1.5rem); }
+        .card-new-mark { font-family: ui-sans-serif, system-ui, sans-serif; color: #b45309; font-weight: 700; font-size: 0.75rem; line-height: 1; flex-shrink: 0; white-space: nowrap; }
         .product-nav-brand { white-space: nowrap; font-size: clamp(0.95rem, 4.4vw, 1.25rem); }
     </style>
 </head>
@@ -89,7 +91,9 @@
         </div>
         <div class="p-6">
             <div class="mb-6">
-                <h1 id="product-page-title" class="product-page-title">日式焙茶/鐵觀音巴斯克</h1>
+                <div class="product-title-row">
+                    <h1 id="product-page-title" class="product-page-title">日式焙茶/鐵觀音巴斯克</h1>
+                </div>
                 <div class="font-zoom">
                 <p class="text-stone-500 text-sm leading-relaxed">靜靜落入窗邊的午後陽光，最適合留給一口濃郁的茶香。<br>​今天想和大家分享這款復刻的超人氣美味「焙茶軟心巴斯克」。如果你也著迷於香港 Hemma Cafe 每天大排長龍、讓人心甘情願等待的 Hojicha Basque，那你一定不能錯過這個味道。<br>​我們特別選用的優質焙茶粉，一入口，率先迎來的是外層迷人的微焦香氣，隨之而來的是絲滑、醇厚的軟心質地。焙茶獨特的煙燻茶韻在舌尖緩緩散開，那是焦香與茶香的完美碰撞。<br>​這樣綿密而深邃的滋味，彷彿有一種神奇的魔力。吃下一口，今天的煩惱好像就被溫柔地治癒了。</p>
                 <p class="allergen-note">⚠️ 含蛋、牛奶；產線另有麩質穀物及堅果。對上述成分過敏者不適合食用。<a href="faq.html">常見問題</a></p>

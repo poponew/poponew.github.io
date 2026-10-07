@@ -45,7 +45,9 @@
         .flavor-img-box img { width: 50px; height: 50px; object-fit: cover; }
         .allergen-note { margin-top: 0.75rem; font-size: 0.75rem; line-height: 1.6; color: #78716c; }
         .allergen-note a { font-weight: 600; color: #b45309; text-decoration: underline; text-underline-offset: 2px; }
-        .product-page-title { font-weight: 700; color: #44403c; margin-bottom: 0.5rem; line-height: 1.25; white-space: nowrap; overflow: hidden; width: 100%; font-size: clamp(0.9rem, 5.4vw, 1.5rem); }
+        .product-title-row { display: flex; align-items: flex-start; gap: 0.2em; min-width: 0; margin-bottom: 0.5rem; }
+        .product-page-title { font-weight: 700; color: #44403c; line-height: 1.25; white-space: nowrap; overflow: hidden; min-width: 0; flex: 1; font-size: clamp(0.9rem, 5.4vw, 1.5rem); }
+        .card-new-mark { font-family: ui-sans-serif, system-ui, sans-serif; color: #b45309; font-weight: 700; font-size: 0.75rem; line-height: 1; flex-shrink: 0; white-space: nowrap; }
         .product-nav-brand { white-space: nowrap; font-size: clamp(0.95rem, 4.4vw, 1.25rem); }
     </style>
 </head>
@@ -69,7 +71,9 @@
         </div>
         <div class="p-6">
             <div class="mb-6">
-                <h1 id="product-page-title" class="product-page-title">蘭姆鳳梨巴斯克</h1>
+                <div class="product-title-row">
+                    <h1 id="product-page-title" class="product-page-title">蘭姆鳳梨巴斯克</h1>
+                </div>
                 <div class="font-zoom">
                 <p class="text-stone-500 text-sm leading-relaxed">微醺夏日｜蘭姆鳳梨巴斯克起司蛋糕<br>​今天，給自己點一份清爽與甜香交織的優雅。<br>​剛出爐的巴斯克，有著經典的迷人焦香外皮，切開是柔軟順滑的軟心乳酪。而最讓人驚豔的靈魂，是我們親自熬煮的「法式蘭姆香草鳳梨果醬」。<br>​這次的食譜靈感，特別致敬了法國果醬女王 Christine Ferber 的經典配方。<br>當蘭姆酒、香草與在地鳳梨在鍋中慢火熬煮，神奇的魔法就發生了——琥珀色的光澤裡，蘭姆酒的成熟木質香與鳳梨的熱帶酸甜互不搶戲，反而完美融合，華麗蛻變成一種極具層次、溫柔而獨特的甜美氣味。<br>​乳酪的濃郁，夾帶著法式果醬的細緻香氣，每口都是味蕾的頂級享受。<br>​獨特風味，限量製作，歡迎妳來品嚐這份法式浪漫。</p>
                 <p class="allergen-note">⚠️ 含蛋、牛奶；產線另有麩質穀物及堅果。對上述成分過敏者不適合食用。<a href="faq.html">常見問題</a></p>

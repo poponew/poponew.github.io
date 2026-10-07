@@ -45,7 +45,9 @@
         .flavor-img-box img { width: 50px; height: 50px; object-fit: cover; }
         .allergen-note { margin-top: 0.75rem; font-size: 0.75rem; line-height: 1.6; color: #78716c; }
         .allergen-note a { font-weight: 600; color: #b45309; text-decoration: underline; text-underline-offset: 2px; }
-        .product-page-title { font-weight: 700; color: #44403c; margin-bottom: 0.5rem; line-height: 1.25; white-space: nowrap; overflow: hidden; width: 100%; font-size: clamp(0.9rem, 5.4vw, 1.5rem); }
+        .product-title-row { display: flex; align-items: flex-start; gap: 0.2em; min-width: 0; margin-bottom: 0.5rem; }
+        .product-page-title { font-weight: 700; color: #44403c; line-height: 1.25; white-space: nowrap; overflow: hidden; min-width: 0; flex: 1; font-size: clamp(0.9rem, 5.4vw, 1.5rem); }
+        .card-new-mark { font-family: ui-sans-serif, system-ui, sans-serif; color: #b45309; font-weight: 700; font-size: 0.75rem; line-height: 1; flex-shrink: 0; white-space: nowrap; }
         .product-nav-brand { white-space: nowrap; font-size: clamp(0.95rem, 4.4vw, 1.25rem); }
     </style>
 </head>
@@ -69,7 +71,9 @@
         </div>
         <div class="p-6">
             <div class="mb-6">
-                <h1 id="product-page-title" class="product-page-title">經典原味巴斯克</h1>
+                <div class="product-title-row">
+                    <h1 id="product-page-title" class="product-page-title">經典原味巴斯克</h1>
+                </div>
                 <div class="font-zoom">
                 <p class="text-stone-500 text-sm leading-relaxed">陽光灑落，正是品嚐這一口純粹的時候。我們的「經典原味巴斯克」，外皮帶著迷人的焦香，內餡綿密滑順、乳酪香氣濃郁。<br>搭配一杯熱茶與英式司康，簡簡單單的優雅。無需多餘的裝飾，這份單純的美味最能療癒身心。快約上好友，一起享受愜意的下午茶吧！</p>
                 <p class="allergen-note">⚠️ 含蛋、牛奶；產線另有麩質穀物及堅果。對上述成分過敏者不適合食用。<a href="faq.html">常見問題</a></p>

@@ -35,7 +35,9 @@
         .flavor-img-box img { width: 50px; height: 50px; object-fit: cover; }
         .allergen-note { margin-top: 0.75rem; font-size: 0.75rem; line-height: 1.6; color: #78716c; }
         .allergen-note a { font-weight: 600; color: #b45309; text-decoration: underline; text-underline-offset: 2px; }
-        .product-page-title { font-weight: 700; color: #44403c; margin-bottom: 0.5rem; line-height: 1.25; white-space: nowrap; overflow: hidden; width: 100%; font-size: clamp(0.9rem, 5.4vw, 1.5rem); }
+        .product-title-row { display: flex; align-items: flex-start; gap: 0.2em; min-width: 0; margin-bottom: 0.5rem; }
+        .product-page-title { font-weight: 700; color: #44403c; line-height: 1.25; white-space: nowrap; overflow: hidden; min-width: 0; flex: 1; font-size: clamp(0.9rem, 5.4vw, 1.5rem); }
+        .card-new-mark { font-family: ui-sans-serif, system-ui, sans-serif; color: #b45309; font-weight: 700; font-size: 0.75rem; line-height: 1; flex-shrink: 0; white-space: nowrap; }
         .product-nav-brand { white-space: nowrap; font-size: clamp(0.95rem, 4.4vw, 1.25rem); }
     </style>
 </head>
@@ -59,7 +61,9 @@
         </div>
         <div class="p-6">
             <div class="mb-6">
-                <h1 id="product-page-title" class="product-page-title">Lotus生乳酪棒棒糖蛋糕</h1>
+                <div class="product-title-row">
+                    <h1 id="product-page-title" class="product-page-title">Lotus生乳酪棒棒糖蛋糕</h1>
+                </div>
                 <div class="font-zoom">
                 <p class="text-stone-500 text-sm leading-relaxed">單手就能享用的精緻美味！Lotus蓮花餅乾生乳酪棒棒糖蛋糕<br>一款兼具顏值與美味的造型甜點！<br>底層特別選用經典的 比利時 Lotus 蓮花薄脆餅，濃郁焦糖香搭配淡淡肉桂風味，薄脆又帶點微鹹甜感。搭配香濃細滑的生乳酪蛋糕基底，外層再淋上一層香濃巧克力，每一口都是多層次的幸福滋味！<br>​切片後插上小木棒，秒變可愛又方便的蛋糕棒棒糖<br>不沾手、好拿取，不論是生日派對、家庭聚會，還是作為精緻伴手禮都超級吸睛！<br>​大人小孩都無法抗拒的夢幻甜點，看完是不是也想來一支呢？</p>
                 <p class="allergen-note">⚠️ 含蛋、牛奶；產線另有麩質穀物及堅果。對上述成分過敏者不適合食用。<a href="faq.html">常見問題</a></p>
