@@ -61,6 +61,29 @@
         .brand-mark { font-family: "poponew", sans-serif; }
         .flavor-img-box { width: 50px; height: 50px; background-color: #f5f5f4; border-radius: 0.75rem; overflow: hidden; flex-shrink: 0; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); cursor: zoom-in; }
         .flavor-img-box img { width: 50px; height: 50px; object-fit: cover; }
+        .flavor-lb-panel { position: relative; display: flex; flex-direction: column; align-items: center; max-width: 90vw; max-height: 92vh; cursor: default; }
+        .flavor-lb-title { align-self: flex-start; margin: 0 0 0.7rem 3.3rem; color: #fff; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.02em; background: rgba(120,53,15,0.92); border: 1px solid rgba(245,158,11,0.35); padding: 0.4rem 1rem; border-radius: 999px; text-align: left; max-width: 100%; }
+        .flavor-lb-stage { position: relative; display: flex; align-items: center; justify-content: center; gap: 0.45rem; width: auto; max-width: 94vw; }
+        .flavor-lb-stage > img { max-width: calc(90vw - 7.2rem); }
+        .flavor-lb-nav { flex-shrink: 0; position: static; transform: none; z-index: 2; width: 2.85rem; height: 2.85rem; padding: 0; border: none; border-radius: 0; color: rgba(255,255,255,0.5); background: transparent; box-shadow: none; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .flavor-lb-nav:hover { color: rgba(255,255,255,0.85); background: transparent; }
+        .flavor-lb-nav:active { transform: scale(0.96); }
+        .flavor-lb-nav svg { width: 2.85rem; height: 2.85rem; display: block; filter: none; }
+        .flavor-lb-nav[hidden] { display: none !important; }
+        .flavor-lb-prev { left: auto; }
+        .flavor-lb-next { right: auto; }
+        .flavor-lb-hint { display: none; margin: 0.55rem 0 0; color: rgba(255,255,255,0.88); font-size: 0.8rem; letter-spacing: 0.04em; text-align: center; opacity: 0; transition: opacity 0.35s ease; pointer-events: none; }
+        .flavor-lb-hint.is-on { opacity: 1; }
+        @media (max-width: 768px), (hover: none) and (pointer: coarse) {
+            .flavor-lb-nav { display: none !important; }
+            .flavor-lb-hint { display: block; opacity: 1; }
+            .flavor-lb-stage > img { max-width: 90vw; }
+            .flavor-lb-title { margin-left: 0; }
+        }
+        .flavor-lb-cart { position: relative; margin-top: 0.85rem; width: 100%; display: flex; justify-content: center; align-items: center; background: transparent; }
+        .flavor-lb-qty-anchor { position: relative; }
+        .flavor-lb-qtybox { display: flex; flex-direction: row; align-items: center; height: 2.5rem; background: rgba(255,255,255,0.8); border-radius: 0.75rem; padding: 0 0.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+        .flavor-lb-price { position: absolute; right: 100%; top: 50%; transform: translateY(-50%); margin: 0 0.5rem 0 0; display: flex; align-items: center; height: 2.5rem; font-size: 0.875rem; font-weight: 700; color: #1c1917; background: rgba(255,255,255,0.8); border: none; border-radius: 0.75rem; padding: 0 0.75rem; line-height: 1; white-space: nowrap; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
         .allergen-note { margin-top: 0.75rem; font-size: 0.75rem; line-height: 1.6; color: #78716c; }
         .allergen-note a { font-weight: 600; color: #b45309; text-decoration: underline; text-underline-offset: 2px; }
         .product-title-row { display: flex; align-items: flex-start; gap: 0.2em; min-width: 0; margin-bottom: 0.5rem; }
@@ -144,13 +167,13 @@
             container.appendChild(itemDiv);
         });
         }
-        function updateQty(id, change) { var input = document.getElementById("qty-" + id); var currentQty = parseInt(input.value) || 0; currentQty = Math.max(0, currentQty + change); if (currentQty > 20) { currentQty = 20; alert("單品數量上限為20"); } input.value = currentQty; if (currentQty === 0) { delete cart[id]; } else { cart[id] = currentQty; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); calculatePageTotal(); updateCartCount(); }
+        function updateQty(id, change) { var input = document.getElementById("qty-" + id); var currentQty = parseInt(input && input.value, 10) || 0; currentQty = Math.max(0, currentQty + change); if (currentQty > 20) { currentQty = 20; alert("單品數量上限為20"); } if (input) input.value = currentQty; if (currentQty === 0) { delete cart[id]; } else { cart[id] = currentQty; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); calculatePageTotal(); updateCartCount(); if (window.syncFlavorLightboxQty) window.syncFlavorLightboxQty(); }
         function calculatePageTotal() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.allProductsLookup[id] || 0) * cart[id]; } document.getElementById("entire-cart-total").innerText = entireCartTotal; var tipElement = document.getElementById("free-shipping-tip"); if (entireCartTotal === 0) { tipElement.innerText = "⚠️ 本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元唷！"; } else if (entireCartTotal >= cfg.freeShipping) { tipElement.innerHTML = "<span class='text-green-600 font-bold text-sm'>🎉 全店已達免運費門檻！直接結帳超划算！</span>"; } else { tipElement.innerText = "還差" + (cfg.freeShipping - entireCartTotal) + " 元就免運啦！"; } var bulkTip = document.getElementById("bulk-order-tip"); if (bulkTip) { if (entireCartTotal > cfg.bulkOrder) { bulkTip.classList.remove("hidden"); bulkTip.innerText = "您的訂購數量較大，屬於大宗/企業訂單。為了保障您的權益與確認出貨檔期，請直接透過網站下方聯絡方式聯繫我們由專人為您服務！"; } else { bulkTip.classList.add("hidden"); bulkTip.innerText = ""; } } var codTip = document.getElementById("cod-limit-tip"); if (codTip) { if (entireCartTotal > cfg.codLimit) { codTip.classList.remove("hidden"); codTip.innerText = "單筆滿 NT$ " + cfg.codLimit.toLocaleString() + " 不提供貨到付款，結帳時請改用轉帳匯款。"; } else { codTip.classList.add("hidden"); codTip.innerText = ""; } } }
         function saveToCartAndGo() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.allProductsLookup[id] || 0) * cart[id]; } if (entireCartTotal === 0) { alert("您目前尚未選擇任何數量唷！"); return; } if (entireCartTotal < cfg.minOrder) { alert("抱歉！本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元，目前綜合累計為 NT$ " + entireCartTotal + " 元，請再多選購一些甜點唷！"); return; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); window.location.href = "cart.html"; }
         function updateCartCount() { var count = 0; for (var id in cart) { count += cart[id]; } document.getElementById("cart-count").innerText = count; }
         calculatePageTotal(); updateCartCount();
         window.addEventListener("pagehide", function() { localStorage.setItem("poponew_cart", JSON.stringify(cart)); });
-        window.addEventListener("pageshow", function() { cart = JSON.parse(localStorage.getItem("poponew_cart")) || {}; if (window.products) { window.products.forEach(function(p) { var input = document.getElementById("qty-" + p.id); if (input) input.value = cart[p.id] || 0; }); } calculatePageTotal(); updateCartCount(); });
+        window.addEventListener("pageshow", function() { cart = JSON.parse(localStorage.getItem("poponew_cart")) || {}; if (window.products) { window.products.forEach(function(p) { var input = document.getElementById("qty-" + p.id); if (input) input.value = cart[p.id] || 0; }); } calculatePageTotal(); updateCartCount(); if (window.syncFlavorLightboxQty) window.syncFlavorLightboxQty(); });
         (function() {
             var imgEl = document.getElementById("product-gallery-img");
             var prevBtn = document.getElementById("product-gallery-prev");
@@ -181,6 +204,23 @@
             if (first) probe(2);
         })();
         (function() {
+            var gallery = [];
+            var lbIndex = 0;
+            function isMobileFlavorView() {
+                return window.matchMedia("(max-width: 768px)").matches || window.matchMedia("(pointer: coarse)").matches;
+            }
+            function flavorOrder(id) {
+                for (var i = 0; i < window.products.length; i++) { if (Number(window.products[i].id) === Number(id)) return i; }
+                return 9999;
+            }
+            function isFlavorOut(p) {
+                var rawNote = String((p && p.note) || "").replace(/"/g, "").replace(/&quot;/g, "").trim();
+                return !!(p && p.soldOut) || (rawNote && (rawNote.indexOf("缺貨") !== -1 || rawNote.indexOf("售完") !== -1));
+            }
+            function findProduct(id) {
+                for (var i = 0; i < window.products.length; i++) { if (Number(window.products[i].id) === Number(id)) return window.products[i]; }
+                return null;
+            }
             window.products.forEach(function(p) {
                 var imgUrl = "images/thumb/" + p.id + ".jpg";
                 var imgTester = new Image();
@@ -190,25 +230,99 @@
                         var imgBox = document.createElement("div");
                         imgBox.className = "flavor-img-box";
                         var safeName = String(p.name || "").replace(/"/g, "").replace(/&quot;/g, "").replace(/'/g, "\\'").trim();
-                        imgBox.innerHTML = "<img src='" + imgUrl + "' alt='" + safeName + "' onclick=\"window.openFlavorLightbox(this.src, '" + safeName + "')\">";
+                        imgBox.innerHTML = "<img src='" + imgUrl + "' alt='" + safeName + "'>";
+                        imgBox.addEventListener("click", function(e) { e.preventDefault(); window.openFlavorLightbox(p.id); });
                         targetLeftPart.insertBefore(imgBox, targetLeftPart.firstChild);
                     }
+                    var exists = false;
+                    for (var i = 0; i < gallery.length; i++) { if (Number(gallery[i].id) === Number(p.id)) exists = true; }
+                    if (!exists) gallery.push({ id: p.id, src: imgUrl, name: String(p.name || "").trim(), price: parseInt(p.price, 10) || 0 });
+                    gallery.sort(function(a, b) { return flavorOrder(a.id) - flavorOrder(b.id); });
                 };
                 imgTester.src = imgUrl;
             });
             var lb = document.createElement("div");
-            lb.className = "fixed inset-0 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-all duration-300 cursor-zoom-out";
-            lb.innerHTML = "<div class='relative flex flex-col items-center max-w-[90vw] max-h-[85vh]'><img id='lb-img' class='max-w-full max-h-[75vh] rounded-2xl shadow-2xl border-4 border-white/10 transform scale-95 transition-all duration-300 object-contain'><p id='lb-title' class='mt-3 text-white font-bold text-sm md:text-base tracking-wide bg-amber-900/90 border border-amber-500/30 px-4 py-1.5 rounded-full shadow-lg text-center max-w-full truncate'></p></div>";
-            lb.onclick = function() { lb.classList.add("opacity-0", "pointer-events-none"); lb.querySelector("img").classList.add("scale-95"); };
+            lb.id = "flavor-lightbox";
+            lb.className = "fixed inset-0 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-all duration-300";
+            lb.innerHTML = "<div class='flavor-lb-panel'><p id='lb-title' class='flavor-lb-title'></p><div class='flavor-lb-stage'><button type='button' id='lb-prev' class='flavor-lb-nav flavor-lb-prev' aria-label='上一個規格'><svg viewBox='0 0 24 24' fill='none' aria-hidden='true'><path d='M14.5 6.5L9 12l5.5 5.5' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/></svg></button><img id='lb-img' class='max-w-full max-h-[62vh] rounded-2xl shadow-2xl border-4 border-white/10 transform scale-95 transition-all duration-300 object-contain'><button type='button' id='lb-next' class='flavor-lb-nav flavor-lb-next' aria-label='下一個規格'><svg viewBox='0 0 24 24' fill='none' aria-hidden='true'><path d='M9.5 6.5L15 12l-5.5 5.5' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/></svg></button></div><p id='lb-hint' class='flavor-lb-hint'>左右滑動可切換規格</p><div id='lb-cart' class='flavor-lb-cart'><div class='flavor-lb-qty-anchor'><p id='lb-price' class='flavor-lb-price'></p><div class='flavor-lb-qtybox'><div id='lb-qty-wrap' class='flex items-center gap-2'><button type='button' id='lb-minus' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm hover:bg-stone-50 active:scale-95'>-</button><input type='number' id='lb-qty' value='0' min='0' readonly class='w-8 text-center bg-transparent font-bold text-stone-800'><button type='button' id='lb-plus' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm hover:bg-stone-50 active:scale-95'>+</button></div><p id='lb-soldout' class='hidden text-sm font-bold text-stone-500'>已售完</p></div></div></div></div>";
+            function closeLb() { lb.classList.add("opacity-0", "pointer-events-none"); var img = document.getElementById("lb-img"); if (img) img.classList.add("scale-95"); }
+            lb.addEventListener("click", function(e) { if (e.target === lb) closeLb(); });
             document.body.appendChild(lb);
-            window.openFlavorLightbox = function(src, title) {
+            function currentItem() { return gallery[lbIndex] || null; }
+            function renderLbCart() {
+                var item = currentItem();
+                if (!item) return;
+                document.getElementById("lb-price").innerText = "NT$ " + item.price;
+                var wrap = document.getElementById("lb-qty-wrap");
+                var sold = document.getElementById("lb-soldout");
+                var qtyEl = document.getElementById("lb-qty");
+                var p = findProduct(item.id);
+                if (isFlavorOut(p)) { wrap.classList.add("hidden"); sold.classList.remove("hidden"); }
+                else { wrap.classList.remove("hidden"); sold.classList.add("hidden"); qtyEl.value = cart[item.id] || 0; }
+            }
+            function showLb(i) {
+                if (!gallery.length) return;
+                lbIndex = (i + gallery.length) % gallery.length;
+                var item = gallery[lbIndex];
                 var img = document.getElementById("lb-img");
                 var titleEl = document.getElementById("lb-title");
-                img.src = src;
-                if (title) { titleEl.innerText = title; titleEl.style.display = "block"; } else { titleEl.style.display = "none"; }
+                img.src = item.src;
+                titleEl.innerText = item.name || "";
+                titleEl.style.display = item.name ? "block" : "none";
+                var showNav = gallery.length > 1 && !isMobileFlavorView();
+                document.getElementById("lb-prev").hidden = !showNav;
+                document.getElementById("lb-next").hidden = !showNav;
+                renderLbCart();
+            }
+            function flashSwipeHint() {
+                var hint = document.getElementById("lb-hint");
+                if (!hint) return;
+                hint.classList.remove("is-on");
+                if (!isMobileFlavorView() || gallery.length < 2) return;
+                hint.classList.add("is-on");
+                clearTimeout(flashSwipeHint.t);
+                flashSwipeHint.t = setTimeout(function() { hint.classList.remove("is-on"); }, 2600);
+            }
+            document.getElementById("lb-prev").addEventListener("click", function(e) { e.stopPropagation(); showLb(lbIndex - 1); });
+            document.getElementById("lb-next").addEventListener("click", function(e) { e.stopPropagation(); showLb(lbIndex + 1); });
+            (function() {
+                var stage = lb.querySelector(".flavor-lb-stage");
+                if (!stage) return;
+                var touchX = 0, touchY = 0;
+                stage.addEventListener("touchstart", function(e) {
+                    var t = e.changedTouches && e.changedTouches[0];
+                    if (!t) return;
+                    touchX = t.clientX; touchY = t.clientY;
+                }, { passive: true });
+                stage.addEventListener("touchend", function(e) {
+                    if (!isMobileFlavorView() || gallery.length < 2) return;
+                    var t = e.changedTouches && e.changedTouches[0];
+                    if (!t) return;
+                    var dx = t.clientX - touchX, dy = t.clientY - touchY;
+                    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+                    if (dx < 0) showLb(lbIndex + 1); else showLb(lbIndex - 1);
+                }, { passive: true });
+            })();
+            document.getElementById("lb-minus").addEventListener("click", function(e) { e.stopPropagation(); var item = currentItem(); if (item) updateQty(item.id, -1); });
+            document.getElementById("lb-plus").addEventListener("click", function(e) { e.stopPropagation(); var item = currentItem(); if (item) updateQty(item.id, 1); });
+            window.syncFlavorLightboxQty = function() { if (lb.classList.contains("pointer-events-none")) return; renderLbCart(); };
+            window.openFlavorLightbox = function(id) {
+                var idx = -1;
+                for (var i = 0; i < gallery.length; i++) { if (Number(gallery[i].id) === Number(id)) idx = i; }
+                if (idx < 0) return;
                 lb.classList.remove("opacity-0", "pointer-events-none");
+                var img = document.getElementById("lb-img");
+                img.classList.add("scale-95");
+                showLb(idx);
+                flashSwipeHint();
                 setTimeout(function() { img.classList.remove("scale-95"); }, 10);
             };
+            document.addEventListener("keydown", function(e) {
+                if (lb.classList.contains("pointer-events-none")) return;
+                if (e.key === "Escape") closeLb();
+                if (e.key === "ArrowLeft") showLb(lbIndex - 1);
+                if (e.key === "ArrowRight") showLb(lbIndex + 1);
+            });
         })();
         let currentFontSize = parseInt(localStorage.getItem("poponew_font_size")) || 16;
         applyFontSize(currentFontSize);
