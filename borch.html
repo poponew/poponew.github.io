@@ -42,7 +42,12 @@
         .flavor-img-box { width: 50px; height: 50px; background-color: #f5f5f4; border-radius: 0.75rem; overflow: hidden; flex-shrink: 0; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); cursor: zoom-in; }
         .flavor-img-box img { width: 50px; height: 50px; object-fit: cover; }
         .flavor-lb-panel { position: relative; display: flex; flex-direction: column; align-items: center; max-width: 90vw; max-height: 92vh; cursor: default; }
-        .flavor-lb-title { align-self: flex-start; margin: 0 0 0.7rem 3.3rem; color: #fff; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.02em; background: rgba(120,53,15,0.92); border: 1px solid rgba(245,158,11,0.35); padding: 0.4rem 1rem; border-radius: 999px; text-align: left; max-width: 100%; }
+        .flavor-lb-bar { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; align-self: stretch; width: 100%; box-sizing: border-box; margin: 0 0 0.7rem; padding: 0 3.3rem; }
+        .flavor-lb-title { margin: 0; min-width: 0; color: #fff; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.02em; background: rgba(120,53,15,0.92); border: 1px solid rgba(245,158,11,0.35); padding: 0.4rem 1rem; border-radius: 999px; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .flavor-lb-close { flex-shrink: 0; width: 2.85rem; height: 2.85rem; padding: 0; border: none; border-radius: 0; color: rgba(255,255,255,0.3); background: transparent; box-shadow: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transform: translateX(-5px); }
+        .flavor-lb-close:hover { color: rgba(255,255,255,0.85); background: transparent; }
+        .flavor-lb-close:active { transform: translateX(-5px) scale(0.96); }
+        .flavor-lb-close svg { width: 2.85rem; height: 2.85rem; display: block; filter: none; }
         .flavor-lb-stage { position: relative; display: flex; align-items: center; justify-content: center; gap: 0.45rem; width: auto; max-width: 94vw; }
         .flavor-lb-stage > img { max-width: calc(90vw - 7.2rem); }
         .flavor-lb-nav { flex-shrink: 0; position: static; transform: none; z-index: 2; width: 2.85rem; height: 2.85rem; padding: 0; border: none; border-radius: 0; color: rgba(255,255,255,0.5); background: transparent; box-shadow: none; display: flex; align-items: center; justify-content: center; cursor: pointer; }
@@ -58,7 +63,7 @@
             .flavor-lb-nav { display: none !important; }
             .flavor-lb-hint { display: block; opacity: 1; }
             .flavor-lb-stage > img { max-width: 90vw; }
-            .flavor-lb-title { margin-left: 0; }
+            .flavor-lb-bar { padding: 0; }
         }
         .flavor-lb-cart { position: relative; margin-top: 0.85rem; width: 100%; display: flex; justify-content: center; align-items: center; background: transparent; }
         .flavor-lb-qty-anchor { position: relative; }
@@ -222,10 +227,20 @@
             var lb = document.createElement("div");
             lb.id = "flavor-lightbox";
             lb.className = "fixed inset-0 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-all duration-300";
-            lb.innerHTML = "<div class='flavor-lb-panel'><p id='lb-title' class='flavor-lb-title'></p><div class='flavor-lb-stage'><button type='button' id='lb-prev' class='flavor-lb-nav flavor-lb-prev' aria-label='上一個規格'><svg viewBox='0 0 24 24' fill='none' aria-hidden='true'><path d='M14.5 6.5L9 12l5.5 5.5' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/></svg></button><img id='lb-img' class='max-w-full max-h-[62vh] rounded-2xl shadow-2xl border-4 border-white/10 transform scale-95 transition-all duration-300 object-contain'><button type='button' id='lb-next' class='flavor-lb-nav flavor-lb-next' aria-label='下一個規格'><svg viewBox='0 0 24 24' fill='none' aria-hidden='true'><path d='M9.5 6.5L15 12l-5.5 5.5' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/></svg></button></div><p id='lb-hint' class='flavor-lb-hint'>左右滑動可切換規格</p><div id='lb-cart' class='flavor-lb-cart'><div class='flavor-lb-qty-anchor'><p id='lb-price' class='flavor-lb-price'></p><div class='flavor-lb-qtybox'><div id='lb-qty-wrap' class='flex items-center gap-2'><button type='button' id='lb-minus' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm hover:bg-stone-50 active:scale-95'>-</button><input type='number' id='lb-qty' value='0' min='0' readonly class='w-8 text-center bg-transparent font-bold text-stone-800'><button type='button' id='lb-plus' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm hover:bg-stone-50 active:scale-95'>+</button></div><p id='lb-soldout' class='hidden text-sm font-bold text-stone-500'>已售完</p></div></div></div></div>";
-            function closeLb() { lb.classList.add("opacity-0", "pointer-events-none"); var img = document.getElementById("lb-img"); if (img) img.classList.add("scale-95"); }
+            lb.innerHTML = "<div class='flavor-lb-panel'><div class='flavor-lb-bar'><p id='lb-title' class='flavor-lb-title'></p><button type='button' id='lb-close' class='flavor-lb-close' aria-label='關閉預覽'><svg viewBox='0 0 24 24' fill='none' aria-hidden='true'><path d='M7 7l10 10M17 7L7 17' stroke='currentColor' stroke-width='2.2' stroke-linecap='round'/></svg></button></div><div class='flavor-lb-stage'><button type='button' id='lb-prev' class='flavor-lb-nav flavor-lb-prev' aria-label='上一個規格'><svg viewBox='0 0 24 24' fill='none' aria-hidden='true'><path d='M14.5 6.5L9 12l5.5 5.5' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/></svg></button><img id='lb-img' class='max-w-full max-h-[62vh] rounded-2xl shadow-2xl border-4 border-white/10 transform scale-95 transition-all duration-300 object-contain'><button type='button' id='lb-next' class='flavor-lb-nav flavor-lb-next' aria-label='下一個規格'><svg viewBox='0 0 24 24' fill='none' aria-hidden='true'><path d='M9.5 6.5L15 12l-5.5 5.5' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/></svg></button></div><p id='lb-hint' class='flavor-lb-hint'>左右滑動可切換口味</p><div id='lb-cart' class='flavor-lb-cart'><div class='flavor-lb-qty-anchor'><p id='lb-price' class='flavor-lb-price'></p><div class='flavor-lb-qtybox'><div id='lb-qty-wrap' class='flex items-center gap-2'><button type='button' id='lb-minus' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm hover:bg-stone-50 active:scale-95'>-</button><input type='number' id='lb-qty' value='0' min='0' readonly class='w-8 text-center bg-transparent font-bold text-stone-800'><button type='button' id='lb-plus' class='w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm hover:bg-stone-50 active:scale-95'>+</button></div><p id='lb-soldout' class='hidden text-sm font-bold text-stone-500'>已售完</p></div></div></div></div>";
+            var lbHist = false;
+            function isLbOpen() { return !lb.classList.contains("pointer-events-none"); }
+            function closeLb(fromPop) {
+                if (!isLbOpen()) { lbHist = false; return; }
+                lb.classList.add("opacity-0", "pointer-events-none");
+                var img = document.getElementById("lb-img");
+                if (img) img.classList.add("scale-95");
+                if (!fromPop && lbHist) { lbHist = false; history.back(); }
+                else lbHist = false;
+            }
             lb.addEventListener("click", function(e) { if (e.target === lb) closeLb(); });
             document.body.appendChild(lb);
+            document.getElementById("lb-close").addEventListener("click", function(e) { e.stopPropagation(); closeLb(); });
             function currentItem() { return gallery[lbIndex] || null; }
             function renderLbCart() {
                 var item = currentItem();
@@ -240,16 +255,17 @@
             }
             function showLb(i) {
                 if (!gallery.length) return;
-                lbIndex = (i + gallery.length) % gallery.length;
+                if (i < 0 || i >= gallery.length) return;
+                lbIndex = i;
                 var item = gallery[lbIndex];
                 var img = document.getElementById("lb-img");
                 var titleEl = document.getElementById("lb-title");
                 img.src = item.src;
                 titleEl.innerText = item.name || "";
                 titleEl.style.display = item.name ? "block" : "none";
-                var showNav = gallery.length > 1 && !isMobileFlavorView();
-                document.getElementById("lb-prev").hidden = !showNav;
-                document.getElementById("lb-next").hidden = !showNav;
+                var desktopNav = gallery.length > 1 && !isMobileFlavorView();
+                document.getElementById("lb-prev").hidden = !desktopNav || lbIndex === 0;
+                document.getElementById("lb-next").hidden = !desktopNav || lbIndex === gallery.length - 1;
                 renderLbCart();
             }
             function flashSwipeHint() {
@@ -288,13 +304,21 @@
                 var idx = -1;
                 for (var i = 0; i < gallery.length; i++) { if (Number(gallery[i].id) === Number(id)) idx = i; }
                 if (idx < 0) return;
+                var wasClosed = !isLbOpen();
                 lb.classList.remove("opacity-0", "pointer-events-none");
                 var img = document.getElementById("lb-img");
                 img.classList.add("scale-95");
                 showLb(idx);
                 flashSwipeHint();
                 setTimeout(function() { img.classList.remove("scale-95"); }, 10);
+                if (wasClosed && !lbHist) {
+                    try { history.pushState({ poponewLb: 1 }, ""); lbHist = true; } catch (err) {}
+                }
             };
+            window.addEventListener("popstate", function() {
+                if (isLbOpen()) closeLb(true);
+                else lbHist = false;
+            });
             document.addEventListener("keydown", function(e) {
                 if (lb.classList.contains("pointer-events-none")) return;
                 if (e.key === "Escape") closeLb();
