@@ -81,8 +81,8 @@
 
         <!-- 頁尾聯絡資訊 -->
         <div class="mt-8 text-center p-4 border-t border-stone-200 text-xs text-stone-500 space-y-2">
-            <p>💬 若查詢過程有任何疑問，歡迎到<a href="ask.html" class="font-semibold text-amber-700 underline underline-offset-2">客人詢問</a>或來電 0900-769880。</p>
-            <p class="leading-relaxed"><a href="keep.html#shipping" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">宅配配送與簽收須知</a><span class="text-stone-300"> ｜ </span><a href="keep.html#terms" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">訂購與退換貨條款</a><span class="text-stone-300"> ｜ </span><a href="faq.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">常見問題</a><span class="text-stone-300"> ｜ </span><a href="ask.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">客人詢問</a></p>
+            <p>💬 若查詢過程有任何疑問，歡迎來電 0900-769880。</p>
+            <p class="leading-relaxed"><a href="keep.html#shipping" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">宅配配送與簽收須知</a><span class="text-stone-300"> ｜ </span><a href="keep.html#terms" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">訂購與退換貨條款</a><span class="text-stone-300"> ｜ </span><a href="faq.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">常見問題</a></p>
         </div>
     </div>
 
@@ -209,6 +209,7 @@
                 const idxOrderStatus = getIndex(['訂單狀態', 'order_status']);
                 const idxShipDate = getIndex(['出貨日', 'ship_date', '預計出貨']);
                 const idxTracking = getIndex(['tracking_no', '物流單號', '單號', '追蹤碼']);
+                const idxOrderId = getIndex(['訂單編號', 'order_id']);
 
                 const cleanInput = inputPhone.replace(/-/g, '').replace(/^0+/, '');
                 const matchedOrders = [];
@@ -232,6 +233,7 @@
                     const dateFromOrderTime = idxOrderTime !== -1 ? (row[idxOrderTime] || '').trim() : '';
                     matchedOrders.push({
                         sheetIndex: i,
+                        orderId: idxOrderId !== -1 ? (row[idxOrderId] || '').trim() : '',
                         date: dateFromStamp || dateFromOrderTime || '未提供',
                         name: idxName !== -1 ? (row[idxName] || '顧客') : '顧客',
                         address: idxAddress !== -1 ? (row[idxAddress] || '') : '',
@@ -270,11 +272,24 @@
 
                     matchedOrders.forEach(order => {
                         let payBadge = "bg-stone-100 text-stone-600 border-stone-200";
-                        if (order.payStatus.includes("已收") || order.payStatus.includes("完成")) {
+                        if (order.payStatus.includes("已收") || order.payStatus.includes("已對帳") || order.payStatus.includes("完成")) {
                             payBadge = "bg-emerald-100 text-emerald-800 border-emerald-200";
+                        } else if (order.payStatus.includes("已回報")) {
+                            payBadge = "bg-sky-100 text-sky-800 border-sky-200";
                         } else if (order.payStatus.includes("待")) {
                             payBadge = "bg-amber-100 text-amber-800 border-amber-200";
                         }
+
+                        const alreadyReported = order.orderId && localStorage.getItem('poponew_paid_' + order.orderId);
+                        const canReportPaid = order.orderId
+                            && String(order.paymentMethod).includes('轉帳')
+                            && !/已收|已對帳|完成|已回報/.test(order.payStatus)
+                            && !alreadyReported;
+                        const paidHref = canReportPaid
+                            ? ('paid.html?order=' + encodeURIComponent(order.orderId)
+                                + '&phone=' + encodeURIComponent(inputPhone)
+                                + '&five=' + encodeURIComponent(String(order.lastFive || '').replace(/\D/g, '').slice(-5)))
+                            : '';
 
                         let orderBadge = "bg-stone-100 text-stone-600 border-stone-200"; // 預設灰色
 
@@ -295,6 +310,7 @@
                                     <div>
                                         <span class="text-xs text-stone-400 block">下單時間</span>
                                         <span class="text-sm font-bold text-stone-700">${formatOrderDate24h(order.date)}</span>
+                                        ${order.orderId ? `<span class="text-xs text-stone-400 block mt-1">訂單編號 ${order.orderId}</span>` : ''}
                                     </div>
                                     <div class="flex gap-1.5">
                                         <span class="text-xs px-2.5 py-1 rounded-full border font-bold ${payBadge}">對帳：${order.payStatus}</span>
@@ -330,6 +346,12 @@
                                             ${order.trackingNo}
                                         </span>
                                     </div>
+                                    ${canReportPaid ? `
+                                    <div class="col-span-2 pt-1">
+                                        <a href="${paidHref}" class="inline-flex items-center justify-center w-full h-11 bg-amber-700 hover:bg-amber-800 text-white font-bold rounded-xl shadow-sm">通知店家我已匯款</a>
+                                        <p class="text-[11px] text-stone-400 mt-1.5 text-center">這只是通知店家，還要等對完帳才算出貨。</p>
+                                    </div>` : (alreadyReported && String(order.paymentMethod).includes('轉帳') ? `
+                                    <div class="col-span-2 text-[11px] text-sky-700 bg-sky-50 border border-sky-100 rounded-xl px-3 py-2">這筆訂單已在本機回報過匯款，不必再送一次。</div>` : '')}
                                 </div>
                             </div>`;
                     });

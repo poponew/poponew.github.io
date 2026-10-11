@@ -56,7 +56,7 @@
                 <span class="text-xl font-bold text-amber-700">NT$ <span id="total-price">0</span></span>
             </div>
             <p id="free-shipping-tip" class="text-xs text-amber-600 text-right font-medium pt-1"></p><p id="bulk-order-tip" class="hidden text-xs text-red-600 font-bold pt-1"></p>
-            <p class="text-xs pt-1 text-right"><a href="keep.html#shipping" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">宅配配送與簽收須知</a><span class="text-stone-300"> ｜ </span><a href="faq.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">常見問題</a><span class="text-stone-300"> ｜ </span><a href="ask.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">客人詢問</a></p>
+            <p class="text-xs pt-1 text-right"><a href="keep.html#shipping" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">宅配配送與簽收須知</a><span class="text-stone-300"> ｜ </span><a href="faq.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">常見問題</a></p>
         </div>
 
         <form id="orderForm" onsubmit="submitOrder(event)" class="space-y-4">
@@ -498,6 +498,17 @@ function submitOrder(event) {
             var rawDetails = orderDetailsText; // 這是你原本的原始資料
             var cleanDetails = rawDetails.replace(/\s*\(約\s*\d+g\)/g, "");
 
+            var lastFiveValue = document.getElementById('account_last_five').value || "";
+            var paidNoticeBlock = "";
+            if (paymentMethodValue.indexOf("轉帳") !== -1) {
+                var paidUrl = "https://poponew.github.io/paid.html?order=" + encodeURIComponent(orderId)
+                    + "&phone=" + encodeURIComponent(phoneValue)
+                    + "&five=" + encodeURIComponent(lastFiveValue.replace(/\D/g, "").slice(-5));
+                paidNoticeBlock =
+                    '<p style="margin:0 0 12px;"><a href="' + paidUrl + '" target="_blank" style="display:inline-block;padding:12px 22px;background:#b45309;color:#fffbeb;text-decoration:none;border-radius:999px;font-size:15px;font-weight:700;">我已匯款，通知店家</a></p>'
+                    + '<p style="margin:0;font-size:13px;color:#9a3412;">這只是通知店家「我已匯款」，還要等對完帳才算出貨。</p>';
+            }
+
             // 2. 設定 EmailJS 的參數 (order_details 改用過濾後的 cleanDetails)
             const templateParams = {
                 customer_name: document.getElementById('name').value,
@@ -505,12 +516,13 @@ function submitOrder(event) {
                 customer_address: fullCombinedAddress, 
                 customer_email: document.getElementById('email').value,
                 payment_method: paymentMethodValue,
-                account_last_five: document.getElementById('account_last_five').value || "貨到付款",
+                account_last_five: lastFiveValue || "貨到付款",
                 customer_note: document.getElementById('note').value || "無",
                 order_details: cleanDetails, // 使用過濾後的版本！
                 total_price: productSubtotal + shippingFee,
                 order_id: orderId,
-                admin_email: "hi.poponew@gmail.com"
+                admin_email: "hi.poponew@gmail.com",
+                paid_notice_block: paidNoticeBlock
             };
 
             // 3. 最後執行 EmailJS 發信，並觸發同步 Google 表單
