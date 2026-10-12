@@ -12,12 +12,12 @@
         gtag('config', 'G-MMGS0E58FW');
     </script>
     <title>訂單狀況查詢 - Poponew手做甜點</title>
-    <meta name="description" content="查詢 Poponew手做甜點訂單對帳與出貨狀態，請輸入訂購時填寫的手機號碼。">
+    <meta name="description" content="查詢 Poponew手做甜點訂單對帳與出貨狀態，請輸入手機號碼或訂單編號。">
     <meta property="og:site_name" content="Poponew手做甜點">
     <meta property="og:locale" content="zh_TW">
     <meta property="og:type" content="website">
     <meta property="og:title" content="訂單狀況查詢 - Poponew手做甜點">
-    <meta property="og:description" content="查詢 Poponew手做甜點訂單對帳與出貨狀態，請輸入訂購時填寫的手機號碼。">
+    <meta property="og:description" content="查詢 Poponew手做甜點訂單對帳與出貨狀態，請輸入手機號碼或訂單編號。">
     <meta property="og:image" content="https://poponew.github.io/images/scone.jpg">
     <link rel="stylesheet" href="css/tailwind.css">
 <style>
@@ -58,16 +58,17 @@
     <!-- 頁頭標題 (恢復乾淨無按鈕衝突) -->
     <header class="text-center py-6 px-4 bg-white rounded-2xl shadow-sm border border-stone-100 mb-6">
         <h1 class="text-3xl font-extrabold text-amber-800 tracking-wider">🔍 訂單進度查詢</h1>
-        <p class="text-stone-500 mt-2 text-sm px-4">請輸入您訂購時填寫的「手機號碼」即可查看對帳與出貨狀態</p>
+        <p class="text-stone-500 mt-2 text-sm px-4">請輸入「手機號碼」或「訂單編號」即可查看對帳與出貨狀態</p>
     </header>
 
         <!-- 搜尋表單區塊 -->
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 mb-6">
             <form onsubmit="searchOrder(event)" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-stone-700 mb-1">手機號碼</label>
-                    <input type="tel" id="search-phone" placeholder="例如：0987430896" required
-                        class="w-full px-4 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-base">
+                    <label class="block text-sm font-medium text-stone-700 mb-1">手機或訂單編號</label>
+                    <input type="text" id="search-query" placeholder="例如：0987430896 或 POPO-1791730581958" required
+                        class="w-full px-4 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-base"
+                        autocomplete="tel">
                 </div>
                 <button type="submit" id="search-btn"
                     class="w-full bg-amber-700 hover:bg-amber-800 text-white font-bold py-3 px-4 rounded-xl transition duration-200 shadow-md flex items-center justify-center gap-2">
@@ -149,14 +150,37 @@
                 + ' ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes()) + ':' + pad2(d.getSeconds());
         }
 
+        function normalizePhone(value) {
+            return String(value || '').replace(/\D/g, '').replace(/^0+/, '');
+        }
+
+        function normalizeOrderId(value) {
+            return String(value || '').replace(/\s+/g, '').toUpperCase();
+        }
+
+        function orderIdsMatch(rowId, queryId) {
+            if (!rowId || !queryId) return false;
+            if (rowId === queryId) return true;
+            const a = rowId.replace(/^POPO-/, '');
+            const b = queryId.replace(/^POPO-/, '');
+            return a.length >= 8 && a === b;
+        }
+
+        function displayPhone(raw) {
+            const d = String(raw || '').replace(/\D/g, '');
+            if (d.length === 9 && d.charAt(0) === '9') return '0' + d;
+            if (d.length === 10 && d.indexOf('09') === 0) return d;
+            return String(raw || '').trim();
+        }
+
         async function searchOrder(event) {
             event.preventDefault();
-            const inputPhone = document.getElementById('search-phone').value.trim();
+            const rawQuery = document.getElementById('search-query').value.trim();
             const resultContainer = document.getElementById('result-container');
             const searchBtn = document.getElementById('search-btn');
 
-            if (!inputPhone) {
-                alert("請輸入手機號碼！");
+            if (!rawQuery) {
+                alert("請輸入手機號碼或訂單編號！");
                 return;
             }
 
@@ -208,21 +232,26 @@
                 const idxPayStatus = getIndex(['對帳狀態', 'payment_status']);
                 const idxOrderStatus = getIndex(['訂單狀態', 'order_status']);
                 const idxShipDate = getIndex(['出貨日', 'ship_date', '預計出貨']);
-                const idxTracking = getIndex(['tracking_no', '物流單號', '單號', '追蹤碼']);
+                const idxTracking = getIndex(['物流單號', 'tracking_no', '追蹤碼']);
                 const idxOrderId = getIndex(['訂單編號', 'order_id']);
 
-                const cleanInput = inputPhone.replace(/-/g, '').replace(/^0+/, '');
+                const queryPhone = normalizePhone(rawQuery);
+                const queryId = normalizeOrderId(rawQuery);
+                const looksLikePhone = /^0?9\d{8}$/.test(rawQuery.replace(/[-\s]/g, ''));
                 const matchedOrders = [];
 
-                // 2. 逐行比對搜尋
+                // 2. 逐行比對搜尋（手機或訂單編號）
                 for (let i = 1; i < lines.length; i++) {
                     const row = parseCSVRow(lines[i]);
                     if (row.length === 0) continue;
 
                     const rawPhone = idxPhone !== -1 ? (row[idxPhone] || '') : '';
-                    const cleanRowPhone = rawPhone.replace(/-/g, '').trim().replace(/^0+/, '');
+                    const rowPhone = normalizePhone(rawPhone);
+                    const rowOrderId = idxOrderId !== -1 ? normalizeOrderId(row[idxOrderId] || '') : '';
+                    const phoneHit = looksLikePhone && queryPhone && rowPhone === queryPhone;
+                    const idHit = queryId.length >= 8 && orderIdsMatch(rowOrderId, queryId);
 
-                if (cleanInput !== '' && cleanRowPhone === cleanInput) {
+                if (phoneHit || idHit) {
                     const payMethod = idxPayment !== -1 ? (row[idxPayment] || '') : '未指定';
                     
                     // 取出對應數值並去除前後空白
@@ -234,6 +263,7 @@
                     matchedOrders.push({
                         sheetIndex: i,
                         orderId: idxOrderId !== -1 ? (row[idxOrderId] || '').trim() : '',
+                        phone: displayPhone(rawPhone),
                         date: dateFromStamp || dateFromOrderTime || '未提供',
                         name: idxName !== -1 ? (row[idxName] || '顧客') : '顧客',
                         address: idxAddress !== -1 ? (row[idxAddress] || '') : '',
@@ -260,7 +290,7 @@
                     resultContainer.innerHTML = `
                         <div class="bg-amber-50 border border-amber-200 text-stone-700 p-6 rounded-2xl text-center space-y-2">
                             <p class="text-base font-bold text-amber-800">查無對應的訂單紀錄 😅</p>
-                            <p class="text-xs text-stone-500">請確認輸入的手機號碼是否與下單時填寫的一致（例如：0987430896）。</p>
+                            <p class="text-xs text-stone-500">請確認手機號碼或訂單編號是否與訂購確認信一致（例如：0987430896 或 POPO-1791730581958）。</p>
                         </div>`;
                 } else {
                     let html = `<p class="text-xs font-semibold text-stone-500 mb-2">找到 ${matchedOrders.length} 筆相關訂單紀錄：</p>`;
@@ -287,7 +317,7 @@
                             && !alreadyReported;
                         const paidHref = canReportPaid
                             ? ('paid.html?order=' + encodeURIComponent(order.orderId)
-                                + '&phone=' + encodeURIComponent(inputPhone)
+                                + '&phone=' + encodeURIComponent(order.phone || '')
                                 + '&five=' + encodeURIComponent(String(order.lastFive || '').replace(/\D/g, '').slice(-5)))
                             : '';
 
