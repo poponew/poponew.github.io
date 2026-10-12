@@ -66,7 +66,7 @@
             <form onsubmit="searchOrder(event)" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-stone-700 mb-1">手機或訂單編號</label>
-                    <input type="text" id="search-query" placeholder="例如：0987430896 或 POPO-1791730581958" required
+                    <input type="text" id="search-query" placeholder="例如：0987430896 或 P10235841" required
                         class="w-full px-4 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-base"
                         autocomplete="tel">
                 </div>
@@ -158,11 +158,18 @@
             return String(value || '').replace(/\s+/g, '').toUpperCase();
         }
 
+        function orderIdKey(value) {
+            var s = String(value || '').replace(/\s+/g, '').toUpperCase();
+            if (s.indexOf('POPO-') === 0) return s.slice(5);
+            if (/^P\d{8}$/.test(s)) return s.slice(1);
+            return s;
+        }
+
         function orderIdsMatch(rowId, queryId) {
             if (!rowId || !queryId) return false;
             if (rowId === queryId) return true;
-            const a = rowId.replace(/^POPO-/, '');
-            const b = queryId.replace(/^POPO-/, '');
+            const a = orderIdKey(rowId);
+            const b = orderIdKey(queryId);
             return a.length >= 8 && a === b;
         }
 
@@ -290,7 +297,7 @@
                     resultContainer.innerHTML = `
                         <div class="bg-amber-50 border border-amber-200 text-stone-700 p-6 rounded-2xl text-center space-y-2">
                             <p class="text-base font-bold text-amber-800">查無對應的訂單紀錄 😅</p>
-                            <p class="text-xs text-stone-500">請確認手機號碼或訂單編號是否與訂購確認信一致（例如：0987430896 或 POPO-1791730581958）。</p>
+                            <p class="text-xs text-stone-500">請確認手機號碼或訂單編號是否與訂購確認信一致（例如：0987430896 或 P10235841）。</p>
                         </div>`;
                 } else {
                     let html = `<p class="text-xs font-semibold text-stone-500 mb-2">找到 ${matchedOrders.length} 筆相關訂單紀錄：</p>`;

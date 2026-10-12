@@ -446,6 +446,22 @@ document.getElementById('subtotal-price').innerText = productSubtotal;
             }
         }
 
+        function makeOrderId() {
+            var parts = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Asia/Taipei',
+                month: '2-digit',
+                day: '2-digit'
+            }).formatToParts(new Date());
+            var mm = '';
+            var dd = '';
+            for (var i = 0; i < parts.length; i++) {
+                if (parts[i].type === 'month') mm = parts[i].value;
+                if (parts[i].type === 'day') dd = parts[i].value;
+            }
+            var rand = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+            return 'P' + mm + dd + rand;
+        }
+
 function submitOrder(event) {
             event.preventDefault();
             
@@ -472,7 +488,7 @@ function submitOrder(event) {
                 return;
             }
             saveCustomerProfile();
-            const orderId = 'POPO-' + Date.now();
+            const orderId = makeOrderId();
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.disabled = true;
             submitBtn.innerText = "訂單送出中...";
@@ -546,7 +562,7 @@ function submitOrder(event) {
                 mode: 'no-cors', // 繞過跨域限制
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    order_id: params.order_id || ("POPO-" + Date.now()),
+                    order_id: params.order_id || makeOrderId(),
                     order_time: new Date().toLocaleString('zh-TW', { hour12: false }),
                     customer_name: params.customer_name,
                     customer_phone: params.customer_phone,
