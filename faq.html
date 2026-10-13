@@ -37,7 +37,7 @@
                 "name": "運費怎麼算？可以超商取貨嗎？",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "全店一律低溫冷凍宅配，沒有超商取貨或常溫寄送。冷凍宅配實際運費 NT$ 160，店家先幫您負擔一半，結帳只需支付 NT$ 80。全店滿 NT$ 2,000 免運。"
+                    "text": "全店一律低溫冷凍宅配，沒有超商取貨或常溫寄送。冷凍宅配實際運費 NT$ 160，店家先幫您負擔一半，結帳只需支付 NT$ 80。全店滿 NT$ 1,500 免運。"
                 }
             },
             {
@@ -180,7 +180,7 @@
                     <div class="answer">
                         <p>全店一律<strong>低溫冷凍宅配</strong>，沒有超商取貨或常溫寄送。</p>
                         <p class="mt-2">冷凍宅配實際運費 <b data-shop="shippingTotal">NT$ 160</b>，店家先幫您負擔一半，結帳只需支付 <b data-shop="shippingFee">NT$ 80</b>。</p>
-                        <p class="mt-2">全店滿 <b data-shop="freeShipping">NT$ 2,000</b> 免運。</p>
+                        <p class="mt-2">全店滿 <b data-shop="freeShipping">NT$ 1,500</b> 免運。</p>
                     </div>
                 </details>
 
@@ -278,7 +278,7 @@
             var map = {
                 shippingFee: money(customerShip, 80),
                 shippingTotal: money(customerShip * 2, 160),
-                freeShipping: money(s.freeShipping, 2000),
+                freeShipping: money(s.freeShipping, 1500),
                 minOrder: money(s.minOrder, 500),
                 codLimit: money(s.codLimit, 2000),
                 bulkOrder: money(s.bulkOrder, 5000)

@@ -13,12 +13,12 @@
     </script>
     <title>購物車結帳 - Poponew手做甜點</title>
     <meta name="robots" content="noindex, follow">
-    <meta name="description" content="Poponew手做甜點購物車結帳。全店滿 NT$ 2,000 免運。">
+    <meta name="description" content="Poponew手做甜點購物車結帳。全店滿 NT$ 1,500 免運。">
     <meta property="og:site_name" content="Poponew手做甜點">
     <meta property="og:locale" content="zh_TW">
     <meta property="og:type" content="website">
     <meta property="og:title" content="購物車結帳 - Poponew手做甜點">
-    <meta property="og:description" content="Poponew手做甜點購物車結帳。全店滿 NT$ 2,000 免運。">
+    <meta property="og:description" content="Poponew手做甜點購物車結帳。全店滿 NT$ 1,500 免運。">
     <meta property="og:image" content="https://poponew.github.io/images/scone.jpg">
     <link rel="stylesheet" href="css/tailwind.css">
     <script src="js/shop-settings.js"></script>
@@ -262,13 +262,14 @@
             "93": { name: "可可費南雪", weight: "", price: 55 },
             "94": { name: "Lotus生乳酪棒棒糖蛋糕", weight: "", price: 200 },
             "95": { name: "肉桂焦糖蘋果核桃起司蛋糕", weight: "", price: 180 },
+            "96": { name: "OREO生乳酪獨享杯", weight: "", price: 110 },
         };
 
         function shopCfg() {
             var s = window.shopSettings || {};
             return {
                 shippingFee: parseInt(s.shippingFee, 10) || 80,
-                freeShipping: parseInt(s.freeShipping, 10) || 2000,
+                freeShipping: parseInt(s.freeShipping, 10) || 1500,
                 minOrder: parseInt(s.minOrder, 10) || 500,
                 codLimit: parseInt(s.codLimit, 10) || 2000,
                 bulkOrder: parseInt(s.bulkOrder, 10) || 5000
