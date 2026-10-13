@@ -131,7 +131,7 @@
     </div>
     <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.</p>
     <script>
-        function shop() { var s = window.shopSettings || {}; return { shippingFee: parseInt(s.shippingFee,10)||80, freeShipping: parseInt(s.freeShipping,10)||2000, minOrder: parseInt(s.minOrder,10)||500, codLimit: parseInt(s.codLimit,10)||2000, bulkOrder: parseInt(s.bulkOrder,10)||5000 }; }
+        function shop() { var s = window.shopSettings || {}; return { shippingFee: parseInt(s.shippingFee,10)||80, freeShipping: parseInt(s.freeShipping,10)||1500, minOrder: parseInt(s.minOrder,10)||500, codLimit: parseInt(s.codLimit,10)||2000, bulkOrder: parseInt(s.bulkOrder,10)||5000 }; }
         var cart = JSON.parse(localStorage.getItem("poponew_cart")) || {};
         var container = document.getElementById("cookie-list");
         if (container && !container.querySelector("[data-product-id]")) {
