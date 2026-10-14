@@ -704,14 +704,14 @@
             return array;
         }
 
-        // 2. 頁面載入時：手動置頂 → 新品自動置頂 30 天 → 其餘隨機
+        // 2. 頁面載入時：新品自動置頂 30 天 → 手動置頂 → 其餘隨機
         document.addEventListener("DOMContentLoaded", function() {
             var container = document.getElementById("product-list");
             if (!container) return;
-            var pinnedCards = Array.from(container.querySelectorAll(".product-card[data-pinned='true']"));
-            var newCards = Array.from(container.querySelectorAll(".product-card[data-new='true']:not([data-pinned='true'])"));
+            var newCards = Array.from(container.querySelectorAll(".product-card[data-new='true']"));
+            var pinnedCards = Array.from(container.querySelectorAll(".product-card[data-pinned='true']:not([data-new='true'])"));
             var normalCards = Array.from(container.querySelectorAll(".product-card:not([data-pinned='true']):not([data-new='true'])"));
-            pinnedCards.concat(shuffleArray(newCards)).concat(shuffleArray(normalCards)).forEach(function(card) {
+            shuffleArray(newCards).concat(pinnedCards).concat(shuffleArray(normalCards)).forEach(function(card) {
                 container.appendChild(card);
             });
         });
