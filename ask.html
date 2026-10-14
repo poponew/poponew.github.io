@@ -11,13 +11,13 @@
         gtag('js', new Date());
         gtag('config', 'G-MMGS0E58FW');
     </script>
-    <title>客人詢問 - Poponew手做甜點</title>
-    <meta name="description" content="向 Poponew手做甜點詢問訂購、出貨或商品問題。本店沒有官方 LINE，請用電話、email 或表單聯絡。">
+    <title>聯絡我們 - Poponew手做甜點</title>
+    <meta name="description" content="聯絡 Poponew手做甜點：官方 LINE、email 或表單。">
     <meta property="og:site_name" content="Poponew手做甜點">
     <meta property="og:locale" content="zh_TW">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="客人詢問 - Poponew手做甜點">
-    <meta property="og:description" content="向 Poponew手做甜點詢問訂購、出貨或商品問題。本店沒有官方 LINE，請用電話、email 或表單聯絡。">
+    <meta property="og:title" content="聯絡我們 - Poponew手做甜點">
+    <meta property="og:description" content="聯絡 Poponew手做甜點：官方 LINE、email 或表單。">
     <meta property="og:image" content="https://poponew.github.io/images/scone.jpg">
     <link rel="stylesheet" href="css/tailwind.css">
     <script src="js/shop-settings.js"></script>
@@ -34,16 +34,23 @@
         @media (min-width: 520px) { .ask-grid { grid-template-columns: 1fr 1fr; } }
         .ask-card {
             display: block;
+            width: 100%;
             padding: 1rem 1.1rem;
             border: 1px solid #e7e5e4;
             border-radius: 1rem;
             background: #fff;
             text-decoration: none;
             color: inherit;
+            text-align: left;
+            font: inherit;
+            cursor: pointer;
         }
         .ask-card:hover { border-color: #e7d4b8; background: #fffdf8; }
         .ask-card b { display: block; color: #92400e; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .ask-card .line-title { display: flex; align-items: center; flex-wrap: nowrap; white-space: nowrap; gap: 0.4rem; font-size: calc(0.95rem + 4px); }
+        .ask-card .line-title .line-logo { flex-shrink: 0; width: 22px; height: 22px; }
         .ask-card span { color: #57534e; font-size: 0.9rem; }
+        .ask-req { color: #dc2626; font-weight: 700; margin-left: 0.15rem; }
         .ask-form { margin-top: 1.25rem; padding: 1.15rem 1.1rem 1.25rem; border: 1px solid #e7e5e4; border-radius: 1rem; background: #fff; }
         .ask-field { margin-bottom: 0.85rem; }
         .ask-field label { display: block; font-size: 0.8rem; font-weight: 700; color: #44403c; margin-bottom: 0.35rem; }
@@ -98,16 +105,16 @@
 
         <div class="p-6">
             <header class="text-center mb-6">
-                <h1 class="brand-mark text-2xl font-bold text-amber-800">客人詢問</h1>
-                <p class="text-stone-500 text-sm mt-2 leading-relaxed">本店沒有官方 LINE。訂購、出貨或商品問題，請打電話、寫 email，或填下面表單。</p>
-                <p class="text-stone-500 text-sm mt-1 leading-relaxed">先看過<a href="faq.html" class="font-semibold text-amber-700 underline underline-offset-2">常見問題</a>，常常就能立刻找到答案。</p>
+                <h1 class="brand-mark text-2xl font-bold text-amber-800">聯絡我們</h1>
+                <p class="text-stone-500 text-sm mt-2 leading-relaxed">訂購、出貨或商品問題，歡迎加官方 LINE、寫 email，或填下面表單。</p>
+                <p class="text-stone-500 text-sm mt-1 leading-relaxed">先看過<a href="faq.html" class="font-semibold text-amber-700 underline underline-offset-2">常見問題</a>，常常就能立刻找到答案。已下單、想查進度，請到<a href="order-search.html" class="font-semibold text-amber-700 underline underline-offset-2">訂單查詢</a>。</p>
             </header>
 
             <div class="ask-grid font-zoom mb-2">
-                <a class="ask-card" href="tel:0900769880">
-                    <b>服務專線</b>
-                    <span>0900-769880</span>
-                </a>
+                <button type="button" class="ask-card" data-line-open>
+                    <b class="line-title"><svg class="line-logo" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#06C755"/><path fill="#fff" d="M12.03 5.55c-3.68 0-6.66 2.38-6.66 5.32 0 2.62 2.32 4.82 5.46 5.23.21.04.47.13.54.3.06.15.04.38.02.53l-.09.53c-.03.18-.13.65.58.35 1.16-.49 3.14-1.84 4.3-3.15C17.4 13.02 18 11.66 18 10.87c0-2.94-2.98-5.32-5.97-5.32z"/></svg>官方 LINE</b>
+                    <span>@534euhut（掃描加入好友）</span>
+                </button>
                 <a class="ask-card" href="mailto:hi.poponew@gmail.com">
                     <b>電子郵件</b>
                     <span>hi.poponew@gmail.com</span>
@@ -116,16 +123,16 @@
 
             <form id="ask-form" class="ask-form font-zoom" novalidate>
                 <div class="ask-field">
-                    <label for="ask-name">姓名</label>
+                    <label for="ask-name">姓名<span class="ask-req" aria-hidden="true">*</span></label>
                     <input id="ask-name" name="name" type="text" autocomplete="name" required placeholder="怎麼稱呼您">
                 </div>
                 <div class="ask-field">
-                    <label for="ask-phone">聯絡電話</label>
+                    <label for="ask-phone">聯絡電話<span class="ask-req" aria-hidden="true">*</span></label>
                     <input id="ask-phone" name="phone" type="tel" autocomplete="tel" required placeholder="方便回覆的手機">
                 </div>
                 <div class="ask-field">
-                    <label for="ask-email">Email（選填）</label>
-                    <input id="ask-email" name="email" type="email" autocomplete="email" placeholder="沒有郵件程式時，我們也能用電話回">
+                    <label for="ask-email">Email<span class="ask-req" aria-hidden="true">*</span></label>
+                    <input id="ask-email" name="email" type="email" autocomplete="email" required placeholder="方便回信的 Email">
                 </div>
                 <div class="ask-field">
                     <label for="ask-topic">問題類型</label>
@@ -133,7 +140,6 @@
                         <option value="訂購付款">訂購／付款</option>
                         <option value="出貨物流">出貨／物流</option>
                         <option value="商品口味">商品／口味</option>
-                        <option value="訂單查詢">訂單查詢</option>
                         <option value="其他">其他</option>
                     </select>
                 </div>
@@ -142,14 +148,14 @@
                     <input id="ask-order" name="orderPhone" type="tel" placeholder="若已下單，方便我們對訂單">
                 </div>
                 <div class="ask-field">
-                    <label for="ask-message">想問的事情</label>
+                    <label for="ask-message">想問的事情<span class="ask-req" aria-hidden="true">*</span></label>
                     <textarea id="ask-message" name="message" required placeholder="請寫下商品、數量、希望到貨日，或其他問題"></textarea>
                 </div>
                 <div class="ask-actions">
                     <button type="submit" class="ask-submit">用郵件送出問題</button>
                     <button type="button" id="ask-copy" class="ask-copy">複製詢問內容</button>
                 </div>
-                <p class="ask-note">送出後會開啟您手機或電腦的郵件程式，收件人是 <b>hi.poponew@gmail.com</b>。若沒有跳出郵件，請按「複製詢問內容」後自行寄出，或直接打電話。</p>
+                <p class="ask-note">送出後會開啟您手機或電腦的郵件程式，收件人是 <b>hi.poponew@gmail.com</b>。若沒有跳出郵件，請按「複製詢問內容」後自行寄出，或改加官方 LINE。</p>
                 <p id="ask-ok" class="ask-ok" role="status"></p>
             </form>
         </div>
@@ -157,8 +163,8 @@
 
     <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl mt-3 md:-mt-3 p-5 md:p-6 border border-stone-100">
         <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">Poponew手做甜點</h4>
-        <p class="text-stone-500 text-[11px] md:text-xs leading-relaxed">服務專線：0900-769880｜e-mail：<a href="mailto:hi.poponew@gmail.com" class="text-blue-600 hover:underline">hi.poponew@gmail.com</a></p>
-        <p class="mt-2 text-[11px] md:text-xs leading-relaxed"><a href="keep.html#shipping" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">宅配配送與簽收須知</a><span class="text-stone-300"> ｜ </span><a href="keep.html#terms" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">訂購與退換貨條款</a><span class="text-stone-300"> ｜ </span><a href="faq.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">常見問題</a></p>
+        <p class="text-stone-500 text-[11px] md:text-xs leading-relaxed"><button type="button" class="line-open-btn" data-line-open><svg class="line-logo" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#06C755"/><path fill="#fff" d="M12.03 5.55c-3.68 0-6.66 2.38-6.66 5.32 0 2.62 2.32 4.82 5.46 5.23.21.04.47.13.54.3.06.15.04.38.02.53l-.09.53c-.03.18-.13.65.58.35 1.16-.49 3.14-1.84 4.3-3.15C17.4 13.02 18 11.66 18 10.87c0-2.94-2.98-5.32-5.97-5.32z"/></svg><span>官方 LINE</span></button></p>
+        <p class="mt-2 text-[11px] md:text-xs leading-relaxed"><a href="keep.html#shipping" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">宅配配送與簽收須知</a><span class="text-stone-300"> ｜ </span><a href="keep.html#terms" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">訂購與退換貨條款</a><span class="text-stone-300"> ｜ </span><a href="faq.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">常見問題</a><span class="text-stone-300"> ｜ </span><a href="ask.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">聯絡我們</a></p>
     </div>
     <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.</p>
 
@@ -177,7 +183,7 @@
                 topic: topic,
                 orderPhone: orderPhone,
                 message: message,
-                subject: "【客人詢問】" + topic + "／" + (name || "未留名"),
+                subject: "【聯絡我們】" + topic + "／" + (name || "未留名"),
                 text: "姓名：" + (name || "（未填）") +
                     "\n電話：" + (phone || "（未填）") +
                     "\nEmail：" + (email || "（未填）") +
@@ -194,18 +200,22 @@
         document.getElementById("ask-form").addEventListener("submit", function(e) {
             e.preventDefault();
             var data = askBody();
-            if (!data.name || !data.phone || !data.message) {
-                showAskOk("請先填姓名、電話和想問的事情。");
+            if (!data.name || !data.phone || !data.email || !data.message) {
+                showAskOk("請先填姓名、電話、Email 和想問的事情。");
+                return;
+            }
+            if (data.email.indexOf("@") < 1) {
+                showAskOk("請填寫正確的 Email。");
                 return;
             }
             var href = "mailto:hi.poponew@gmail.com?subject=" + encodeURIComponent(data.subject) + "&body=" + encodeURIComponent(data.text);
             window.location.href = href;
-            showAskOk("已開啟郵件程式。若沒有跳出，請按「複製詢問內容」，寄到 hi.poponew@gmail.com，或改打電話 0900-769880。");
+            showAskOk("已開啟郵件程式。若沒有跳出，請按「複製詢問內容」，寄到 hi.poponew@gmail.com，或改加官方 LINE。");
         });
         document.getElementById("ask-copy").addEventListener("click", function() {
             var data = askBody();
             var text = data.subject + "\n\n" + data.text;
-            function done() { showAskOk("已複製。請貼到郵件寄給 hi.poponew@gmail.com，或傳簡訊到 0900-769880。"); }
+            function done() { showAskOk("已複製。請貼到郵件寄給 hi.poponew@gmail.com，或加官方 LINE。"); }
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(text).then(done).catch(function() {
                     window.prompt("請複製以下內容", text);
@@ -233,6 +243,7 @@
             document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
         }
     </script>
+    <script src="js/line-modal.js"></script>
     <script src="js/cart-sync.js"></script>
 </body>
 </html>

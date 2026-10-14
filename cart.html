@@ -56,7 +56,7 @@
                 <span class="text-xl font-bold text-amber-700">NT$ <span id="total-price">0</span></span>
             </div>
             <p id="free-shipping-tip" class="text-xs text-amber-600 text-right font-medium pt-1"></p><p id="bulk-order-tip" class="hidden text-xs text-red-600 font-bold pt-1"></p>
-            <p class="text-xs pt-1 text-right"><a href="keep.html#shipping" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">宅配配送與簽收須知</a><span class="text-stone-300"> ｜ </span><a href="faq.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">常見問題</a></p>
+            <p class="text-xs pt-1 text-right"><button type="button" class="line-open-btn" data-line-open><svg class="line-logo" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#06C755"/><path fill="#fff" d="M12.03 5.55c-3.68 0-6.66 2.38-6.66 5.32 0 2.62 2.32 4.82 5.46 5.23.21.04.47.13.54.3.06.15.04.38.02.53l-.09.53c-.03.18-.13.65.58.35 1.16-.49 3.14-1.84 4.3-3.15C17.4 13.02 18 11.66 18 10.87c0-2.94-2.98-5.32-5.97-5.32z"/></svg><span>官方 LINE</span></button><span class="text-stone-300"> ｜ </span><a href="keep.html#shipping" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">宅配配送與簽收須知</a><span class="text-stone-300"> ｜ </span><a href="faq.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">常見問題</a><span class="text-stone-300"> ｜ </span><a href="ask.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">聯絡我們</a></p>
         </div>
 
         <form id="orderForm" onsubmit="submitOrder(event)" class="space-y-4">
@@ -643,6 +643,7 @@ function submitOrder(event) {
             </button>
         </div>
     </div>
+    <script src="js/line-modal.js"></script>
     <script src="js/cart-sync.js"></script>
 </body>
 </html>
