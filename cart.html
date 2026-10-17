@@ -427,7 +427,7 @@
             } else {
                 shippingFee = cfg.shippingFee;
                 document.getElementById('shipping-fee-text').innerText = `NT$ ${cfg.shippingFee}`;
-                document.getElementById('free-shipping-tip').innerText = `再買 NT$ ${cfg.freeShipping - productSubtotal} 元即享免運費宅配！`;
+                document.getElementById('free-shipping-tip').innerText = `還差 NT$ ${cfg.freeShipping - productSubtotal} 元即享免運費宅配！`;
             }
 
             var discountSave = hasItems ? Math.max(0, originalSubtotal - productSubtotal) : 0;
