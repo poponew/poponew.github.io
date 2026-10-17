@@ -45,11 +45,22 @@
         <div class="p-4 bg-amber-50 rounded-xl border border-amber-100 mb-5 space-y-2 text-sm">
             <div class="flex justify-between">
                 <span class="text-stone-600">商品小計：</span>
-                <span class="font-bold text-stone-800">NT$ <span id="subtotal-price">0</span></span>
+                <span class="font-bold" style="color:#44403c">NT$ <span id="subtotal-price">0</span></span>
             </div>
             <div class="flex justify-between">
                 <span class="text-stone-600">冷凍宅配運費：</span>
-                <span class="font-bold text-stone-800" id="shipping-fee-text">NT$ 80</span>
+                <span class="font-bold" id="shipping-fee-text" style="color:#44403c">NT$ 80</span>
+            </div>
+            <div id="savings-box" class="hidden space-y-1 pt-1 text-sm">
+                <p class="text-stone-600">本次購物一共省下</p>
+                <div id="savings-discount" class="hidden flex justify-between">
+                    <span class="text-stone-600">折扣金額</span>
+                    <span class="font-bold" style="color:#44403c;text-decoration:line-through">NT$ <span id="savings-discount-amount">0</span></span>
+                </div>
+                <div id="savings-ship" class="hidden flex justify-between">
+                    <span class="text-stone-600">運費</span>
+                    <span class="font-bold" style="color:#44403c;text-decoration:line-through">NT$ <span id="savings-ship-amount">0</span></span>
+                </div>
             </div>
             <div class="flex justify-between items-center pt-2 border-t border-amber-200 text-base">
                 <span class="font-medium text-amber-900">總計金額：</span>
@@ -365,6 +376,7 @@
             const container = document.getElementById('cart-items');
             container.innerHTML = '';
             productSubtotal = 0;
+            var originalSubtotal = 0;
             let hasItems = false;
 
             for (const [id, qty] of Object.entries(cart)) {
@@ -374,6 +386,8 @@
                 if (!p) continue;
 
                 var unit = saleUnit(p.price);
+                var origin = parseInt(p.price, 10) || 0;
+                originalSubtotal += origin * qty;
                 productSubtotal += unit * qty;
                 var priceLine = (window.shopDiscountActive && window.shopDiscountActive())
                     ? `<s class="text-stone-400 font-normal" style="text-decoration:line-through">NT$ ${p.price}</s> NT$ ${unit} x ${qty}`
@@ -405,14 +419,44 @@
             }
 
             const cfg = shopCfg();
-            if (productSubtotal >= cfg.freeShipping) {
+            var reachedFreeShip = productSubtotal >= cfg.freeShipping;
+            if (reachedFreeShip) {
                 shippingFee = 0;
-                document.getElementById('shipping-fee-text').innerHTML = `<span class="text-green-600 font-bold">🎉 免運費</span>`;
+                document.getElementById('shipping-fee-text').innerHTML = `<span class="font-bold" style="color:#44403c">🎉 免運費</span>`;
                 document.getElementById('free-shipping-tip').innerText = `已達 NT$ ${cfg.freeShipping.toLocaleString()} 免運門檻！`;
             } else {
                 shippingFee = cfg.shippingFee;
                 document.getElementById('shipping-fee-text').innerText = `NT$ ${cfg.shippingFee}`;
                 document.getElementById('free-shipping-tip').innerText = `再買 NT$ ${cfg.freeShipping - productSubtotal} 元即享免運費宅配！`;
+            }
+
+            var discountSave = hasItems ? Math.max(0, originalSubtotal - productSubtotal) : 0;
+            var shipSave = (hasItems && reachedFreeShip) ? (parseInt(cfg.shippingFee, 10) || 0) : 0;
+            var savingsBox = document.getElementById('savings-box');
+            var savingsDiscount = document.getElementById('savings-discount');
+            var savingsShip = document.getElementById('savings-ship');
+            if (savingsBox) {
+                if (discountSave > 0 || shipSave > 0) {
+                    savingsBox.classList.remove('hidden');
+                    if (savingsDiscount) {
+                        if (discountSave > 0) {
+                            savingsDiscount.classList.remove('hidden');
+                            document.getElementById('savings-discount-amount').innerText = discountSave;
+                        } else {
+                            savingsDiscount.classList.add('hidden');
+                        }
+                    }
+                    if (savingsShip) {
+                        if (shipSave > 0) {
+                            savingsShip.classList.remove('hidden');
+                            document.getElementById('savings-ship-amount').innerText = shipSave;
+                        } else {
+                            savingsShip.classList.add('hidden');
+                        }
+                    }
+                } else {
+                    savingsBox.classList.add('hidden');
+                }
             }
 
             
