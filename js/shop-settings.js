@@ -4,7 +4,7 @@ window.shopSettings = {
     "minOrder": 500,
     "codLimit": 2000,
     "bulkOrder": 5000,
-    "discountFold": 9,
+    "discountFold": 10,
     "discountStart": "",
     "discountEnd": ""
 };
