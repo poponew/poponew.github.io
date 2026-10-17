@@ -29,13 +29,16 @@ window.shopSettings = {
         if (!window.shopDiscountActive()) return n;
         return Math.round(n * shopDiscountFold() / 10);
     };
+    function shopNtMark(s) {
+        return String(s).replace(/NT\$/g, '<span class="shop-nt">NT$</span>');
+    }
     window.shopPriceHtml = function (original, opt) {
         opt = opt || {};
         var o = parseInt(original, 10) || 0;
         var n = window.shopSalePrice(o);
         var from = opt.from ? ' <span class="text-xs font-medium">起</span>' : (opt.suffix || "");
-        if (n === o) return "NT$ " + o + from;
-        return '<s class="shop-old-price text-sm font-normal" style="text-decoration:line-through;color:#a8a29e;font-weight:400;font-size:0.875rem">NT$ ' + o + "</s> <span class=\"shop-sale-price\">NT$ " + n + "</span>" + from;
+        if (n === o) return shopNtMark("NT$ ") + o + from;
+        return '<s class="shop-old-price text-sm font-normal" style="text-decoration:line-through;color:#a8a29e;font-weight:400;font-size:0.875rem">' + shopNtMark("NT$ ") + o + "</s> <span class=\"shop-sale-price\">" + shopNtMark("NT$ ") + n + "</span>" + from;
     };
     function bindIndexCardPrices() {
         if (!window.shopSearch || !window.shopSearch.length) return;
@@ -145,7 +148,75 @@ window.shopSettings = {
         document.querySelectorAll("[data-shop-price]").forEach(function (el) {
             el.innerHTML = window.shopPriceHtml(el.getAttribute("data-shop-price"), { from: el.getAttribute("data-shop-price-from") });
         });
+        shopEnsureNt();
     };
-    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", window.shopApplyPrices);
-    else window.shopApplyPrices();
+    function shopNtCss() {
+        if (document.getElementById("shop-nt-style")) return;
+        var st = document.createElement("style");
+        st.id = "shop-nt-style";
+        st.textContent = ".shop-nt{font-size:calc(1em - 4px);font-weight:inherit;}.keep-body .shop-nt{font-size:calc(1em - 4px)!important;}";
+        document.head.appendChild(st);
+    }
+    var ntBusy = false;
+    var ntTimer = 0;
+    function shopWrapNt(root) {
+        if (!root) return;
+        var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+            acceptNode: function (node) {
+                var p = node.parentNode;
+                if (!p || p.nodeType !== 1) return NodeFilter.FILTER_REJECT;
+                var tag = p.tagName;
+                if (tag === "SCRIPT" || tag === "STYLE" || tag === "TEXTAREA" || tag === "NOSCRIPT") return NodeFilter.FILTER_REJECT;
+                if (p.classList && p.classList.contains("shop-nt")) return NodeFilter.FILTER_REJECT;
+                if (p.closest && p.closest(".shop-nt")) return NodeFilter.FILTER_REJECT;
+                if (node.nodeValue && node.nodeValue.indexOf("NT$") !== -1) return NodeFilter.FILTER_ACCEPT;
+                return NodeFilter.FILTER_SKIP;
+            }
+        });
+        var nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(function (node) {
+            var p = node.parentNode;
+            if (!p) return;
+            var text = node.nodeValue;
+            if (String(text).trim() === "NT$" && p.childNodes.length === 1) {
+                p.classList.add("shop-nt");
+                p.classList.remove("text-xs");
+                return;
+            }
+            var tmp = document.createElement("span");
+            tmp.innerHTML = shopNtMark(text);
+            var frag = document.createDocumentFragment();
+            while (tmp.firstChild) frag.appendChild(tmp.firstChild);
+            p.replaceChild(frag, node);
+        });
+    }
+    function shopEnsureNt() {
+        if (ntBusy || !document.body) return;
+        ntBusy = true;
+        try {
+            shopNtCss();
+            shopWrapNt(document.body);
+        } finally {
+            ntBusy = false;
+        }
+    }
+    function shopScheduleNt() {
+        clearTimeout(ntTimer);
+        ntTimer = setTimeout(shopEnsureNt, 40);
+    }
+    function shopWatchNt() {
+        if (!document.body || document.body._shopNtWatch || !window.MutationObserver) return;
+        document.body._shopNtWatch = true;
+        new MutationObserver(function () {
+            if (!ntBusy) shopScheduleNt();
+        }).observe(document.body, { childList: true, characterData: true, subtree: true });
+    }
+    function shopBoot() {
+        window.shopApplyPrices();
+        shopWatchNt();
+        shopEnsureNt();
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", shopBoot);
+    else shopBoot();
 })();
