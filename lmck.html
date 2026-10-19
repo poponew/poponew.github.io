@@ -91,7 +91,10 @@
             </div>
         </div>
         <div id="product-gallery" class="w-full min-w-full aspect-square flex items-center justify-center bg-stone-100 shrink-0 relative overflow-hidden">
-            <img id="product-gallery-img" src="images/lmck.jpg" alt="檸檬夾心餅乾" class="w-full h-full object-cover" draggable="false">
+            <picture>
+                <source id="product-gallery-webp" type="image/webp" srcset="images/lmck.webp">
+                <img id="product-gallery-img" src="images/lmck.jpg" alt="檸檬夾心餅乾" class="w-full h-full object-cover" draggable="false">
+            </picture>
             <button type="button" id="product-gallery-prev" hidden class="hidden absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 text-stone-800 shadow-md border border-stone-200 flex items-center justify-center text-2xl leading-none hover:bg-white active:scale-95" aria-label="上一張">&#8249;</button>
             <button type="button" id="product-gallery-next" hidden class="hidden absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 text-stone-800 shadow-md border border-stone-200 flex items-center justify-center text-2xl leading-none hover:bg-white active:scale-95" aria-label="下一張">&#8250;</button>
         </div>
@@ -107,7 +110,7 @@
                 </div>
             </div>
             <div id="cookie-list" class="space-y-3 mb-8">
-                <div class="p-4 bg-stone-50 rounded-xl border border-stone-200 hover:border-amber-200 transition space-y-2" data-product-id="67"><h3 class="font-medium text-stone-800 text-sm w-full mb-1">檸檬夾心餅乾 <span class="text-xs text-amber-600 font-semibold bg-amber-100/60 px-1.5 py-0.5 rounded-md ml-1">1入</span></h3><div class="flex justify-between items-center w-full"><div class="flex gap-3 items-center" id="product-info-left-67"><div><p class="text-sm text-amber-700 font-semibold mt-0.5">NT$ 65</p></div></div><div class="flex items-center gap-3"><button type="button" onclick="updateQty(67, -1)" class="w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm hover:bg-stone-50 active:scale-95">-</button><input type="number" id="qty-67" value="0" min="0" readonly class="w-6 text-center bg-transparent font-bold text-stone-800"><button type="button" onclick="updateQty(67, 1)" class="w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm hover:bg-stone-50 active:scale-95">+</button></div></div></div>
+                <div class="p-4 bg-stone-50 rounded-xl border border-stone-200 hover:border-amber-200 transition space-y-2" data-product-id="67"><h3 class="font-medium text-stone-800 text-sm w-full mb-1">檸檬夾心餅乾 <span class="text-xs text-amber-600 font-semibold bg-amber-100/60 px-1.5 py-0.5 rounded-md ml-1">1入</span></h3><div class="flex justify-between items-center w-full"><div class="flex gap-3 items-center" id="product-info-left-67"><div><p class="text-sm text-amber-700 font-semibold mt-0.5" data-shop-price="65">NT$ 65</p></div></div><div class="flex items-center gap-3"><button type="button" onclick="updateQty(67, -1)" class="w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm hover:bg-stone-50 active:scale-95">-</button><input type="number" id="qty-67" value="0" min="0" readonly class="w-6 text-center bg-transparent font-bold text-stone-800"><button type="button" onclick="updateQty(67, 1)" class="w-8 h-8 rounded-lg border bg-white flex items-center justify-center font-bold shadow-sm hover:bg-stone-50 active:scale-95">+</button></div></div></div>
             </div>
             <div class="bg-amber-50 rounded-2xl p-4 border border-amber-100 flex justify-between items-center flex-wrap gap-4 shadow-sm">
                 <div class="flex flex-col">
@@ -146,13 +149,13 @@
             itemDiv.setAttribute("data-product-id", p.id);
             var cleanWeight = String(p.weight || "").replace(/"/g, "").replace(/&quot;/g, "").replace(/g/gi, "").trim();
             var weightHtml = cleanWeight ? "<p class='text-xs text-stone-400'>約 " + cleanWeight + "g</p>" : "";
-            itemDiv.innerHTML = "<h3 class='font-medium text-stone-800 text-sm w-full mb-1'>" + rawName + noteHtml + "</h3><div class='flex justify-between items-center w-full'><div class='flex gap-3 items-center' id='product-info-left-" + p.id + "'><div>" + weightHtml + "<p class='text-sm text-amber-700 font-semibold mt-0.5'>NT$ " + p.price + "</p></div></div>" + actionHtml + "</div>";
+            itemDiv.innerHTML = "<h3 class='font-medium text-stone-800 text-sm w-full mb-1'>" + rawName + noteHtml + "</h3><div class='flex justify-between items-center w-full'><div class='flex gap-3 items-center' id='product-info-left-" + p.id + "'><div>" + weightHtml + "<p class='text-sm text-amber-700 font-semibold mt-0.5' data-shop-price='" + p.price + "'>NT$ " + p.price + "</p></div></div>" + actionHtml + "</div>";
             container.appendChild(itemDiv);
         });
         }
         function updateQty(id, change) { var input = document.getElementById("qty-" + id); var currentQty = parseInt(input && input.value, 10) || 0; currentQty = Math.max(0, currentQty + change); if (currentQty > 20) { currentQty = 20; alert("單品數量上限為20"); } if (input) input.value = currentQty; if (currentQty === 0) { delete cart[id]; } else { cart[id] = currentQty; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); calculatePageTotal(); updateCartCount(); if (window.syncFlavorLightboxQty) window.syncFlavorLightboxQty(); }
-        function calculatePageTotal() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.allProductsLookup[id] || 0) * cart[id]; } document.getElementById("entire-cart-total").innerText = entireCartTotal; var tipElement = document.getElementById("free-shipping-tip"); if (entireCartTotal === 0) { tipElement.innerText = "⚠️ 本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元唷！"; } else if (entireCartTotal >= cfg.freeShipping) { tipElement.innerHTML = "<span class='text-green-600 font-bold text-sm'>🎉 全店已達免運費門檻！直接結帳超划算！</span>"; } else { tipElement.innerText = "還差" + (cfg.freeShipping - entireCartTotal) + " 元就免運啦！"; } var bulkTip = document.getElementById("bulk-order-tip"); if (bulkTip) { if (entireCartTotal > cfg.bulkOrder) { bulkTip.classList.remove("hidden"); bulkTip.innerText = "您的訂購數量較大，屬於大宗/企業訂單。為了保障您的權益與確認出貨檔期，請直接透過網站下方聯絡方式聯繫我們由專人為您服務！"; } else { bulkTip.classList.add("hidden"); bulkTip.innerText = ""; } } var codTip = document.getElementById("cod-limit-tip"); if (codTip) { if (entireCartTotal > cfg.codLimit) { codTip.classList.remove("hidden"); codTip.innerText = "單筆滿 NT$ " + cfg.codLimit.toLocaleString() + " 不提供貨到付款，結帳時請改用轉帳匯款。"; } else { codTip.classList.add("hidden"); codTip.innerText = ""; } } }
-        function saveToCartAndGo() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.allProductsLookup[id] || 0) * cart[id]; } if (entireCartTotal === 0) { alert("您目前尚未選擇任何數量唷！"); return; } if (entireCartTotal < cfg.minOrder) { alert("抱歉！本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元，目前綜合累計為 NT$ " + entireCartTotal + " 元，請再多選購一些甜點唷！"); return; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); window.location.href = "cart.html"; }
+        function calculatePageTotal() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0) : (window.allProductsLookup[id] || 0)) * cart[id]; } document.getElementById("entire-cart-total").innerText = entireCartTotal; var tipElement = document.getElementById("free-shipping-tip"); if (entireCartTotal === 0) { tipElement.innerText = "⚠️ 本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元唷！"; } else if (entireCartTotal >= cfg.freeShipping) { tipElement.innerHTML = "<span class='text-green-600 font-bold text-sm'>🎉 全店已達免運費門檻！直接結帳超划算！</span>"; } else { tipElement.innerText = "還差" + (cfg.freeShipping - entireCartTotal) + " 元就免運啦！"; } var bulkTip = document.getElementById("bulk-order-tip"); if (bulkTip) { if (entireCartTotal > cfg.bulkOrder) { bulkTip.classList.remove("hidden"); bulkTip.innerText = "您的訂購數量較大，屬於大宗/企業訂單。為了保障您的權益與確認出貨檔期，請直接透過網站下方聯絡方式聯繫我們由專人為您服務！"; } else { bulkTip.classList.add("hidden"); bulkTip.innerText = ""; } } var codTip = document.getElementById("cod-limit-tip"); if (codTip) { if (entireCartTotal > cfg.codLimit) { codTip.classList.remove("hidden"); codTip.innerText = "單筆滿 NT$ " + cfg.codLimit.toLocaleString() + " 不提供貨到付款，結帳時請改用轉帳匯款。"; } else { codTip.classList.add("hidden"); codTip.innerText = ""; } } }
+        function saveToCartAndGo() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0) : (window.allProductsLookup[id] || 0)) * cart[id]; } if (entireCartTotal === 0) { alert("您目前尚未選擇任何數量唷！"); return; } if (entireCartTotal < cfg.minOrder) { alert("抱歉！本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元，目前綜合累計為 NT$ " + entireCartTotal + " 元，請再多選購一些甜點唷！"); return; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); window.location.href = "cart.html"; }
         function updateCartCount() { var count = 0; for (var id in cart) { count += cart[id]; } document.getElementById("cart-count").innerText = count; }
         calculatePageTotal(); updateCartCount();
         window.addEventListener("pagehide", function() { localStorage.setItem("poponew_cart", JSON.stringify(cart)); });
@@ -165,7 +168,7 @@
             var first = imgEl.getAttribute("src") || "";
             var urls = first ? [first] : [];
             var index = 0;
-            function show(i) { if (!urls.length) return; index = (i + urls.length) % urls.length; imgEl.src = urls[index]; }
+            function show(i) { if (!urls.length) return; index = (i + urls.length) % urls.length; if (window.shopSetPictureSrc) window.shopSetPictureSrc(imgEl, urls[index]); else imgEl.src = urls[index]; }
             function reveal() { if (urls.length < 2) return; prevBtn.hidden = false; nextBtn.hidden = false; prevBtn.classList.remove("hidden"); nextBtn.classList.remove("hidden"); }
             prevBtn.addEventListener("click", function() { show(index - 1); });
             nextBtn.addEventListener("click", function() { show(index + 1); });
@@ -213,7 +216,7 @@
                         var imgBox = document.createElement("div");
                         imgBox.className = "flavor-img-box";
                         var safeName = String(p.name || "").replace(/"/g, "").replace(/&quot;/g, "").replace(/'/g, "\\'").trim();
-                        imgBox.innerHTML = "<img src='" + imgUrl + "' alt='" + safeName + "'>";
+                        imgBox.innerHTML = window.shopPictureHtml ? window.shopPictureHtml(imgUrl, "alt='" + safeName + "'") : ("<img src='" + imgUrl + "' alt='" + safeName + "'>");
                         imgBox.addEventListener("click", function(e) { e.preventDefault(); window.openFlavorLightbox(p.id); });
                         targetLeftPart.insertBefore(imgBox, targetLeftPart.firstChild);
                     }
@@ -245,7 +248,7 @@
             function renderLbCart() {
                 var item = currentItem();
                 if (!item) return;
-                document.getElementById("lb-price").innerText = "NT$ " + item.price;
+                document.getElementById("lb-price").innerHTML = window.shopPriceHtml ? window.shopPriceHtml(item.price) : ("NT$ " + item.price);
                 var wrap = document.getElementById("lb-qty-wrap");
                 var sold = document.getElementById("lb-soldout");
                 var qtyEl = document.getElementById("lb-qty");
@@ -260,7 +263,7 @@
                 var item = gallery[lbIndex];
                 var img = document.getElementById("lb-img");
                 var titleEl = document.getElementById("lb-title");
-                img.src = item.src;
+                if (window.shopSetPictureSrc) window.shopSetPictureSrc(img, item.src); else img.src = item.src;
                 titleEl.innerText = item.name || "";
                 titleEl.style.display = item.name ? "block" : "none";
                 var desktopNav = gallery.length > 1 && !isMobileFlavorView();
