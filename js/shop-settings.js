@@ -38,6 +38,7 @@ window.shopSettings = {
     };
     window.shopSetPictureSrc = function (img, src) {
         if (!img) return;
+        img._shopWebpFail = false;
         img.src = src;
         var pic = img.parentNode;
         if (pic && pic.tagName === "PICTURE") {
@@ -45,6 +46,24 @@ window.shopSettings = {
             if (source) source.srcset = window.shopWebpPath(src);
         }
     };
+    function shopFallbackJpg(img) {
+        if (!img || img._shopWebpFail) return;
+        var jpg = img.getAttribute("src") || "";
+        if (/\.webp(\?|$)/i.test(jpg)) jpg = jpg.replace(/\.webp(\?.*)?$/i, ".jpg$1");
+        if (!/\.jpe?g(\?|$)/i.test(jpg)) return;
+        var pic = img.parentNode;
+        if (pic && pic.tagName === "PICTURE") {
+            var sources = pic.querySelectorAll("source");
+            for (var i = 0; i < sources.length; i++) sources[i].remove();
+        }
+        img._shopWebpFail = true;
+        img.src = "";
+        img.src = jpg;
+    }
+    document.addEventListener("error", function (e) {
+        var t = e.target;
+        if (t && t.tagName === "IMG") shopFallbackJpg(t);
+    }, true);
     function shopNtMark(s) {
         return String(s).replace(/NT\$/g, '<span class="shop-nt">NT$</span>');
     }
