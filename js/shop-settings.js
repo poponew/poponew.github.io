@@ -29,6 +29,22 @@ window.shopSettings = {
         if (!window.shopDiscountActive()) return n;
         return Math.round(n * shopDiscountFold() / 10);
     };
+    window.shopWebpPath = function (src) {
+        return String(src || "").replace(/\.jpe?g(\?.*)?$/i, ".webp$1");
+    };
+    window.shopPictureHtml = function (src, attrs) {
+        var jpg = String(src || "");
+        return '<picture><source srcset="' + window.shopWebpPath(jpg) + '" type="image/webp"><img src="' + jpg + '"' + (attrs ? (" " + attrs) : "") + "></picture>";
+    };
+    window.shopSetPictureSrc = function (img, src) {
+        if (!img) return;
+        img.src = src;
+        var pic = img.parentNode;
+        if (pic && pic.tagName === "PICTURE") {
+            var source = pic.querySelector('source[type="image/webp"]');
+            if (source) source.srcset = window.shopWebpPath(src);
+        }
+    };
     function shopNtMark(s) {
         return String(s).replace(/NT\$/g, '<span class="shop-nt">NT$</span>');
     }
