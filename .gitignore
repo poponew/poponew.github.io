@@ -1,0 +1,13 @@
+本機/
+backup/*.exe
+backup/*.cmd
+backup/*.vbs
+backup/*.cs
+backup/*.jpg
+backup/*.txt
+backup/publish.js
+backup/poponew_backup.csv
+Thumbs.db
+desktop.ini
+.DS_Store
+*.log

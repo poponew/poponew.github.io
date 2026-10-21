@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MMGS0E58FW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-MMGS0E58FW');
+    </script>
+    <title>聯絡我們 - Poponew手做甜點</title>
+    <meta name="description" content="聯絡 Poponew手做甜點：官方 LINE、email 或表單。">
+    <meta property="og:site_name" content="Poponew手做甜點">
+    <meta property="og:locale" content="zh_TW">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="聯絡我們 - Poponew手做甜點">
+    <meta property="og:description" content="聯絡 Poponew手做甜點：官方 LINE、email 或表單。">
+    <meta property="og:image" content="https://poponew.github.io/images/scone.jpg">
+    <link rel="stylesheet" href="css/tailwind.css">
+    <script src="js/shop-settings.js"></script>
+    <style>
+        @font-face {
+            font-family: "poponew";
+            src: url("fonts/poponew.woff2") format("woff2");
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+        .brand-mark { font-family: "poponew", sans-serif; }
+        .ask-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+        @media (min-width: 520px) { .ask-grid { grid-template-columns: 1fr 1fr; } }
+        .ask-card {
+            display: block;
+            width: 100%;
+            padding: 1rem 1.1rem;
+            border: 1px solid #e7e5e4;
+            border-radius: 1rem;
+            background: #fff;
+            text-decoration: none;
+            color: inherit;
+            text-align: left;
+            font: inherit;
+            cursor: pointer;
+        }
+        .ask-card:hover { border-color: #e7d4b8; background: #fffdf8; }
+        .ask-card b { display: block; color: #92400e; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .ask-card .line-title { display: flex; align-items: center; flex-wrap: nowrap; white-space: nowrap; gap: 0.4rem; font-size: calc(0.95rem + 4px); color: #06C755; }
+        .ask-lead { list-style: none; padding: 0; margin: 0.5rem auto 0; width: max-content; max-width: 100%; text-align: left; line-height: 1.35; }
+        .ask-lead li { position: relative; padding-left: 0.95em; margin: 0; }
+        .ask-lead li::before { content: "‧"; position: absolute; left: 0; }
+        .ask-card .line-title .line-logo { flex-shrink: 0; width: 22px; height: 22px; }
+        .ask-card span { color: #57534e; font-size: 0.9rem; }
+        .ask-req { color: #dc2626; font-weight: 700; margin-left: 0.15rem; }
+        .ask-form { margin-top: 1.25rem; padding: 1.15rem 1.1rem 1.25rem; border: 1px solid #e7e5e4; border-radius: 1rem; background: #fff; }
+        .ask-field { margin-bottom: 0.85rem; }
+        .ask-field label { display: block; font-size: 0.8rem; font-weight: 700; color: #44403c; margin-bottom: 0.35rem; }
+        .ask-field input, .ask-field select, .ask-field textarea {
+            width: 100%;
+            border: 1px solid #d6d3d1;
+            border-radius: 0.75rem;
+            padding: 0.7rem 0.8rem;
+            font-size: 1rem;
+            color: #292524;
+            background: #fff;
+        }
+        .ask-field input:focus, .ask-field select:focus, .ask-field textarea:focus {
+            outline: none;
+            border-color: #b45309;
+            box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.12);
+        }
+        .ask-field textarea { min-height: 8.5rem; resize: vertical; line-height: 1.6; }
+        .ask-actions { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1rem; }
+        @media (min-width: 520px) { .ask-actions { flex-direction: row; } }
+        .ask-submit, .ask-copy {
+            flex: 1;
+            border-radius: 0.75rem;
+            padding: 0.8rem 1rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .ask-submit { background: #b45309; color: #fff; border: 0; }
+        .ask-submit:hover { background: #92400e; }
+        .ask-copy { background: #fff; color: #92400e; border: 1px solid #e7d4b8; }
+        .ask-copy:hover { background: #fff7ed; }
+        .ask-note { margin-top: 0.85rem; color: #78716c; font-size: 0.8rem; line-height: 1.6; }
+        .ask-ok { display: none; margin-top: 0.85rem; padding: 0.75rem 0.85rem; border-radius: 0.75rem; background: #fff7ed; color: #92400e; font-size: 0.85rem; line-height: 1.6; }
+        .ask-ok.is-on { display: block; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-12">
+    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl my-0 md:my-8">
+        <div class="sticky top-0 bg-white/90 backdrop-blur-md z-40 border-b md:rounded-t-2xl">
+            <div class="p-4 pb-2 flex justify-between items-center">
+                <a href="index.html" class="brand-mark text-amber-800 text-xl font-bold leading-tight">Poponew手做甜點</a>
+                <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
+            </div>
+            <div class="flex justify-end px-4 pb-3">
+                <div class="flex items-center bg-white/95 backdrop-blur-md rounded-xl p-1 border border-stone-200 shadow-md">
+                    <button type="button" onclick="changeFontSize(-1)" title="縮小字型" class="w-8 h-7 flex items-center justify-center text-xs font-bold text-stone-600 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A-</button>
+                    <button type="button" onclick="resetFontSize()" title="重設字型" class="px-2 h-7 flex items-center justify-center text-xs font-medium text-stone-400 hover:text-amber-800 transition">預設</button>
+                    <button type="button" onclick="changeFontSize(1)" title="放大字型" class="w-8 h-7 flex items-center justify-center text-sm font-bold text-stone-700 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6">
+            <header class="text-center mb-6">
+                <h1 class="brand-mark text-2xl font-bold text-amber-800">聯絡我們</h1>
+                <ul class="ask-lead text-stone-500 text-sm">
+                    <li>訂購、出貨或商品問題，歡迎加官方 LINE、寫 email，或填下面表單。</li>
+                    <li>在<a href="faq.html" class="font-semibold text-amber-700 underline underline-offset-2">常見問題</a>通常能找到答案，已下單、想查進度，請到<a href="order-search.html" class="font-semibold text-amber-700 underline underline-offset-2">訂單查詢</a>。</li>
+                </ul>
+            </header>
+
+            <div class="ask-grid font-zoom mb-2">
+                <button type="button" class="ask-card" data-line-open>
+                    <b class="line-title"><svg class="line-logo" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#06C755"/><path fill="#fff" d="M12.03 5.55c-3.68 0-6.66 2.38-6.66 5.32 0 2.62 2.32 4.82 5.46 5.23.21.04.47.13.54.3.06.15.04.38.02.53l-.09.53c-.03.18-.13.65.58.35 1.16-.49 3.14-1.84 4.3-3.15C17.4 13.02 18 11.66 18 10.87c0-2.94-2.98-5.32-5.97-5.32z"/></svg>官方LINE</b>
+                    <span>@534euhut（掃描加入好友）</span>
+                </button>
+                <a class="ask-card" href="mailto:hi.poponew@gmail.com">
+                    <b>電子郵件</b>
+                    <span>hi.poponew@gmail.com</span>
+                </a>
+            </div>
+
+            <form id="ask-form" class="ask-form font-zoom" novalidate>
+                <div class="ask-field">
+                    <label for="ask-name">姓名<span class="ask-req" aria-hidden="true">*</span></label>
+                    <input id="ask-name" name="name" type="text" autocomplete="name" required placeholder="怎麼稱呼您">
+                </div>
+                <div class="ask-field">
+                    <label for="ask-phone">聯絡電話<span class="ask-req" aria-hidden="true">*</span></label>
+                    <input id="ask-phone" name="phone" type="tel" autocomplete="tel" required placeholder="方便回覆的手機">
+                </div>
+                <div class="ask-field">
+                    <label for="ask-email">Email<span class="ask-req" aria-hidden="true">*</span></label>
+                    <input id="ask-email" name="email" type="email" autocomplete="email" required placeholder="方便回信的 Email">
+                </div>
+                <div class="ask-field">
+                    <label for="ask-topic">問題類型</label>
+                    <select id="ask-topic" name="topic">
+                        <option value="訂購付款">訂購／付款</option>
+                        <option value="出貨物流">出貨／物流</option>
+                        <option value="商品口味">商品／口味</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="ask-field">
+                    <label for="ask-order">訂購時的手機（選填）</label>
+                    <input id="ask-order" name="orderPhone" type="tel" placeholder="若已下單，方便我們對訂單">
+                </div>
+                <div class="ask-field">
+                    <label for="ask-message">想問的事情<span class="ask-req" aria-hidden="true">*</span></label>
+                    <textarea id="ask-message" name="message" required placeholder="請寫下商品、數量、希望到貨日，或其他問題"></textarea>
+                </div>
+                <div class="ask-actions">
+                    <button type="submit" class="ask-submit">用郵件送出問題</button>
+                    <button type="button" id="ask-copy" class="ask-copy">複製詢問內容</button>
+                </div>
+                <p class="ask-note">送出後會開啟您手機或電腦的郵件程式，收件人是 <b>hi.poponew@gmail.com</b>。若沒有跳出郵件，請按「複製詢問內容」後自行寄出，或改加官方 LINE。</p>
+                <p id="ask-ok" class="ask-ok" role="status"></p>
+            </form>
+        </div>
+    </div>
+
+    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl mt-3 md:-mt-3 p-5 md:p-6 border border-stone-100">
+        <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">Poponew手做甜點</h4>
+        <p class="text-stone-500 text-[11px] md:text-xs leading-relaxed"><button type="button" class="line-open-btn" data-line-open><svg class="line-logo" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#06C755"/><path fill="#fff" d="M12.03 5.55c-3.68 0-6.66 2.38-6.66 5.32 0 2.62 2.32 4.82 5.46 5.23.21.04.47.13.54.3.06.15.04.38.02.53l-.09.53c-.03.18-.13.65.58.35 1.16-.49 3.14-1.84 4.3-3.15C17.4 13.02 18 11.66 18 10.87c0-2.94-2.98-5.32-5.97-5.32z"/></svg><span>官方LINE</span></button></p>
+        <p class="mt-2 text-[11px] md:text-xs leading-relaxed"><a href="keep.html#shipping" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">宅配配送與簽收須知</a><span class="text-stone-300"> ｜ </span><a href="keep.html#terms" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">訂購與退換貨條款</a><span class="text-stone-300"> ｜ </span><a href="faq.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">常見問題</a><span class="text-stone-300"> ｜ </span><a href="ask.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">聯絡我們</a></p>
+    </div>
+    <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.</p>
+
+    <script>
+        function askBody() {
+            var name = document.getElementById("ask-name").value.trim();
+            var phone = document.getElementById("ask-phone").value.trim();
+            var email = document.getElementById("ask-email").value.trim();
+            var topic = document.getElementById("ask-topic").value;
+            var orderPhone = document.getElementById("ask-order").value.trim();
+            var message = document.getElementById("ask-message").value.trim();
+            return {
+                name: name,
+                phone: phone,
+                email: email,
+                topic: topic,
+                orderPhone: orderPhone,
+                message: message,
+                subject: "【聯絡我們】" + topic + "／" + (name || "未留名"),
+                text: "姓名：" + (name || "（未填）") +
+                    "\n電話：" + (phone || "（未填）") +
+                    "\nEmail：" + (email || "（未填）") +
+                    "\n類型：" + topic +
+                    "\n訂購手機：" + (orderPhone || "（未填）") +
+                    "\n\n問題：\n" + (message || "（未填）")
+            };
+        }
+        function showAskOk(text) {
+            var ok = document.getElementById("ask-ok");
+            ok.textContent = text;
+            ok.classList.add("is-on");
+        }
+        document.getElementById("ask-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            var data = askBody();
+            if (!data.name || !data.phone || !data.email || !data.message) {
+                showAskOk("請先填姓名、電話、Email 和想問的事情。");
+                return;
+            }
+            if (data.email.indexOf("@") < 1) {
+                showAskOk("請填寫正確的 Email。");
+                return;
+            }
+            var href = "mailto:hi.poponew@gmail.com?subject=" + encodeURIComponent(data.subject) + "&body=" + encodeURIComponent(data.text);
+            window.location.href = href;
+            showAskOk("已開啟郵件程式。若沒有跳出，請按「複製詢問內容」，寄到 hi.poponew@gmail.com，或改加官方 LINE。");
+        });
+        document.getElementById("ask-copy").addEventListener("click", function() {
+            var data = askBody();
+            var text = data.subject + "\n\n" + data.text;
+            function done() { showAskOk("已複製。請貼到郵件寄給 hi.poponew@gmail.com，或加官方 LINE。"); }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(done).catch(function() {
+                    window.prompt("請複製以下內容", text);
+                    done();
+                });
+            } else {
+                window.prompt("請複製以下內容", text);
+                done();
+            }
+        });
+        let currentFontSize = parseInt(localStorage.getItem("poponew_font_size")) || 16;
+        applyFontSize(currentFontSize);
+        function changeFontSize(delta) {
+            currentFontSize = Math.min(Math.max(currentFontSize + delta * 2, 14), 22);
+            applyFontSize(currentFontSize);
+        }
+        function resetFontSize() {
+            currentFontSize = 16;
+            applyFontSize(currentFontSize);
+        }
+        function applyFontSize(size) {
+            document.documentElement.style.fontSize = "16px";
+            localStorage.setItem("poponew_font_size", size);
+            var scale = (parseInt(size, 10) || 16) / 16;
+            document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
+        }
+    </script>
+    <script src="js/line-modal.js"></script>
+    <script src="js/cart-sync.js"></script>
+</body>
+</html>

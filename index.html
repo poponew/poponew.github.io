@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MMGS0E58FW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-MMGS0E58FW');
+    </script>
+    <title>Poponew手做甜點｜手工司康、巴斯克、美式軟餅乾、生乳捲、比利時鬆餅、布朗尼</title>
+    <meta name="description" content="Poponew手做甜點提供手工司康、巴斯克乳酪蛋糕與餅乾。全店滿 NT$ 1,500 免運。">
+    <meta property="og:site_name" content="Poponew手做甜點">
+    <meta property="og:locale" content="zh_TW">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Poponew手做甜點｜手工司康、巴斯克、美式軟餅乾、生乳捲、比利時鬆餅、布朗尼">
+    <meta property="og:description" content="Poponew手做甜點提供手工司康、巴斯克乳酪蛋糕與餅乾。全店滿 NT$ 1,500 免運。">
+    <meta property="og:image" content="https://poponew.github.io/images/msbg.jpg">
+    <link rel="stylesheet" href="css/tailwind.css">
+    <script src="js/shop-settings.js"></script>
+    <style>
+        @font-face {
+            font-family: "poponew";
+            src: url("fonts/poponew.woff2") format("woff2");
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+        /* 讓首頁 h2 大標題套用此字型 */
+        h2 {
+            font-family: "poponew", sans-serif !important;
+            color: #44403c;
+        }
+        .brand-mark { font-family: "poponew", sans-serif; }
+        .home-nav-brand { white-space: nowrap; overflow: hidden; min-width: 0; flex: 1 1 auto; font-size: clamp(0.95rem, 4.4vw, 1.25rem); }
+        .shop-search-open-btn { width: 2.375rem; height: 2.375rem; border-radius: 0.75rem; border: 1px solid #e7d4b8; background: linear-gradient(180deg, #fffdf8 0%, #f8efe3 100%); color: #92400e; box-shadow: 0 1px 2px rgba(120,53,15,0.08), inset 0 1px 0 rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease; }
+        .shop-search-open-btn:hover { background: linear-gradient(180deg, #fff7ed 0%, #fde8c8 100%); box-shadow: 0 3px 10px rgba(180,83,9,0.16), inset 0 1px 0 rgba(255,255,255,0.95); color: #78350f; }
+        .shop-search-open-btn:active { transform: scale(0.96); }
+        .shop-search-open-btn svg { width: 1.05rem; height: 1.05rem; stroke: currentColor; fill: none; }
+        .shop-search-layer { display: none; position: fixed; inset: 0; z-index: 70; }
+        .shop-search-layer.is-open { display: block; }
+        .shop-search-backdrop { position: absolute; inset: 0; background: rgba(28, 25, 23, 0.45); }
+        .shop-search-panel { position: relative; z-index: 1; margin: 0.75rem auto 0; width: calc(100% - 1.5rem); max-width: 32rem; max-height: min(80vh, 36rem); overflow: hidden; background: #fff; border-radius: 1rem; box-shadow: 0 16px 40px rgba(0,0,0,0.18); display: flex; flex-direction: column; }
+        .shop-search-bar { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; border-bottom: 1px solid #e7e5e4; }
+        .shop-search-bar input { flex: 1; min-width: 0; border: 1px solid #d6d3d1; border-radius: 0.75rem; padding: 0.55rem 0.75rem; font-size: 1rem; }
+        .shop-search-bar input:focus { outline: none; border-color: #b45309; }
+        .shop-search-close { flex-shrink: 0; font-size: 0.8rem; font-weight: 600; color: #78716c; padding: 0.4rem 0.55rem; }
+        .shop-search-results { overflow: auto; padding: 0.35rem 0.5rem 0.6rem; }
+        .shop-search-hint { color: #78716c; font-size: 0.85rem; padding: 0.85rem 0.6rem; }
+        .shop-search-item { display: block; padding: 0.7rem 0.65rem; border-radius: 0.75rem; text-decoration: none; }
+        .shop-search-item:hover, .shop-search-item:focus { background: #fffbeb; }
+        .shop-search-name { display: block; color: #292524; font-weight: 700; font-size: 0.9rem; }
+        .shop-search-meta { display: block; margin-top: 0.15rem; color: #78716c; font-size: 0.75rem; }
+        .shop-search-sold { color: #a8a29e; }
+        body.shop-search-open { overflow: hidden; }
+        .card-new-mark { font-family: ui-sans-serif, system-ui, sans-serif !important; color: #b45309; font-weight: 700; font-size: 0.75rem; line-height: 1; flex-shrink: 0; margin-right: 0.2em; white-space: nowrap; }
+        .card-stock-note { margin-left: 0.4rem; font-size: 0.75rem; font-weight: 600; color: #78716c; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-12">
+    <nav class="border-b sticky top-0 bg-white/90 backdrop-blur-md z-40">
+        <div class="max-w-5xl mx-auto px-4 py-3">
+            <div class="flex justify-between items-center gap-3">
+                <h1 id="home-nav-brand" class="brand-mark home-nav-brand font-bold text-amber-800 leading-tight">Poponew手做甜點</h1>
+                <div class="flex items-center gap-2 shrink-0">
+                    <a href="cart.html" class="shrink-0 bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0</span>)</a>
+                    <button type="button" id="shop-search-open" class="shop-search-open-btn" title="搜尋商品" aria-label="搜尋商品"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke-width="2"/><path d="M16.2 16.2L21 21" stroke-width="2" stroke-linecap="round"/></svg></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div id="shop-search-layer" class="shop-search-layer" hidden>
+        <div class="shop-search-backdrop" id="shop-search-backdrop"></div>
+        <div class="shop-search-panel" role="dialog" aria-label="搜尋商品">
+            <div class="shop-search-bar">
+                <input id="shop-search-input" type="search" placeholder="搜尋商品或口味" autocomplete="off" enterkeyhint="search">
+                <button type="button" id="shop-search-close" class="shop-search-close">關閉</button>
+            </div>
+            <div id="shop-search-results" class="shop-search-results"></div>
+        </div>
+    </div>
+    <div class="fixed right-3 top-1/3 -translate-y-1/2 z-30 flex flex-col items-center bg-white/50 backdrop-blur-sm rounded-2xl p-1 border border-stone-200/70 shadow-md">
+        <button type="button" onclick="changeFontSize(-1)" title="縮小字型" class="w-9 h-8 flex items-center justify-center text-xs font-bold text-stone-600 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A-</button>
+        <button type="button" onclick="resetFontSize()" title="重設字型" class="w-9 h-8 flex items-center justify-center text-[10px] font-medium text-stone-400 hover:text-amber-800 transition">預設</button>
+        <button type="button" onclick="changeFontSize(1)" title="放大字型" class="w-9 h-8 flex items-center justify-center text-sm font-bold text-stone-700 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A+</button>
+    </div>
+    <div class="max-w-5xl mx-auto px-4 mb-8">
+        <p id="shop-home-lead" class="text-stone-600 text-sm leading-snug text-center mt-5 mb-5">📢 滿NT$ 1,500元即享免運費宅配！</p>
+        <div class="flex flex-wrap items-center justify-center gap-1.5 mb-6" id="category-tags">
+          <button type="button" onclick="filterCategory('all', this)" class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-amber-700 text-white shadow-sm transition">全部商品</button>
+          <button type="button" onclick='filterCategory("職人手工餅乾", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">職人手工餅乾</button>
+          <button type="button" onclick='filterCategory("手作司康", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">手作司康</button>
+          <button type="button" onclick='filterCategory("巴斯克乳酪蛋糕", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">巴斯克乳酪蛋糕</button>
+          <button type="button" onclick='filterCategory("生乳捲", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">生乳捲</button>
+          <button type="button" onclick='filterCategory("迷你一口系列", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">迷你一口系列</button>
+          <button type="button" onclick='filterCategory("人氣單品", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">人氣單品</button>
+          <a href="order-search.html" class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition">📋 訂單查詢</a>
+          <a href="faq.html" class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition">常見問題</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-list">
+            <a href="msbg.html" data-tag="職人手工餅乾" data-pinned="true" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/msbg.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/msbg.jpg" alt="美式軟餅乾系列" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">美式軟餅乾系列</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">如果說法式甜點是精雕細琢的藝術品，那麼美式軟餅乾，就是生活中最溫暖厚實的擁抱。<br/>​我們以此為靈感，悉心復刻了紐約 Levain Bakery 的代表作 — Chocolate Chip Walnut Cookie。<br/>巧克力的微苦與核桃的溫潤堅果香，向來是烘焙界無需多言的絕配。在厚實、不規則的外表下，藏著極致的外酥內軟。<br/>​​微微加熱後，流淌的巧克力流心讓人驚豔；而冷藏過後的緊實風味，同樣出眾。沒有繁複的裝飾，只有純粹的美味。在每一個需要被撫慰的日常瞬間，為你補充最滿的能量。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="100" data-shop-price-from="1"><span class="shop-nt">NT$</span> 100 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="scone.html" data-tag="手作司康" data-pinned="true" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/scone.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/scone.jpg" alt="職人手工司康系列" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">職人手工司康系列</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">司康(Scone)的起源，訴說著一段遙遠的蘇格蘭歷史。<br/>​最初，它曾是蘇格蘭圓桌騎士們的能量來源，歷經時光的洗禮，如今它已成為英式下午茶桌上不可或缺的靈魂角色。<br/>​我們將這份悠久的傳統，不追求浮誇的裝飾，而是透過堅持每日手作，試圖還原那份質樸、溫暖的記憶。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="55" data-shop-price-from="1"><span class="shop-nt">NT$</span> 55 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="mcyobsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/mcyobsk.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/mcyobsk.jpg" alt="抹茶柚子巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">抹茶柚子巴斯克</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">悶熱的夏天需要一點清爽的溫柔。<br/>抹​茶柚子巴斯克<br/>​抹茶的微苦，遇上柚子的清甜，在舌尖優雅地化開。<br/>獨特的軟心質地，綿密順滑如雲朵般細緻。<br/>​每一口，都是剛剛好的甜，和撫平浮躁的高級大人味。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="140" data-shop-price-from="1"><span class="shop-nt">NT$</span> 140 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="bcbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/bcbsk.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/bcbsk.jpg" alt="日式焙茶/鐵觀音巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">日式焙茶/鐵觀音巴斯克</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">靜靜落入窗邊的午後陽光，最適合留給一口濃郁的茶香。<br>​今天想和大家分享這款復刻的超人氣美味「焙茶軟心巴斯克」。如果你也著迷於香港 Hemma Cafe 每天大排長龍、讓人心甘情願等待的 Hojicha Basque，那你一定不能錯過這個味道。<br>​我們特別選用的優質焙茶粉，一入口，率先迎來的是外層迷人的微焦香氣，隨之而來的是絲滑、醇厚的軟心質地。焙茶獨特的煙燻茶韻在舌尖緩緩散開，那是焦香與茶香的完美碰撞。<br>​這樣綿密而深邃的滋味，彷彿有一種神奇的魔力。吃下一口，今天的煩惱好像就被溫柔地治癒了。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="140" data-shop-price-from="1"><span class="shop-nt">NT$</span> 140 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="blssb.html" data-tag="職人手工餅乾" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/blssb.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/blssb.jpg" alt="比利時列日鬆餅" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">比利時列日鬆餅</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">午後的暖陽，與比利時列日的卡滋邂逅 ✨<br/>​不只是甜點，更是一場關於時間的發酵藝術。<br/>不同於一般的麵糊鬆餅，我們堅持使用酵母，讓麵糰經過一夜的慢活發酵，才有了這份紮實且充滿彈性的獨特靈魂。<br/>​最迷人的秘密，在於藏在麵糰裡的比利時珍珠糖。<br/>來自天然甜菜的清甜，在高溫烘烤下化作琥珀色的焦糖外殼。<br/>每一口咬下，都是「外酥、內Q、卡滋」的完美三重奏，這是我私心最著迷的驚喜。<br/>​新口味登場囉！<br/>🍷 蘭姆酒葡萄乾：酒香消散，只留下果乾的甘甜層次。<br/>🍊 鐵觀音柑橘：茶香控必試！茶韻與柑橘皮的完美調和。<br/>還有 抹茶白巧、巧克力豆、蔓越莓 以及 經典原味 同步供應中。<br/>​特別介紹：「小星星迷你鬆餅」🌟<br/>一顆口大小，超級「唰嘴」，是追劇或辦公室下午茶的最佳拍檔，真的好療癒…ヾ(*´∇`)ﾉ</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="60" data-shop-price-from="1"><span class="shop-nt">NT$</span> 60 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="lmppbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/lmppbsk.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/lmppbsk.jpg" alt="蘭姆鳳梨巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">蘭姆鳳梨巴斯克</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">微醺夏日｜蘭姆鳳梨巴斯克起司蛋糕<br>​今天，給自己點一份清爽與甜香交織的優雅。<br>​剛出爐的巴斯克，有著經典的迷人焦香外皮，切開是柔軟順滑的軟心乳酪。而最讓人驚豔的靈魂，是我們親自熬煮的「法式蘭姆香草鳳梨果醬」。<br>​這次的食譜靈感，特別致敬了法國果醬女王 Christine Ferber 的經典配方。<br>當蘭姆酒、香草與在地鳳梨在鍋中慢火熬煮，神奇的魔法就發生了——琥珀色的光澤裡，蘭姆酒的成熟木質香與鳳梨的熱帶酸甜互不搶戲，反而完美融合，華麗蛻變成一種極具層次、溫柔而獨特的甜美氣味。<br>​乳酪的濃郁，夾帶著法式果醬的細緻香氣，每口都是味蕾的頂級享受。<br>​獨特風味，限量製作，歡迎妳來品嚐這份法式浪漫。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="145" data-shop-price-from="1"><span class="shop-nt">NT$</span> 145 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="cklbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/cklbsk.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/cklbsk.jpg" alt="雙重巧克力巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">雙重巧克力巴斯克</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">#雙重巧克力的巴斯克饗宴<br>​今天的午茶時光，獻給這枚「70% 軟心可可巴斯克」。<br>為了追求更極致的濃郁感，我們這次挑戰了日本名店的配方。不同於市面上常見的簡單做法，我們在麵糊中融入了絲滑的巧克力甘納許，再灑上微苦的可可粉加持。<br>​雙重巧克力的交織，讓蛋糕體呈現出如生巧克力般的軟心質地。每一口都能感受到更濃郁、更飽滿的層次，誠摯推薦給追求高品質甜點的你。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="135" data-shop-price-from="1"><span class="shop-nt">NT$</span> 135 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="hjbjbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/hjbjbsk.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/hjbjbsk.jpg" alt="皇家伯爵茶巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">皇家伯爵茶巴斯克</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">皇家伯爵茶巴斯克：優雅下午茶的完美句點<br>今日的午後，從這一口濃郁開始。<br>當經典的「皇家伯爵茶」遇上口感綿密的「巴斯克乳酪蛋糕」，一場味蕾的饗宴就此展開。每一口都能品嚐到淡雅的佛手柑香氣與醇厚的乳酪完美融合，焦香的外皮更增添了層次感。<br>搭配一杯現泡的熱茶，享受專屬於您的悠閒時光。不論是獨自品嚐還是與好友分享，都是最美好的選擇。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="130" data-shop-price-from="1"><span class="shop-nt">NT$</span> 130 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="classbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/classbsk.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/classbsk.jpg" alt="經典原味巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">經典原味巴斯克</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">陽光灑落，正是品嚐這一口純粹的時候。我們的「經典原味巴斯克」，外皮帶著迷人的焦香，內餡綿密滑順、乳酪香氣濃郁。<br>搭配一杯熱茶與英式司康，簡簡單單的優雅。無需多餘的裝飾，這份單純的美味最能療癒身心。快約上好友，一起享受愜意的下午茶吧！</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="110" data-shop-price-from="1"><span class="shop-nt">NT$</span> 110 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="seggbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/seggbsk.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/seggbsk.jpg" alt="鹹蛋黃巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">鹹蛋黃巴斯克</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">當濃郁乳酪遇上特製鹹蛋黃，迸發出意想不到的完美火花！<br>「鹹蛋黃巴斯克乳酪蛋糕」切面那層金黃綿密的鹹蛋黃流心，入口先是微鹹的沙沙口感，隨後融入濃厚的乳酪香氣與焦香外皮。鹹甜平衡得剛剛好，濃郁卻完全不膩口！<br>搭配一口熱茶，給味蕾最震撼的雙重享受。鹹甜控千萬別錯過唷～</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="135" data-shop-price-from="1"><span class="shop-nt">NT$</span> 135 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="lmptbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/lmptbsk.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/lmptbsk.jpg" alt="蘭姆葡萄巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">蘭姆葡萄巴斯克</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">午後的陽光灑落，是時候來份特別的甜點了。<br>「蘭姆葡萄巴斯克」切面的蘭姆葡萄乾，入口先是濃郁的焦香乳酪，隨之而來的是浸泡過蘭姆酒的葡萄乾迸發出的迷人酒香。<br>鹹甜與微醺交織，綿密滑順的口感，每一口都是優雅的層次。搭配一杯熱咖啡，讓忙碌的午後也充滿療癒感。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="135" data-shop-price-from="1"><span class="shop-nt">NT$</span> 135 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="nntbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/nntbsk.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/nntbsk.jpg" alt="太妃牛奶糖巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">太妃牛奶糖巴斯克</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">【童年的甜蜜回憶 🍬🤎】<br>當濃郁的焦香乳酪，遇上溫潤甜蜜的「太妃牛奶糖」，一口咬下全是幸福感！<br>「太妃牛奶糖巴斯克乳酪蛋糕」將經典太妃糖的焦糖奶香完美融合於細緻的乳酪中。質地綿密滑順，入口即化，伴隨著微苦微甜的焦糖香氣在口中蔓延，甜而不膩。<br>搭配一杯無糖紅茶或黑咖啡，就是最棒的療癒時光！</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="125" data-shop-price-from="1"><span class="shop-nt">NT$</span> 125 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="oreobsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/oreobsk.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/oreobsk.jpg" alt="Oreo巧克力巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">Oreo巧克力巴斯克</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">【巧克力控狂喜！Oreo 雙重驚喜 🍫🍪】<br>當經典 Oreo 遇到濃郁巴斯克，這絕對是甜點界的夢幻聯動！<br>「Oreo 巧克力巴斯克乳酪蛋糕」擁有超迷人的豐富層次：底層是濃郁的巧克力蛋糕底，搭配中間夾滿 Oreo 餅乾碎粒的綿密巴斯克乳酪。每一口都能吃到酥脆與滑順交織的雙重口感，濃郁可可香氣爆棚！</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="140" data-shop-price-from="1"><span class="shop-nt">NT$</span> 140 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="mcbsk.html" data-tag="巴斯克乳酪蛋糕" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/mcbsk.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/mcbsk.jpg" alt="日式抹茶巴斯克" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">日式抹茶巴斯克</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">【抹茶與乳酪的微苦交響曲 🍵💚】<br>入口先是回甘的抹茶微苦，隨後融入濃厚的焦香乳酪，口感綿密滑順、不甜不膩。抹香與奶香在口中完美融合，帶來最純粹的抹系療癒感！<br>配上一杯熱煎茶或黑咖啡，享受日式寂靜的下午茶時光吧～</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="145" data-shop-price-from="1"><span class="shop-nt">NT$</span> 145 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="bltn.html" data-tag="職人手工餅乾" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/bltn.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/bltn.jpg" alt="布列塔尼酥餅" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">布列塔尼酥餅</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">【法式午后的慵懶時光：布列塔尼酥餅】<br>​今天，想邀請你一同品味這份法式經典。<br>在法國，布列塔尼酥餅（Palets Bretons）是每一位甜點控心中不可取代的存在。<br>​我們採用了厚燒做法，將高比例的優質發酵奶油與蛋黃完美融合。<br>隨着烤箱溫度升高，美麗的焦糖色漸顯，濃郁的奶蛋香氣瞬間盈滿整個空間，那是光聞味道就會讓人嘴角上揚的幸福感。<br>​生活就該如此愜意，在微光午后，為自己沏一壺熱茶或沖一杯咖啡，與這份酥脆相遇。<br>​鹽之花：純淨的海鹽結晶點綴其中，輕輕撥動味蕾。<br>​70% 深焙可可：大人感的濃郁香氣，微苦不甜膩。<br>​金沙鹹蛋黃：大口滿足的塊狀鹹蛋黃，鹹甜交織出超人氣的經典層次。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="80" data-shop-price-from="1"><span class="shop-nt">NT$</span> 80 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="bbegg.html" data-tag="職人手工餅乾" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/bbegg.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/bbegg.jpg" alt="恐龍寶貝蛋餅乾" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">恐龍寶貝蛋餅乾</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">恐龍出沒注意！🦖 萌翻天的「恐龍寶貝蛋」驚喜登場！<br>​外型可愛到融化，口感更是讓人驚艷！這款裹上厚厚糖粉的餅乾，在烘烤時會綻放出自然的裂紋，像極了神秘的恐龍蛋。<br>為什麼你會愛上它？<br>它不只是餅乾！外層酥脆、內裡濕潤，口感介於布朗尼與小蛋糕之間。<br>​常溫吃：香軟濃郁，像現烤蛋糕。<br>​冰冰吃：紮實綿密，層次感大升級！<br>​一口咬下，同時擁有布朗尼、巧克力蛋糕與餅乾的三重驚喜，快來領養你的寶貝蛋吧！🥳</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="75" data-shop-price-from="1"><span class="shop-nt">NT$</span> 75 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="mkroll.html" data-tag="生乳捲" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/mkroll.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/mkroll.jpg" alt="經典原味生乳捲" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">經典原味生乳捲</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">超人氣香濃生乳卷!<br>​嚴選優質食材，打造出澎軟綿密的蛋糕口感；搭配靈魂靈魂內餡—濃郁又滑順的鮮乳酪，交織出最動人的甜點層次。<br>一口咬下，療癒感滿溢，絕對是讓人停不下來的招牌美味！</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="100"><span class="shop-nt">NT$</span> 100</span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="lmck.html" data-tag="職人手工餅乾" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/lmck.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/lmck.jpg" alt="檸檬夾心餅乾" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">檸檬夾心餅乾</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">這是一款在清爽的檸檬餅乾中夾入濃郁醇厚的奶油乳酪內餡，還有添加微酸的檸檬凝乳醬，真正讓人感受到酸爽，在口中爆炸 ✨<br>我在餅乾底和內餡裡都加入了大量的檸檬汁和檸檬皮屑，所以檸檬的香氣非常濃郁，<br>酸酸甜甜的，真的超級好吃！<br>外形上也盡可能還原了檸檬的細節，給人一種彷彿在直接吃新鮮檸檬的感覺 🍋<br>這款餅乾不僅顏值高，味道也驚艷，非常適合作為禮物送給親朋好友 🎁<br>如果在悶熱潮濕的夏日裡，想吃一口清爽醒胃的甜點，這週末一定要試試看這款檸檬夾心餅乾哦！清爽係甜點！</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="65"><span class="shop-nt">NT$</span> 65</span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="btck.html" data-tag="職人手工餅乾, 迷你一口系列" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/btck.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/btck.jpg" alt="香濃奶油餅乾球" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">香濃奶油餅乾球</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">【經典復刻】香濃奶油餅乾球<br>​引領風潮的日本人氣話題伴手禮，現已為您精緻重現。<br>​嚴選發酵奶油：焙炒出獨特的榛果奶油焦香與濃郁堅果風味，<br>​完美黃金比例：口感酥鬆不甜膩，每一口都是剛剛好的滿足。<br>​精緻一口造型：復刻圓潤小巧的外型，賞心悅目，令人愛不釋手。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="45" data-shop-price-from="1"><span class="shop-nt">NT$</span> 45 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="borch.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/borch.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/borch.jpg" alt="布朗尼生巧克力" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">布朗尼生巧克力</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">苦甜之間，藏著一抹柑橘清香。<br>​這不只是布朗尼，而是層層遞進的巧克力盛宴。外層是紮實濕潤的布朗尼蛋糕體，核心則裹入柔滑如絲的生巧克力。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="150"><span class="shop-nt">NT$</span> 150</span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="obbt.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/obbt.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/obbt.jpg" alt="Oreo巧克力生乳酪棒棒糖蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">Oreo巧克力生乳酪棒棒糖蛋糕</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">獨享的精緻甜密~<br>手作OREO巧克力生乳酪棒棒糖蛋糕<br>​大人與小孩都無法抗拒的夢幻點心 🍫✨<br>​以香濃細滑的奶油乳酪蛋糕為主角，揉合底層酥脆的 OREO 餅乾，外層再裹上一層香醇巧克力。<br>精心設計成優雅好拿的棒棒糖造型，讓品嚐甜點變得輕巧又方便。<br>​一人一支，優雅獨享。<br>無論是溫馨的生日派對、歡樂聚會，或是作為精緻的伴手禮，都能為特別的時刻添上一絲甜美儀式感。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="185"><span class="shop-nt">NT$</span> 185</span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="lmoreo.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/lmoreo.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/lmoreo.jpg" alt="藍莓Oreo漸層生乳酪蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">藍莓Oreo漸層生乳酪蛋糕</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">夏日氣息滿載！藍莓 Oreo 漸層生乳酪蛋糕！<br>哇！一感受到熱情的夏天，腦海裡浮現的就是衝浪、沙灘、陽光和比基尼！🌞 為了呼應這份夏日活力，今天特地做了一款超級消暑的「雙莓 Oreo 生乳酪蛋糕」！<br>趁著藍莓當季，我手工熬製了新鮮的藍莓果泥，拌入綿密的生乳酪中。為了呈現夏日的繽紛，我將蛋糕設計成獨特的漸層色調：頂部是清透的海洋藍，底部是如礦石般深邃的莓果紫，而中間的純白乳酪層則巧妙地夾入了 Oreo 餅乾。<br>​酸甜清爽的莓果氣息，與 Oreo 餅乾帶來的濃郁酥脆完美融合，不僅提升了整體的風味層次，更讓口感豐富而不甜膩。這是一道兼顧視覺與味覺的精緻甜點，每一口，都能嚐到屬於夏天的輕盈與美好。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="185"><span class="shop-nt">NT$</span> 185</span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="coal.html" data-tag="職人手工餅乾" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/coal.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/coal.jpg" alt="小煤炭布朗尼餅乾" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">小煤炭布朗尼餅乾</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">👀 滿滿的巧克力能量！布朗尼化身超萌「黑黑小煤炭」！<br>​圓滾滾的無辜大眼睛，真的太可愛了啦！這款布朗尼餅乾不只好看還超百搭，直接吃、泡牛奶、配果汁，或是搭著冰淇淋一起入口，不管怎麼吃都絕配、都好好吃！<br>​趕快準備好你的甜點胃，跟小煤炭一起融化吧！✨</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="45"><span class="shop-nt">NT$</span> 45</span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="hijt.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/hijt.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/hijt.jpg" alt="海鹽焦糖生乳酪巧克力蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">海鹽焦糖生乳酪巧克力蛋糕</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">午後的微鹹美好~海鹽焦糖生乳酪巧克力蛋糕<br>​絲滑濃郁的巧克力奶油乳酪乳酪，淋上香氣四溢的鹹焦糖醬<br>鹹香與苦甜交織出的層次美學，獻給懂吃的你~</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="175"><span class="shop-nt">NT$</span> 175</span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="oreoball.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/oreoball.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/oreoball.jpg" alt="雙色Oreo乳酪球" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">雙色Oreo乳酪球</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">黑巧的苦甜濃郁與白巧的純粹奶香，口感如松露巧克力般軟Q順滑。<br>​凍在冰箱裡，隨手一顆，就是日常裡最療癒的微甜時刻~</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="145"><span class="shop-nt">NT$</span> 145</span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="ccsmj.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/ccsmj.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/ccsmj.jpg" alt="可可三明治蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">可可三明治蛋糕</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">厚實濃郁的可可香氣，包裹在極致鬆軟的蛋糕體中；轉身遇見輕盈的鮮奶油乳酪餡，完美平衡了巧克力的醇厚。<br>​減糖甜度、細緻不膩口，每一口都是剛剛好的幸福。🥰</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="100"><span class="shop-nt">NT$</span> 100</span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="sscone.html" data-tag="手作司康, 迷你一口系列" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/sscone.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/sscone.jpg" alt="迷你小司康(小歪歪)" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">迷你小司康(小歪歪)</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">小歪歪出沒注意！一口一隻小美味 🎈<br>​哇！這不是普通的小司康，是「可愛又好吃」的小歪歪！✨<br>​一口剛好一個的大小，塞進嘴裡直接幸福感爆棚！<br>滿足你挑剔的味蕾，我們一口氣準備了 10 種驚喜口味 🎨<br>每一口都是開盲盒般的快樂，讓你完全停不下來、一口接一口！</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="100"><span class="shop-nt">NT$</span> 100</span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="mscone.html" data-tag="手作司康" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/mscone.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/mscone.jpg" alt="奶酪系列司康" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">奶酪系列司康</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">輕盈系・奶酪司康 ✨<br>​不同於傳統司康的紮實感，<br>我們的奶酪司康打破你對司康的刻板印象！外皮香酥、口感蓬鬆，恰到好處的濕潤度。<br>​咬開的瞬間，裡頭包裹著的清爽奶油乳酪隨之綻放，搭配 7 款嚴選風味，滿足你的各種甜點胃！</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="90" data-shop-price-from="1"><span class="shop-nt">NT$</span> 90 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="sbltn.html" data-tag="職人手工餅乾, 迷你一口系列" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/sbltn.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/sbltn.jpg" alt="一口酥迷你布列塔尼" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">一口酥迷你布列塔尼</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">【法式午后的慵懶時光：布列塔尼酥餅】<br>​今天，想邀請你一同品味這份【迷你版】的法式經典。<br>在法國，布列塔尼酥餅（Palets Bretons）是每一位甜點控心中不可取代的存在。<br>​我們採用了厚燒做法，將高比例的優質發酵奶油與蛋黃完美融合。<br>隨着烤箱溫度升高，美麗的焦糖色漸顯，濃郁的奶蛋香氣瞬間盈滿整個空間，那是光聞味道就會讓人嘴角上揚的幸福感。<br>​生活就該如此愜意，在微光午后，為自己沏一壺熱茶或沖一杯咖啡，與這份酥脆相遇。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="100"><span class="shop-nt">NT$</span> 100</span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="blnball.html" data-tag="人氣單品, 迷你一口系列" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/blnball.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/blnball.jpg" alt="布朗尼球球" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">布朗尼球球</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">特意挑選了 70% 巧克力打造，走的是「不顯張揚的低調微甜」路線。<br>​剛剛好的鬆軟，剛剛好的大小，放進嘴裡直接融化你的心。<br>吃它的時候必須很專心，因為一個不留神，整盤就會魔術般地消失，畢竟，誰能抗拒得了「再吃一球就好」的魔咒呢？</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="90"><span class="shop-nt">NT$</span> 90</span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="fnc.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/fnc.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/fnc.jpg" alt="費南雪金磚蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">費南雪金磚蛋糕</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">微光下閃耀著細緻金黃光澤，這是來自法國的經典甜點-費南雪（Financier）。<br>費南雪的靈魂，源自精心熬煮的焦化奶油（Noisette）。帶著獨特的堅果沉香與奶香交織，比起瑪德蓮，它的口感更顯濕潤細緻、層次豐富。每咬一口，濃郁香氣便在齒頰間漫開，令人沉醉。<br>這款讓人相見恨晚的甜點，極致詮釋了常溫蛋糕的魅力。</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="45" data-shop-price-from="1"><span class="shop-nt">NT$</span> 45 <span class="text-xs font-medium">起</span></span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="Lotus.html" data-tag="人氣單品" data-pinned="false" data-new="false" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/Lotus.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/Lotus.jpg" alt="Lotus生乳酪棒棒糖蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">Lotus生乳酪棒棒糖蛋糕</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">單手就能享用的精緻美味！Lotus蓮花餅乾生乳酪棒棒糖蛋糕<br>一款兼具顏值與美味的造型甜點！<br>底層特別選用經典的 比利時 Lotus 蓮花薄脆餅，濃郁焦糖香搭配淡淡肉桂風味，薄脆又帶點微鹹甜感。搭配香濃細滑的生乳酪蛋糕基底，外層再淋上一層香濃巧克力，每一口都是多層次的幸福滋味！<br>​切片後插上小木棒，秒變可愛又方便的蛋糕棒棒糖<br>不沾手、好拿取，不論是生日派對、家庭聚會，還是作為精緻伴手禮都超級吸睛！<br>​大人小孩都無法抗拒的夢幻甜點，看完是不是也想來一支呢？</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="200"><span class="shop-nt">NT$</span> 200</span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="rgapple.html" data-tag="人氣單品" data-pinned="false" data-new="true" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/rgapple.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/rgapple.jpg" alt="肉桂焦糖蘋果核桃起司蛋糕" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight"><span class="card-new-mark">【新品】</span>肉桂焦糖蘋果核桃起司蛋糕</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">秋意漸濃，最想念的就是那一抹暖心的肉桂香 ☕️<br>​肉桂焦糖蘋果核桃起司蛋糕<br>酥脆核桃頂層 x 滑順濃郁起司 x 焦糖酸甜蘋果，多重口感交織出絕妙好滋味。一口吃下超療癒，秋天的幸福就是這麼簡單！</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="180"><span class="shop-nt">NT$</span> 180</span></span></span>
+                    </div>
+                </div>
+            </a>
+            <a href="oreocup.html" data-tag="人氣單品" data-pinned="false" data-new="true" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+                <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
+                <div class="h-56 bg-stone-400 overflow-hidden">
+                    <picture>
+                        <source srcset="images/oreocup.webp" type="image/webp">
+                        <img loading="lazy" decoding="async" src="images/oreocup.jpg" alt="OREO生乳酪獨享杯" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </picture>
+                </div>
+                
+                <!-- 2. 文字與售價區塊：貼合底部與售價 -->
+                <div class="p-4 flex-grow flex flex-col justify-between">
+                    <div class="mt-auto">
+                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight"><span class="card-new-mark">【新品】</span>OREO生乳酪獨享杯</h2>
+                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">【屬於一個人的甜點時光｜OREO 生乳酪獨享杯】<br>​忙碌的日子裡，給自己留一段微甜的空白。<br>​恰到好處的獨享份量，濃郁滑順的奶油乳酪，拌入滿滿的 OREO 餅乾碎與香濃巧克力豆。每一口都帶著如冰淇淋般綿密的冰涼口感，重現最經典純粹的奧利奧風味。<br>​這是只屬於自己的小確幸，美味得讓人有點捨不得分享。今晚，就獨自優雅地把它吃光光吧！✨</p>
+                    </div>
+                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">
+                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700"><span data-shop-price="110"><span class="shop-nt">NT$</span> 110</span></span></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <footer class="max-w-2xl mx-auto px-4 pb-12">
+        <div class="bg-white shadow-md rounded-2xl p-5 flex items-center gap-4 border border-stone-100 mt-8">
+            <div class="text-left">
+                <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">Poponew手做甜點</h4>
+                <p class="text-stone-500 text-[11px] md:text-xs leading-relaxed"><button type="button" class="line-open-btn" data-line-open><svg class="line-logo" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#06C755"/><path fill="#fff" d="M12.03 5.55c-3.68 0-6.66 2.38-6.66 5.32 0 2.62 2.32 4.82 5.46 5.23.21.04.47.13.54.3.06.15.04.38.02.53l-.09.53c-.03.18-.13.65.58.35 1.16-.49 3.14-1.84 4.3-3.15C17.4 13.02 18 11.66 18 10.87c0-2.94-2.98-5.32-5.97-5.32z"/></svg><span>官方LINE</span></button></p>
+                <p class="mt-2 text-[11px] md:text-xs leading-relaxed"><a href="keep.html#shipping" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">宅配配送與簽收須知</a><span class="text-stone-300"> ｜ </span><a href="keep.html#terms" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">訂購與退換貨條款</a><span class="text-stone-300"> ｜ </span><a href="faq.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">常見問題</a><span class="text-stone-300"> ｜ </span><a href="ask.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">聯絡我們</a></p>
+            </div>
+        </div>
+        <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.</p>
+    </footer>
+    <script>window.shopSearch = [{"name":"經典核桃巧克力美式軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":100,"soldOut":false},{"name":"草莓棉花糖核桃巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":125,"soldOut":false},{"name":"杏仁片棉花糖苦甜巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":130,"soldOut":false},{"name":"Oreo 碎片棉花糖巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":125,"soldOut":false},{"name":"醇黑榛果巧克力軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":120,"soldOut":false},{"name":"柑橘奶酪軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":130,"soldOut":false},{"name":"經典Oreo奶酪軟餅乾","group":"美式軟餅乾系列","url":"msbg.html","price":130,"soldOut":false},{"name":"抹茶柚子巴斯克 (6吋切片)","group":"抹茶柚子巴斯克","url":"mcyobsk.html","price":140,"soldOut":false},{"name":"抹茶柚子巴斯克 (6吋整顆)","group":"抹茶柚子巴斯克","url":"mcyobsk.html","price":840,"soldOut":false},{"name":"日式焙茶巴斯克(6吋切片)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":145,"soldOut":false},{"name":"鐵觀音巴斯克(6吋切片)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":140,"soldOut":false},{"name":"日式焙茶巴斯克(6吋整顆)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":870,"soldOut":false},{"name":"鐵觀音巴斯克(6吋整顆)","group":"日式焙茶/鐵觀音巴斯克","url":"bcbsk.html","price":840,"soldOut":false},{"name":"經典原味司康","group":"職人手工司康系列","url":"scone.html","price":55,"soldOut":false},{"name":"核桃司康","group":"職人手工司康系列","url":"scone.html","price":70,"soldOut":false},{"name":"伯爵柑橘司康","group":"職人手工司康系列","url":"scone.html","price":80,"soldOut":false},{"name":"伯爵紅茶司康","group":"職人手工司康系列","url":"scone.html","price":70,"soldOut":false},{"name":"抹茶司康","group":"職人手工司康系列","url":"scone.html","price":80,"soldOut":false},{"name":"香濃乳酪丁司康","group":"職人手工司康系列","url":"scone.html","price":85,"soldOut":false},{"name":"巧克力豆豆司康","group":"職人手工司康系列","url":"scone.html","price":75,"soldOut":false},{"name":"萊姆葡萄司康","group":"職人手工司康系列","url":"scone.html","price":75,"soldOut":false},{"name":"蔓越莓司康","group":"職人手工司康系列","url":"scone.html","price":70,"soldOut":false},{"name":"鹹蛋黃司康","group":"職人手工司康系列","url":"scone.html","price":75,"soldOut":false},{"name":"迷你小司康","group":"職人手工司康系列","url":"scone.html","price":100,"soldOut":false},{"name":"經典原味列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":60,"soldOut":false},{"name":"抹茶白巧列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"巧克力豆列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"蔓越莓列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"蘭姆酒葡萄乾列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"鐵觀音柑橘列日鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":70,"soldOut":false},{"name":"小星星迷你一口小鬆餅","group":"比利時列日鬆餅","url":"blssb.html","price":100,"soldOut":false},{"name":"蘭姆鳳梨巴斯克(6吋切片)","group":"蘭姆鳳梨巴斯克","url":"lmppbsk.html","price":145,"soldOut":false},{"name":"蘭姆鳳梨巴斯克(6吋整顆)","group":"蘭姆鳳梨巴斯克","url":"lmppbsk.html","price":870,"soldOut":false},{"name":"雙重巧克力巴斯克(6吋切片)","group":"雙重巧克力巴斯克","url":"cklbsk.html","price":135,"soldOut":false},{"name":"雙重巧克力巴斯克(6吋整顆)","group":"雙重巧克力巴斯克","url":"cklbsk.html","price":810,"soldOut":false},{"name":"皇家伯爵茶巴斯克(6吋切片)","group":"皇家伯爵茶巴斯克","url":"hjbjbsk.html","price":130,"soldOut":false},{"name":"皇家伯爵茶巴斯克(6吋整顆)","group":"皇家伯爵茶巴斯克","url":"hjbjbsk.html","price":780,"soldOut":false},{"name":"經典原味巴斯克(6吋切片)","group":"經典原味巴斯克","url":"classbsk.html","price":110,"soldOut":false},{"name":"經典原味巴斯克(6吋整顆)","group":"經典原味巴斯克","url":"classbsk.html","price":660,"soldOut":false},{"name":"鹹蛋黃巴斯克(6吋切片)","group":"鹹蛋黃巴斯克","url":"seggbsk.html","price":135,"soldOut":false},{"name":"鹹蛋黃巴斯克(6吋整顆)","group":"鹹蛋黃巴斯克","url":"seggbsk.html","price":810,"soldOut":false},{"name":"蘭姆葡萄巴斯克(6吋切片)","group":"蘭姆葡萄巴斯克","url":"lmptbsk.html","price":135,"soldOut":false},{"name":"蘭姆葡萄巴斯克(6吋整顆)","group":"蘭姆葡萄巴斯克","url":"lmptbsk.html","price":810,"soldOut":false},{"name":"太妃牛奶糖巴斯克(6吋切片)","group":"太妃牛奶糖巴斯克","url":"nntbsk.html","price":125,"soldOut":false},{"name":"太妃牛奶糖巴斯克(6吋整顆)","group":"太妃牛奶糖巴斯克","url":"nntbsk.html","price":750,"soldOut":false},{"name":"Oreo巧克力巴斯克(6吋切片)","group":"Oreo巧克力巴斯克","url":"oreobsk.html","price":140,"soldOut":false},{"name":"Oreo巧克力巴斯克(6吋整顆)","group":"Oreo巧克力巴斯克","url":"oreobsk.html","price":840,"soldOut":false},{"name":"日式抹茶巴斯克(6吋切片)","group":"日式抹茶巴斯克","url":"mcbsk.html","price":145,"soldOut":false},{"name":"日式抹茶巴斯克(6吋整顆)","group":"日式抹茶巴斯克","url":"mcbsk.html","price":870,"soldOut":false},{"name":"鹽之花布列塔尼酥餅","group":"布列塔尼酥餅","url":"bltn.html","price":80,"soldOut":false},{"name":"鹹蛋黃布列塔尼酥餅","group":"布列塔尼酥餅","url":"bltn.html","price":85,"soldOut":false},{"name":"巧克力豆布列塔尼酥餅","group":"布列塔尼酥餅","url":"bltn.html","price":85,"soldOut":false},{"name":"一口酥迷你布列塔尼","group":"布列塔尼酥餅","url":"bltn.html","price":100,"soldOut":false},{"name":"布朗尼恐龍寶貝蛋餅乾","group":"恐龍寶貝蛋餅乾","url":"bbegg.html","price":75,"soldOut":false},{"name":"柑橘恐龍寶貝蛋餅乾","group":"恐龍寶貝蛋餅乾","url":"bbegg.html","price":75,"soldOut":false},{"name":"奶油乳酪恐龍寶貝蛋餅乾","group":"恐龍寶貝蛋餅乾","url":"bbegg.html","price":75,"soldOut":false},{"name":"經典原味生乳捲","group":"經典原味生乳捲","url":"mkroll.html","price":100,"soldOut":false},{"name":"檸檬夾心餅乾","group":"檸檬夾心餅乾","url":"lmck.html","price":65,"soldOut":false},{"name":"香濃奶油餅乾球","group":"香濃奶油餅乾球","url":"btck.html","price":100,"soldOut":false},{"name":"香濃奶油棒棒餅乾-經典原味","group":"香濃奶油餅乾球","url":"btck.html","price":45,"soldOut":false},{"name":"香濃奶油棒棒餅乾-可可豆","group":"香濃奶油餅乾球","url":"btck.html","price":50,"soldOut":false},{"name":"布朗尼生巧克力","group":"布朗尼生巧克力","url":"borch.html","price":150,"soldOut":false},{"name":"Oreo巧克力生乳酪棒棒糖蛋糕","group":"Oreo巧克力生乳酪棒棒糖蛋糕","url":"obbt.html","price":185,"soldOut":false},{"name":"藍莓Oreo漸層生乳酪蛋糕","group":"藍莓Oreo漸層生乳酪蛋糕","url":"lmoreo.html","price":185,"soldOut":false},{"name":"小煤炭布朗尼餅乾","group":"小煤炭布朗尼餅乾","url":"coal.html","price":45,"soldOut":false},{"name":"海鹽焦糖生乳酪巧克力蛋糕","group":"海鹽焦糖生乳酪巧克力蛋糕","url":"hijt.html","price":175,"soldOut":false},{"name":"雙色Oreo乳酪球","group":"雙色Oreo乳酪球","url":"oreoball.html","price":145,"soldOut":false},{"name":"可可三明治蛋糕","group":"可可三明治蛋糕","url":"ccsmj.html","price":100,"soldOut":false},{"name":"迷你小司康","group":"迷你小司康(小歪歪)","url":"sscone.html","price":100,"soldOut":false},{"name":"經典原味奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":90,"soldOut":false},{"name":"70%巧克力奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":115,"soldOut":false},{"name":"Oreo巧克力奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":120,"soldOut":false},{"name":"伯爵茶柑橘奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":110,"soldOut":false},{"name":"草莓蔓越莓乾奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":130,"soldOut":false},{"name":"抹茶白巧蔓越莓奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":130,"soldOut":false},{"name":"金黃乳酪起司奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":125,"soldOut":false},{"name":"酷黑藍莓果醬奶酪司康","group":"奶酪系列司康","url":"mscone.html","price":130,"soldOut":false},{"name":"一口酥迷你布列塔尼","group":"一口酥迷你布列塔尼","url":"sbltn.html","price":100,"soldOut":false},{"name":"布朗尼球球","group":"布朗尼球球","url":"blnball.html","price":90,"soldOut":false},{"name":"經典原味費南雪","group":"費南雪金磚蛋糕","url":"fnc.html","price":45,"soldOut":false},{"name":"抹茶費南雪","group":"費南雪金磚蛋糕","url":"fnc.html","price":55,"soldOut":false},{"name":"可可費南雪","group":"費南雪金磚蛋糕","url":"fnc.html","price":55,"soldOut":false},{"name":"Lotus生乳酪棒棒糖蛋糕","group":"Lotus生乳酪棒棒糖蛋糕","url":"Lotus.html","price":200,"soldOut":false},{"name":"肉桂焦糖蘋果核桃起司蛋糕","group":"肉桂焦糖蘋果核桃起司蛋糕","url":"rgapple.html","price":180,"soldOut":false},{"name":"OREO生乳酪獨享杯","group":"OREO生乳酪獨享杯","url":"oreocup.html","price":110,"soldOut":false}];</script>
+    <script>
+        function applyHomeImagePriority() {
+            var cards = document.querySelectorAll("#product-list .product-card");
+            var n = 0;
+            cards.forEach(function(card) {
+                var img = card.querySelector("img");
+                if (!img) return;
+                var shown = card.style.display !== "none";
+                if (shown && n < 3) {
+                    img.loading = "eager";
+                    img.decoding = "async";
+                    if (n === 0) img.setAttribute("fetchpriority", "high");
+                    else img.removeAttribute("fetchpriority");
+                    n += 1;
+                } else {
+                    img.loading = "lazy";
+                    img.decoding = "async";
+                    img.removeAttribute("fetchpriority");
+                }
+            });
+        }
+        // 1. 洗牌演算法 (Fisher-Yates)
+        function shuffleArray(array) {
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+            return array;
+        }
+
+        // 2. 頁面載入時：新品自動置頂 30 天 → 手動置頂 → 其餘隨機
+        document.addEventListener("DOMContentLoaded", function() {
+            var container = document.getElementById("product-list");
+            if (!container) return;
+            var newCards = Array.from(container.querySelectorAll(".product-card[data-new='true']"));
+            var pinnedCards = Array.from(container.querySelectorAll(".product-card[data-pinned='true']:not([data-new='true'])"));
+            var normalCards = Array.from(container.querySelectorAll(".product-card:not([data-pinned='true']):not([data-new='true'])"));
+            shuffleArray(newCards).concat(pinnedCards).concat(shuffleArray(normalCards)).forEach(function(card) {
+                container.appendChild(card);
+            });
+            applyHomeImagePriority();
+        });
+
+        function updateCartCount() {
+            let cart = JSON.parse(localStorage.getItem("poponew_cart")) || {};
+            const count = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+            document.getElementById("cart-count").innerText = count;
+        }
+        updateCartCount();
+        window.addEventListener("pageshow", updateCartCount);
+        document.addEventListener("visibilitychange", function() {
+            if (document.visibilityState === "visible") updateCartCount();
+        });
+        function filterCategory(selectedTag, btn) {
+            const cards = document.querySelectorAll(".product-card");
+            const buttons = document.querySelectorAll("#category-tags button");
+            buttons.forEach(b => {
+                b.classList.remove("bg-amber-700", "text-white");
+                b.classList.add("bg-white", "text-stone-600");
+            });
+            if (btn) {
+                btn.classList.remove("bg-white", "text-stone-600");
+                btn.classList.add("bg-amber-700", "text-white");
+            }
+            cards.forEach(card => {
+                const cardTags = card.dataset.tag ? card.dataset.tag.split(/[,，]/).map(t => t.trim()) : [];
+                if (selectedTag === "all" || cardTags.includes(selectedTag)) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+            applyHomeImagePriority();
+        }
+        (function() {
+            var layer = document.getElementById("shop-search-layer");
+            var input = document.getElementById("shop-search-input");
+            var box = document.getElementById("shop-search-results");
+            var openBtn = document.getElementById("shop-search-open");
+            var items = window.shopSearch || [];
+            function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
+            function openSearch() { if (!layer) return; layer.hidden = false; layer.classList.add("is-open"); document.body.classList.add("shop-search-open"); if (input) { input.value = ""; renderSearch(""); setTimeout(function() { input.focus(); }, 40); } }
+            function closeSearch() { if (!layer) return; layer.hidden = true; layer.classList.remove("is-open"); document.body.classList.remove("shop-search-open"); }
+            function renderSearch(q) {
+                q = String(q || "").trim().toLowerCase();
+                if (!box) return;
+                if (!q) { box.innerHTML = "<p class='shop-search-hint'>輸入商品或口味，例如「伯爵柑橘」</p>"; return; }
+                var hits = items.filter(function(p) { return (p.name + " " + p.group).toLowerCase().indexOf(q) !== -1; }).slice(0, 12);
+                if (!hits.length) { box.innerHTML = "<p class='shop-search-hint'>找不到「" + esc(q) + "」</p>"; return; }
+                box.innerHTML = hits.map(function(p) {
+                    var extra = p.soldOut ? "<span class='shop-search-sold'>已售完</span>" : (window.shopPriceHtml ? window.shopPriceHtml(p.price) : ("NT$ " + p.price));
+                    var meta = (p.group && p.group !== p.name) ? (esc(p.group) + " · " + extra) : extra;
+                    return "<a class='shop-search-item' href='" + esc(p.url) + "'><span class='shop-search-name'>" + esc(p.name) + "</span><span class='shop-search-meta'>" + meta + "</span></a>";
+                }).join("");
+            }
+            if (openBtn) openBtn.addEventListener("click", openSearch);
+            var closeBtn = document.getElementById("shop-search-close");
+            var backdrop = document.getElementById("shop-search-backdrop");
+            if (closeBtn) closeBtn.addEventListener("click", closeSearch);
+            if (backdrop) backdrop.addEventListener("click", closeSearch);
+            if (input) input.addEventListener("input", function() { renderSearch(input.value); });
+            document.addEventListener("keydown", function(e) { if (e.key === "Escape" && layer && !layer.hidden) closeSearch(); });
+        })();
+    </script>
+    <script>
+        (function() {
+            var lb = document.createElement("div");
+            lb.className = "fixed inset-0 bg-black/80 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm";
+            lb.innerHTML = "<img id='lb-img' class='max-w-[90vw] max-h-[85vh] rounded-2xl shadow-2xl transform scale-95 transition-all duration-300'>";
+            lb.onclick = function() { lb.classList.add("opacity-0", "pointer-events-none"); lb.querySelector("img").classList.add("scale-95"); };
+            document.body.appendChild(lb);
+            window.openFlavorLightbox = function(src) {
+                var img = document.getElementById("lb-img"); if (window.shopSetPictureSrc) window.shopSetPictureSrc(img, src); else img.src = src;
+                lb.classList.remove("opacity-0", "pointer-events-none");
+                setTimeout(function() { img.classList.remove("scale-95"); }, 10);
+            };
+        })();
+    </script>
+    <!-- 回到頂端按鈕 -->
+    <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-6 right-6 z-50 bg-amber-800/90 hover:bg-amber-800 text-white w-11 h-11 rounded-full shadow-lg border border-amber-600/30 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:scale-110 active:scale-95">
+        <span class="text-lg font-bold">▲</span>
+    </button>
+    <script>
+        // 監聽滾動事件，超過 300px 才浮現「回到頂端」按鈕
+        window.addEventListener("scroll", function() {
+            var btn = document.getElementById("back-to-top");
+            if (btn) {
+                if (window.scrollY > 300) {
+                    btn.classList.remove("opacity-0", "pointer-events-none");
+                    btn.classList.add("opacity-100");
+                } else {
+                    btn.classList.add("opacity-0", "pointer-events-none");
+                    btn.classList.remove("opacity-100");
+                }
+            }
+        });
+    </script>
+    <script>
+        let currentFontSize = parseInt(localStorage.getItem("poponew_font_size")) || 16;
+        applyFontSize(currentFontSize);
+        function changeFontSize(delta) {
+            currentFontSize = Math.min(Math.max(currentFontSize + delta * 2, 14), 22);
+            applyFontSize(currentFontSize);
+        }
+        function resetFontSize() {
+            currentFontSize = 16;
+            applyFontSize(currentFontSize);
+        }
+        function applyFontSize(size) {
+            document.documentElement.style.fontSize = "16px";
+            localStorage.setItem("poponew_font_size", size);
+            var scale = (parseInt(size, 10) || 16) / 16;
+            document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
+        }
+        (function() {
+            function fitHomeBrand() {
+                var el = document.getElementById("home-nav-brand");
+                if (!el) return;
+                var max = 20, min = 12;
+                el.style.fontSize = max + "px";
+                if (el.scrollWidth <= el.clientWidth) return;
+                var lo = min, hi = max, best = min;
+                while (hi - lo > 0.2) {
+                    var mid = (lo + hi) / 2;
+                    el.style.fontSize = mid + "px";
+                    if (el.scrollWidth <= el.clientWidth) { best = mid; lo = mid; }
+                    else { hi = mid; }
+                }
+                el.style.fontSize = best + "px";
+            }
+            window.addEventListener("resize", fitHomeBrand);
+            if (document.readyState === "complete") fitHomeBrand();
+            else window.addEventListener("load", fitHomeBrand);
+            fitHomeBrand();
+        })();
+    </script>
+    <script src="js/line-modal.js"></script>
+    <script src="js/cart-sync.js"></script>
+</body>
+</html>
