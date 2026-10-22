@@ -1,4 +1,5 @@
 本機/
+.tmp.driveupload/
 backup/*.exe
 backup/*.cmd
 backup/*.vbs
