@@ -157,6 +157,7 @@
             </div>
 
             <p class="text-xs text-stone-500 leading-relaxed">送出前請先閱讀<a href="keep.html#terms" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">訂購與退換貨條款</a>。</p>
+            <p id="orders-paused-tip" hidden class="text-sm leading-relaxed mt-4 mb-0 px-3 py-2 rounded-xl" style="background:#fef3c7;border:1px solid #fde68a;color:#78350f;"></p>
             <button type="submit" id="submit-btn" class="w-full h-12 bg-amber-700 hover:bg-amber-800 text-white font-medium rounded-xl transition shadow-md mt-4 text-base">
                 確認送出訂單
             </button>
@@ -413,10 +414,14 @@
                 container.innerHTML = `<p class="text-center text-stone-400 py-8 text-sm">您的購物車空空的唷！</p>`;
                 document.getElementById('submit-btn').disabled = true;
                 document.getElementById('submit-btn').classList.add('bg-stone-300', 'cursor-not-allowed');
+            } else if (window.shopOrdersPaused && window.shopOrdersPaused()) {
+                document.getElementById('submit-btn').disabled = true;
+                document.getElementById('submit-btn').classList.add('bg-stone-300', 'cursor-not-allowed');
             } else {
                 document.getElementById('submit-btn').disabled = false;
                 document.getElementById('submit-btn').classList.remove('bg-stone-300', 'cursor-not-allowed');
             }
+            if (window.shopLockCheckoutButtons) window.shopLockCheckoutButtons();
 
             const cfg = shopCfg();
             var reachedFreeShip = productSubtotal >= cfg.freeShipping;
@@ -523,7 +528,11 @@ document.getElementById('subtotal-price').innerText = productSubtotal;
 
 function submitOrder(event) {
             event.preventDefault();
-            
+            if (window.shopOrdersPaused && window.shopOrdersPaused()) {
+                alert(window.shopOrdersPausedNote ? window.shopOrdersPausedNote() : '先暫停接單囉');
+                return;
+            }
+
             const phoneInput = document.getElementById('phone');
             const phoneValue = phoneInput.value.trim();
             const phonePattern = /^09\d{8}$/;
