@@ -487,7 +487,7 @@ function shopDiscountHelpersJs() {
                 '        wrap.setAttribute("aria-modal", "true");',
                 '        wrap.style.cssText = "position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:1.25rem;overflow:hidden;";',
                 '        var card = document.createElement("div");',
-                '        card.style.cssText = "position:relative;width:min(92vw,22rem);background:rgba(255,255,255,.42);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.55);border-radius:1.25rem;padding:1.4rem 1.2rem 1.25rem;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.18),0 0 0 100vmax rgba(28,25,23,.4)";',
+                '        card.style.cssText = "position:relative;width:min(92vw,22rem);background:rgba(255,255,255,.42);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.55);border-radius:1.25rem;padding:1.4rem 1.2rem 1.25rem;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.22),0 18px 50px rgba(0,0,0,.28)";',
                 '        var title = document.createElement("p");',
                 '        title.style.cssText = "margin:0 0 .75rem;font-size:1.05rem;font-weight:700;color:#44403c";',
                 '        title.textContent = "(›´ω`‹ )暫停接單";',
