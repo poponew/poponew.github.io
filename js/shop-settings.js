@@ -7,8 +7,8 @@ window.shopSettings = {
     "discountFold": 10,
     "discountStart": "",
     "discountEnd": "",
-    "ordersPaused": false,
-    "ordersPausedNote": "手工甜點趕製中 (｡ŏ_ŏ)，目前暫停接單。已下單不受影響。恢復下單時會在官方 LINE 推播，造成不便還請見諒~"
+    "ordersPaused": true,
+    "ordersPausedNote": "臨時有事，先暫停接單。已下單不受影響。恢復下單時會在官方 LINE 推播，造成不便還請見諒~"
 };
 (function () {
     function shopTaiwanToday() {
