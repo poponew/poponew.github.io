@@ -163,13 +163,13 @@ function parseDiscountFold(value) {
             return Math.round(n * 10) / 10;
         }
 
-let shopSettings = { shippingFee: 80, freeShipping: 1500, minOrder: 500, codLimit: 2000, bulkOrder: 5000, discountFold: 10, discountStart: '', discountEnd: '', homeLead: '', ordersPaused: false, ordersPausedNote: '手工甜點趕製中，先暫停新訂單，免得讓大家等太久。已經下單的不用擔心，會照常做、照常寄。恢復時會在官方 LINE 跟大家說。' };
+let shopSettings = { shippingFee: 80, freeShipping: 1000, minOrder: 500, codLimit: 2000, bulkOrder: 5000, discountFold: 10, discountStart: '', discountEnd: '', homeLead: '', ordersPaused: false, ordersPausedNote: '手工甜點趕製中，先暫停新訂單，免得讓大家等太久。已經下單的不用擔心，會照常做、照常寄。恢復時會在官方 LINE 跟大家說。' };
 
 for (let i = 1; i < lines.length; i++) {
     let parts = parseCSVRow(lines[i]);
     let type = parts[0];
     if (type === 'settings') {
-        shopSettings = Object.assign({}, shopSettings, { shippingFee: parseInt(parts[5], 10) || 80, freeShipping: parseInt(parts[6], 10) || 1500, minOrder: parseInt(parts[7], 10) || 500, codLimit: parseInt(parts[8], 10) || 2000, bulkOrder: parseInt(parts[9], 10) || 5000, homeLead: parts[4] || '' });
+        shopSettings = Object.assign({}, shopSettings, { shippingFee: parseInt(parts[5], 10) || 80, freeShipping: parseInt(parts[6], 10) || 1000, minOrder: parseInt(parts[7], 10) || 500, codLimit: parseInt(parts[8], 10) || 2000, bulkOrder: parseInt(parts[9], 10) || 5000, homeLead: parts[4] || '' });
     } else if (type === 'discount') {
         shopSettings.discountFold = parseDiscountFold(parts[4]);
         shopSettings.discountStart = parseYmd(parts[5]);
@@ -391,7 +391,7 @@ function soldOutBadgeHtml(forJs) {
 function getShopSettings() {
             return {
                 shippingFee: parseInt(shopSettings.shippingFee, 10) || 80,
-                freeShipping: parseInt(shopSettings.freeShipping, 10) || 1500,
+                freeShipping: parseInt(shopSettings.freeShipping, 10) || 1000,
                 minOrder: parseInt(shopSettings.minOrder, 10) || 500,
                 codLimit: parseInt(shopSettings.codLimit, 10) || 2000,
                 bulkOrder: parseInt(shopSettings.bulkOrder, 10) || 5000,
@@ -828,7 +828,7 @@ function buildIndexHtml(groupsList, productsList) {
             (groupsList || []).forEach(function(g) {
                 if (groupIsHidden(g) && g && g.name) hiddenNames[g.name] = true;
             });
-            var homeLead = String(shopSettings.homeLead || '').trim() || '全店滿 NT$ 1,500 元即享免運費宅配！';
+            var homeLead = String(shopSettings.homeLead || '').trim() || ('全店滿 NT$ ' + (parseInt(shopSettings.freeShipping, 10) || 1000).toLocaleString('en-US') + ' 元即享免運費宅配！');
     let tagSet = new Set();
     shopGroups.forEach(g => {
         if (g.tag) {
@@ -839,7 +839,7 @@ function buildIndexHtml(groupsList, productsList) {
     let allTags = Array.from(tagSet);
 
     var indexTitle = shopBrand() + '｜手工司康、巴斯克、美式軟餅乾、生乳捲、比利時鬆餅、布朗尼';
-    var indexDesc = shopBrand() + '提供手工司康、巴斯克乳酪蛋糕與餅乾。全店滿 NT$ 1,500 免運。';
+    var indexDesc = shopBrand() + '提供手工司康、巴斯克乳酪蛋糕與餅乾。全店滿 NT$ ' + (parseInt(shopSettings.freeShipping, 10) || 1000).toLocaleString('en-US') + ' 免運。';
     var indexImg = (shopGroups[0] && shopGroups[0].img) || 'images/scone.jpg';
     var indexHtml = [];
     indexHtml.push('<!DOCTYPE html>');
@@ -1397,7 +1397,7 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('    <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.<\/p>');
 
             h.push('    <script>');
-            h.push('        function shop() { var s = window.shopSettings || {}; return { shippingFee: parseInt(s.shippingFee,10)||80, freeShipping: parseInt(s.freeShipping,10)||1500, minOrder: parseInt(s.minOrder,10)||500, codLimit: parseInt(s.codLimit,10)||2000, bulkOrder: parseInt(s.bulkOrder,10)||5000 }; }');
+            h.push('        function shop() { var s = window.shopSettings || {}; return { shippingFee: parseInt(s.shippingFee,10)||80, freeShipping: parseInt(s.freeShipping,10)||1000, minOrder: parseInt(s.minOrder,10)||500, codLimit: parseInt(s.codLimit,10)||2000, bulkOrder: parseInt(s.bulkOrder,10)||5000 }; }');
             h.push('        var cart = JSON.parse(localStorage.getItem("poponew_cart")) || {};');
             h.push('        var container = document.getElementById("cookie-list");');
             h.push('        if (container && !container.querySelector("[data-product-id]")) {');
