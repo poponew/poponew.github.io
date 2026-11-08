@@ -1,7 +1,7 @@
 window.shopSettings = {
     "shippingFee": 80,
     "freeShipping": 1000,
-    "minOrder": 500,
+    "minOrder": 300,
     "codLimit": 2000,
     "bulkOrder": 5000,
     "discountFold": 10,
