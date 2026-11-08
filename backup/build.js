@@ -163,13 +163,15 @@ function parseDiscountFold(value) {
             return Math.round(n * 10) / 10;
         }
 
-let shopSettings = { shippingFee: 80, freeShipping: 1000, minOrder: 500, codLimit: 2000, bulkOrder: 5000, discountFold: 10, discountStart: '', discountEnd: '', homeLead: '', ordersPaused: false, ordersPausedNote: '手工甜點趕製中，先暫停新訂單，免得讓大家等太久。已經下單的不用擔心，會照常做、照常寄。恢復時會在官方 LINE 跟大家說。' };
+let shopSettings = { shippingFee: 120, freeShipping: 1000, shippingTiers: [], minOrder: 300, codLimit: 2000, bulkOrder: 5000, discountFold: 10, discountStart: '', discountEnd: '', homeLead: '', ordersPaused: false, ordersPausedNote: '手工甜點趕製中，先暫停新訂單，免得讓大家等太久。已經下單的不用擔心，會照常做、照常寄。恢復時會在官方 LINE 跟大家說。' };
 
 for (let i = 1; i < lines.length; i++) {
     let parts = parseCSVRow(lines[i]);
     let type = parts[0];
     if (type === 'settings') {
-        shopSettings = Object.assign({}, shopSettings, { shippingFee: parseInt(parts[5], 10) || 80, freeShipping: parseInt(parts[6], 10) || 1000, minOrder: parseInt(parts[7], 10) || 500, codLimit: parseInt(parts[8], 10) || 2000, bulkOrder: parseInt(parts[9], 10) || 5000, homeLead: parts[4] || '' });
+        shopSettings = Object.assign({}, shopSettings, { shippingFee: parseInt(parts[5], 10) || 80, freeShipping: parseInt(parts[6], 10) || 1000, minOrder: parseInt(parts[7], 10) || 300, codLimit: parseInt(parts[8], 10) || 2000, bulkOrder: parseInt(parts[9], 10) || 5000, homeLead: parts[4] || '' });
+    } else if (type === 'ship') {
+        shopSettings.shippingTiers.push({ min: parseInt(parts[5], 10), fee: parseInt(parts[6], 10) });
     } else if (type === 'discount') {
         shopSettings.discountFold = parseDiscountFold(parts[4]);
         shopSettings.discountStart = parseYmd(parts[5]);
@@ -388,11 +390,52 @@ function soldOutBadgeHtml(forJs) {
             return '<span class="text-sm font-bold text-stone-400 bg-stone-100 px-3 py-1.5 rounded-lg border border-stone-200 shadow-inner" style="display:inline-flex;align-items:center;gap:0.3rem">' + icon + '已售完</span>';
         }
 
-function getShopSettings() {
+function normalizeShippingTiers(list) {
+            var map = {};
+            (list || []).forEach(function(row) {
+                var min = parseInt(row && row.min, 10);
+                var fee = parseInt(row && row.fee, 10);
+                if (!isFinite(min) || min < 0 || !isFinite(fee) || fee < 0) return;
+                map[min] = { min: min, fee: fee };
+            });
+            return Object.keys(map).map(function(key) { return map[key]; }).sort(function(a, b) { return a.min - b.min; });
+        }
+
+function defaultShippingTiers() {
+            return [{ min: 0, fee: 120 }, { min: 500, fee: 80 }, { min: 1000, fee: 0 }];
+        }
+
+function legacyShippingTiers(fee, free) {
+            var amount = parseInt(fee, 10);
+            if (!isFinite(amount) || amount < 0) amount = 80;
+            var door = parseInt(free, 10);
+            if (!isFinite(door) || door < 0) door = 1000;
+            return normalizeShippingTiers([{ min: 0, fee: amount }, { min: door, fee: 0 }]);
+        }
+
+function shippingPairFromTiers(tiers) {
+            var list = normalizeShippingTiers(tiers);
+            if (!list.length) list = defaultShippingTiers();
+            var freeAt = null;
+            list.forEach(function(row) {
+                if (row.fee === 0 && (freeAt === null || row.min < freeAt)) freeAt = row.min;
+            });
             return {
-                shippingFee: parseInt(shopSettings.shippingFee, 10) || 80,
-                freeShipping: parseInt(shopSettings.freeShipping, 10) || 1000,
-                minOrder: parseInt(shopSettings.minOrder, 10) || 500,
+                shippingFee: list[0].fee,
+                freeShipping: freeAt === null ? 0 : freeAt,
+                shippingTiers: list
+            };
+        }
+
+function getShopSettings() {
+            var tiers = normalizeShippingTiers(shopSettings.shippingTiers);
+            if (!tiers.length) tiers = legacyShippingTiers(shopSettings.shippingFee, shopSettings.freeShipping);
+            var pair = shippingPairFromTiers(tiers);
+            return {
+                shippingFee: pair.shippingFee,
+                freeShipping: pair.freeShipping,
+                shippingTiers: pair.shippingTiers,
+                minOrder: parseInt(shopSettings.minOrder, 10) || 300,
                 codLimit: parseInt(shopSettings.codLimit, 10) || 2000,
                 bulkOrder: parseInt(shopSettings.bulkOrder, 10) || 5000,
                 discountFold: parseDiscountFold(shopSettings.discountFold),
@@ -432,6 +475,53 @@ function lineModalScriptTag() {
 function shopDiscountHelpersJs() {
             return [
                 '(function () {',
+                '    function shopTierList() {',
+                '        var s = window.shopSettings || {};',
+                '        var raw = Array.isArray(s.shippingTiers) ? s.shippingTiers : [];',
+                '        var rows = [];',
+                '        raw.forEach(function (row) {',
+                '            var min = parseInt(row && row.min, 10);',
+                '            var fee = parseInt(row && row.fee, 10);',
+                '            if (!isFinite(min) || min < 0 || !isFinite(fee) || fee < 0) return;',
+                '            rows.push({ min: min, fee: fee });',
+                '        });',
+                '        if (!rows.length) {',
+                '            var fee = parseInt(s.shippingFee, 10);',
+                '            if (!isFinite(fee) || fee < 0) fee = 120;',
+                '            var free = parseInt(s.freeShipping, 10);',
+                '            if (!isFinite(free) || free < 0) free = 1000;',
+                '            rows = [{ min: 0, fee: fee }, { min: free, fee: 0 }];',
+                '        }',
+                '        var map = {};',
+                '        rows.forEach(function (row) { map[row.min] = row; });',
+                '        return Object.keys(map).map(function (key) { return map[key]; }).sort(function (a, b) { return a.min - b.min; });',
+                '    }',
+                '    window.shopShippingTiers = function () { return shopTierList(); };',
+                '    window.shopShippingQuote = function (subtotal) {',
+                '        var n = parseInt(subtotal, 10) || 0;',
+                '        if (n < 0) n = 0;',
+                '        var tiers = shopTierList();',
+                '        var current = tiers[0] || { min: 0, fee: 0 };',
+                '        var next = null;',
+                '        tiers.forEach(function (row) {',
+                '            if (n >= row.min) current = row;',
+                '            else if (!next) next = row;',
+                '        });',
+                '        return { fee: current.fee, next: next };',
+                '    };',
+                '    window.shopShippingTip = function (subtotal, minOrder) {',
+                '        var n = parseInt(subtotal, 10) || 0;',
+                '        var floor = parseInt(minOrder, 10) || 0;',
+                '        if (n <= 0) return "⚠️ 本商店最低結帳金額為 NT$ " + floor + " 元唷！";',
+                '        var q = window.shopShippingQuote(n);',
+                '        if (!q.next) {',
+                '            if (q.fee <= 0) return "已達免運門檻！";',
+                '            return "目前冷凍宅配運費 NT$ " + q.fee;',
+                '        }',
+                '        var gap = q.next.min - n;',
+                '        if (q.next.fee <= 0) return "再買 NT$ " + gap + " 元即享免運費宅配！";',
+                '        return "再買 NT$ " + gap + " 元，運費從 " + q.fee + " 變成 " + q.next.fee;',
+                '    };',
                 '    function shopTaiwanToday() {',
                 '        return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Taipei" });',
                 '    }',
@@ -1425,7 +1515,7 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
 
             h.push('        function updateQty(id, change) { var input = document.getElementById("qty-" + id); var currentQty = parseInt(input && input.value, 10) || 0; currentQty = Math.max(0, currentQty + change); if (currentQty > 20) { currentQty = 20; alert("單品數量上限為20"); } if (input) input.value = currentQty; if (currentQty === 0) { delete cart[id]; } else { cart[id] = currentQty; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); calculatePageTotal(); updateCartCount(); if (window.syncFlavorLightboxQty) window.syncFlavorLightboxQty(); }');
             
-            h.push('        function calculatePageTotal() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0) : (window.allProductsLookup[id] || 0)) * cart[id]; } document.getElementById("entire-cart-total").innerText = entireCartTotal; var tipElement = document.getElementById("free-shipping-tip"); if (entireCartTotal === 0) { tipElement.innerText = "⚠️ 本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元唷！"; } else if (entireCartTotal >= cfg.freeShipping) { tipElement.innerHTML = "<span class=\'text-green-600 font-bold text-sm\'>🎉 全店已達免運費門檻！直接結帳超划算！<\/span>"; } else { tipElement.innerText = "還差" + (cfg.freeShipping - entireCartTotal) + " 元就免運啦！"; } var bulkTip = document.getElementById("bulk-order-tip"); if (bulkTip) { if (entireCartTotal > cfg.bulkOrder) { bulkTip.classList.remove("hidden"); bulkTip.innerText = "您的訂購數量較大，屬於大宗/企業訂單。為了保障您的權益與確認出貨檔期，請直接透過網站下方聯絡方式聯繫我們由專人為您服務！"; } else { bulkTip.classList.add("hidden"); bulkTip.innerText = ""; } } var codTip = document.getElementById("cod-limit-tip"); if (codTip) { if (entireCartTotal > cfg.codLimit) { codTip.classList.remove("hidden"); codTip.innerText = "單筆滿 NT$ " + cfg.codLimit.toLocaleString() + " 不提供貨到付款，結帳時請改用轉帳匯款。"; } else { codTip.classList.add("hidden"); codTip.innerText = ""; } } }'); 
+            h.push('        function calculatePageTotal() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0) : (window.allProductsLookup[id] || 0)) * cart[id]; } document.getElementById("entire-cart-total").innerText = entireCartTotal; var tipElement = document.getElementById("free-shipping-tip"); tipElement.innerText = window.shopShippingTip ? window.shopShippingTip(entireCartTotal, cfg.minOrder) : ("⚠️ 本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元唷！"); var bulkTip = document.getElementById("bulk-order-tip"); if (bulkTip) { if (entireCartTotal > cfg.bulkOrder) { bulkTip.classList.remove("hidden"); bulkTip.innerText = "您的訂購數量較大，屬於大宗/企業訂單。為了保障您的權益與確認出貨檔期，請直接透過網站下方聯絡方式聯繫我們由專人為您服務！"; } else { bulkTip.classList.add("hidden"); bulkTip.innerText = ""; } } var codTip = document.getElementById("cod-limit-tip"); if (codTip) { if (entireCartTotal > cfg.codLimit) { codTip.classList.remove("hidden"); codTip.innerText = "單筆滿 NT$ " + cfg.codLimit.toLocaleString() + " 不提供貨到付款，結帳時請改用轉帳匯款。"; } else { codTip.classList.add("hidden"); codTip.innerText = ""; } } }'); 
             
             h.push('        function saveToCartAndGo() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0) : (window.allProductsLookup[id] || 0)) * cart[id]; } if (entireCartTotal === 0) { alert("您目前尚未選擇任何數量唷！"); return; } if (entireCartTotal < cfg.minOrder) { alert("抱歉！本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元，目前綜合累計為 NT$ " + entireCartTotal + " 元，請再多選購一些甜點唷！"); return; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); window.location.href = "cart.html"; }');
             

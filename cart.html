@@ -49,7 +49,7 @@
             </div>
             <div class="flex justify-between">
                 <span class="text-stone-600">冷凍宅配運費：</span>
-                <span class="font-bold" id="shipping-fee-text" style="color:#44403c">NT$ 80</span>
+                <span class="font-bold" id="shipping-fee-text" style="color:#44403c">NT$ 120</span>
             </div>
             <div id="savings-box" class="hidden space-y-1 pt-1 text-sm">
                 <p class="text-stone-600">本次購物一共省下</p>
@@ -424,19 +424,24 @@
             if (window.shopLockCheckoutButtons) window.shopLockCheckoutButtons();
 
             const cfg = shopCfg();
-            var reachedFreeShip = productSubtotal >= cfg.freeShipping;
-            if (reachedFreeShip) {
-                shippingFee = 0;
+            var quote = window.shopShippingQuote ? window.shopShippingQuote(productSubtotal) : {
+                fee: productSubtotal >= cfg.freeShipping ? 0 : cfg.shippingFee,
+                next: productSubtotal >= cfg.freeShipping ? null : { min: cfg.freeShipping, fee: 0 }
+            };
+            var tiers = window.shopShippingTiers ? window.shopShippingTiers() : [{ min: 0, fee: cfg.shippingFee }];
+            var baseFee = tiers.length ? tiers[0].fee : cfg.shippingFee;
+            shippingFee = quote.fee;
+            if (hasItems && shippingFee <= 0) {
                 document.getElementById('shipping-fee-text').innerHTML = `<span class="font-bold" style="color:#44403c">🎉 免運費</span>`;
-                document.getElementById('free-shipping-tip').innerText = `已達 NT$ ${cfg.freeShipping.toLocaleString()} 免運門檻！`;
             } else {
-                shippingFee = cfg.shippingFee;
-                document.getElementById('shipping-fee-text').innerText = `NT$ ${cfg.shippingFee}`;
-                document.getElementById('free-shipping-tip').innerText = `還差 NT$ ${cfg.freeShipping - productSubtotal} 元即享免運費宅配！`;
+                document.getElementById('shipping-fee-text').innerText = `NT$ ${shippingFee}`;
             }
+            document.getElementById('free-shipping-tip').innerText = window.shopShippingTip
+                ? window.shopShippingTip(productSubtotal, cfg.minOrder)
+                : (productSubtotal <= 0 ? ('⚠️ 本商店最低結帳金額為 NT$ ' + cfg.minOrder + ' 元唷！') : ('還差 NT$ ' + (cfg.freeShipping - productSubtotal) + ' 元即享免運費宅配！'));
 
             var discountSave = hasItems ? Math.max(0, originalSubtotal - productSubtotal) : 0;
-            var shipSave = (hasItems && reachedFreeShip) ? (parseInt(cfg.shippingFee, 10) || 0) : 0;
+            var shipSave = hasItems ? Math.max(0, baseFee - shippingFee) : 0;
             var savingsBox = document.getElementById('savings-box');
             var savingsDiscount = document.getElementById('savings-discount');
             var savingsShip = document.getElementById('savings-ship');

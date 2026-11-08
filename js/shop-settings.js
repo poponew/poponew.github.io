@@ -1,7 +1,21 @@
 window.shopSettings = {
-    "shippingFee": 80,
+    "shippingFee": 120,
     "freeShipping": 1000,
-    "minOrder": 300,
+    "shippingTiers": [
+        {
+            "min": 0,
+            "fee": 120
+        },
+        {
+            "min": 500,
+            "fee": 80
+        },
+        {
+            "min": 1000,
+            "fee": 0
+        }
+    ],
+    "minOrder": 299,
     "codLimit": 2000,
     "bulkOrder": 5000,
     "discountFold": 10,
@@ -11,6 +25,53 @@ window.shopSettings = {
     "ordersPausedNote": "臨時有事，先暫停接單。已下單不受影響。恢復下單時會在官方 LINE 推播，造成不便還請見諒~"
 };
 (function () {
+    function shopTierList() {
+        var s = window.shopSettings || {};
+        var raw = Array.isArray(s.shippingTiers) ? s.shippingTiers : [];
+        var rows = [];
+        raw.forEach(function (row) {
+            var min = parseInt(row && row.min, 10);
+            var fee = parseInt(row && row.fee, 10);
+            if (!isFinite(min) || min < 0 || !isFinite(fee) || fee < 0) return;
+            rows.push({ min: min, fee: fee });
+        });
+        if (!rows.length) {
+            var fee = parseInt(s.shippingFee, 10);
+            if (!isFinite(fee) || fee < 0) fee = 120;
+            var free = parseInt(s.freeShipping, 10);
+            if (!isFinite(free) || free < 0) free = 1000;
+            rows = [{ min: 0, fee: fee }, { min: free, fee: 0 }];
+        }
+        var map = {};
+        rows.forEach(function (row) { map[row.min] = row; });
+        return Object.keys(map).map(function (key) { return map[key]; }).sort(function (a, b) { return a.min - b.min; });
+    }
+    window.shopShippingTiers = function () { return shopTierList(); };
+    window.shopShippingQuote = function (subtotal) {
+        var n = parseInt(subtotal, 10) || 0;
+        if (n < 0) n = 0;
+        var tiers = shopTierList();
+        var current = tiers[0] || { min: 0, fee: 0 };
+        var next = null;
+        tiers.forEach(function (row) {
+            if (n >= row.min) current = row;
+            else if (!next) next = row;
+        });
+        return { fee: current.fee, next: next };
+    };
+    window.shopShippingTip = function (subtotal, minOrder) {
+        var n = parseInt(subtotal, 10) || 0;
+        var floor = parseInt(minOrder, 10) || 0;
+        if (n <= 0) return "⚠️ 本商店最低結帳金額為 NT$ " + floor + " 元唷！";
+        var q = window.shopShippingQuote(n);
+        if (!q.next) {
+            if (q.fee <= 0) return "已達免運門檻！";
+            return "目前冷凍宅配運費 NT$ " + q.fee;
+        }
+        var gap = q.next.min - n;
+        if (q.next.fee <= 0) return "再買 NT$ " + gap + " 元即享免運費宅配！";
+        return "再買 NT$ " + gap + " 元，運費從 " + q.fee + " 變成 " + q.next.fee;
+    };
     function shopTaiwanToday() {
         return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Taipei" });
     }
