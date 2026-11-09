@@ -208,7 +208,7 @@ function formatDescHtml(str) {
         }
 
 function shopBrand() {
-            return 'Poponew手做甜點';
+            return 'Poponew手作甜點';
         }
 
 function siteOrigin() {
@@ -450,22 +450,35 @@ function lineLogoSvg() {
             return '<svg class="line-logo" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#06C755"/><path fill="#fff" d="M12.03 5.55c-3.68 0-6.66 2.38-6.66 5.32 0 2.62 2.32 4.82 5.46 5.23.21.04.47.13.54.3.06.15.04.38.02.53l-.09.53c-.03.18-.13.65.58.35 1.16-.49 3.14-1.84 4.3-3.15C17.4 13.02 18 11.66 18 10.87c0-2.94-2.98-5.32-5.97-5.32z"/></svg>';
         }
 
+function uberEatsLogoSvg() {
+            return '<svg class="uber-eats-logo" xmlns="http://www.w3.org/2000/svg" width="76" height="22" viewBox="0 0 76 22" aria-hidden="true"><text x="0" y="16" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#000">Uber</text><text x="42" y="16" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#06C167">Eats</text></svg>';
+        }
+
+function foodpandaLogoHtml() {
+            return '<img class="foodpanda-logo" src="images/foodpanda-logo.png" alt="" width="114" height="22">';
+        }
+
 function shopContactLineHtml() {
-            return '<p class="text-stone-500 text-[11px] md:text-xs leading-relaxed">' +
+            return '<p class="shop-contact-line text-stone-500 text-[11px] md:text-xs leading-relaxed">' +
                 '<button type="button" class="line-open-btn" data-line-open>' + lineLogoSvg() + '<span>官方LINE</span></button>' +
+                '<span class="text-stone-300"> ｜ </span>' +
+                '<span class="delivery-pair">' +
+                '<a class="uber-eats-link" href="https://www.ubereats.com/store/poponew-%E6%B3%A1%E6%B3%A1%E7%89%9B%E6%89%8B%E4%BD%9C%E7%94%9C%E9%BB%9E/o-7ZvxOAXQOOYQ-uYDVdrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" aria-label="Uber Eats"><span class="delivery-area-note"><span class="scooter" aria-hidden="true">🛵</span> 高雄可外送唷</span>' + uberEatsLogoSvg() + '</a>' +
+                '<span class="text-stone-300"> ｜ </span>' +
+                '<a class="foodpanda-link" href="" aria-label="foodpanda">' + foodpandaLogoHtml() + '</a>' +
+                '</span>' +
                 '</p>';
         }
 
 function shopFooterPolicyHtml() {
-            return '<p class="mt-2 text-[11px] md:text-xs leading-relaxed">' +
-                '<a href="keep.html#shipping" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">宅配配送與簽收須知</a>' +
-                '<span class="text-stone-300"> ｜ </span>' +
+            return '<p class="mt-2 text-xs leading-relaxed">' +
                 '<a href="keep.html#terms" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">訂購與退換貨條款</a>' +
                 '<span class="text-stone-300"> ｜ </span>' +
                 '<a href="faq.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">常見問題</a>' +
                 '<span class="text-stone-300"> ｜ </span>' +
                 '<a href="ask.html" class="font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">聯絡我們</a>' +
-                '</p>';
+                '</p>' +
+                '<p class="mt-2 text-stone-500 text-xs leading-relaxed">食品業者登錄字號：E-200166764-00000-3</p>';
         }
 
 function lineModalScriptTag() {
@@ -986,7 +999,7 @@ function buildIndexHtml(groupsList, productsList) {
     indexHtml.push('    <nav class="border-b sticky top-0 bg-white/90 backdrop-blur-md z-40">');
     indexHtml.push('        <div class="max-w-5xl mx-auto px-4 py-3">');
     indexHtml.push('            <div class="flex justify-between items-center gap-3">');
-    indexHtml.push('                <h1 id="home-nav-brand" class="brand-mark home-nav-brand font-bold text-amber-800 leading-tight">Poponew手做甜點<\/h1>');
+    indexHtml.push('                <h1 id="home-nav-brand" class="brand-mark home-nav-brand font-bold text-amber-800 leading-tight">Poponew手作甜點<\/h1>');
     indexHtml.push('                <div class="flex items-center gap-2 shrink-0">');
     indexHtml.push('                    <a href="cart.html" class="shrink-0 bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0<\/span>)<\/a>');
     indexHtml.push('                    <button type="button" id="shop-search-open" class="shop-search-open-btn" title="搜尋商品" aria-label="搜尋商品"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke-width="2"/><path d="M16.2 16.2L21 21" stroke-width="2" stroke-linecap="round"/><\/svg><\/button>');
@@ -1055,7 +1068,7 @@ function buildIndexHtml(groupsList, productsList) {
     indexHtml.push('    <footer class="max-w-2xl mx-auto px-4 pb-12">');
     indexHtml.push('        <div class="bg-white shadow-md rounded-2xl p-5 flex items-center gap-4 border border-stone-100 mt-8">');
     indexHtml.push('            <div class="text-left">');
-    indexHtml.push('                <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">Poponew手做甜點<\/h4>');
+    indexHtml.push('                <h4 class="brand-mark font-bold text-amber-700 text-base md:text-lg mb-1">Poponew手作甜點<\/h4>');
     indexHtml.push('                ' + shopContactLineHtml());
     indexHtml.push('                ' + shopFooterPolicyHtml());
     indexHtml.push('            <\/div>');
@@ -1383,7 +1396,7 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl my-0 md:my-8">');
             
             h.push('        <div class="relative p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40 md:rounded-t-2xl">');
-            h.push('            <a href="index.html" class="brand-mark product-nav-brand text-amber-800 font-bold leading-tight min-w-0">Poponew手做甜點<\/a>');
+            h.push('            <a href="index.html" class="brand-mark product-nav-brand text-amber-800 font-bold leading-tight min-w-0">Poponew手作甜點<\/a>');
             h.push('            <div class="flex items-center gap-2">');
             h.push('                <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0<\/span>)<\/a><br/>');         
             h.push('            <\/div>');
@@ -1479,7 +1492,7 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl mt-3 md:-mt-3 p-5 md:p-6 flex items-center gap-4 md:gap-5 border border-stone-100">');
 
             h.push('        <div>');
-            h.push('            <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">Poponew手做甜點<\/h4>');
+            h.push('            <h4 class="brand-mark font-bold text-amber-700 text-base md:text-lg mb-1">Poponew手作甜點<\/h4>');
             h.push('            ' + shopContactLineHtml());
             h.push('            ' + shopFooterPolicyHtml());
             h.push('        <\/div>');
@@ -1875,7 +1888,7 @@ function buildKeepHtml(keepText) {
             h.push('    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl my-0 md:my-8">');
             h.push('        <div class="sticky top-0 bg-white/90 backdrop-blur-md z-40 border-b md:rounded-t-2xl">');
             h.push('            <div class="p-4 pb-2 flex justify-between items-center">');
-            h.push('                <a href="index.html" class="brand-mark text-amber-800 text-xl font-bold leading-tight">Poponew手做甜點<\/a>');
+            h.push('                <a href="index.html" class="brand-mark text-amber-800 text-xl font-bold leading-tight">Poponew手作甜點<\/a>');
             h.push('                <div class="flex items-center gap-2">');
             h.push('                    <a href="cart.html" class="bg-amber-700 hover:bg-amber-800 text-white font-medium py-1.5 px-3.5 rounded-xl transition flex items-center gap-1.5 shadow-sm text-sm">🛒 購物車 (<span id="cart-count">0<\/span>)<\/a>');
             h.push('                <\/div>');
@@ -1894,7 +1907,7 @@ function buildKeepHtml(keepText) {
             h.push('    <\/div>');
             h.push('    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl mt-3 md:-mt-3 p-5 md:p-6 flex items-center gap-4 md:gap-5 border border-stone-100">');
             h.push('        <div>');
-            h.push('            <h4 class="font-bold text-amber-700 text-sm md:text-base mb-1">Poponew手做甜點<\/h4>');
+            h.push('            <h4 class="brand-mark font-bold text-amber-700 text-base md:text-lg mb-1">Poponew手作甜點<\/h4>');
             h.push('            ' + shopContactLineHtml());
             h.push('            ' + shopFooterPolicyHtml());
             h.push('        <\/div>');

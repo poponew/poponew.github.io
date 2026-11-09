@@ -11,6 +11,19 @@
         ".line-open-btn .line-logo{display:block;flex-shrink:0;width:22px;height:22px;}" +
         ".line-open-btn-inline{font-size:inherit;font-weight:inherit;gap:4px;}" +
         ".line-open-btn-inline .line-logo{width:1.15em;height:1.15em;}" +
+        ".uber-eats-link{position:relative;display:inline-flex;align-items:center;flex-wrap:nowrap;white-space:nowrap;gap:0;margin:0;padding:0;font:inherit;font-weight:700;color:#292524;text-decoration:none;vertical-align:middle;}" +
+        ".uber-eats-link:hover{color:#06C167;}" +
+        ".uber-eats-link .uber-eats-logo{display:block;flex-shrink:0;width:76px;height:22px;}" +
+        ".foodpanda-link{display:inline-flex;align-items:center;flex-wrap:nowrap;white-space:nowrap;gap:0;margin:0;padding:0;font:inherit;font-weight:700;color:#D70F64;text-decoration:none;vertical-align:middle;}" +
+        ".foodpanda-link:hover{color:#b00c50;}" +
+        ".foodpanda-link .foodpanda-logo{display:block;flex-shrink:0;width:114px;height:22px;object-fit:contain;}" +
+        ".delivery-pair{display:inline-flex;align-items:center;vertical-align:middle;white-space:nowrap;}" +
+        ".delivery-area-note{position:absolute;left:calc(100% - 28px);bottom:calc(100% + 12px);display:inline-flex;align-items:center;padding:3px 9px 4px;border:1.5px solid #a8a29e;border-radius:12px;background:#fff;color:#44403c;font-family:ui-sans-serif,system-ui,sans-serif;font-size:12px;font-weight:700;line-height:1.3;white-space:nowrap;box-shadow:0 6px 12px rgba(68,64,60,.16);z-index:2;pointer-events:none;}" +
+        ".delivery-area-note::before{content:\"\";position:absolute;left:6px;top:100%;border-width:6px 6px 0;border-style:solid;border-color:#a8a29e transparent transparent;}" +
+        ".delivery-area-note::after{content:\"\";position:absolute;left:7px;top:calc(100% - 1px);border-width:5px 5px 0;border-style:solid;border-color:#fff transparent transparent;}" +
+        ".scooter{display:inline-block;margin-right:2px;animation:scooter-bob .42s linear infinite;}" +
+        "@keyframes scooter-bob{0%,22%,44%,66%,100%{transform:translateY(0)}11%{transform:translateY(-1.5px)}33%{transform:translateY(-1.5px)}55%{transform:translateY(-1px)}}" +
+        "@media (prefers-reduced-motion:reduce){.scooter{animation:none;}}" +
         ".line-modal[hidden]{display:none !important;}" +
         ".line-modal{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:1.25rem;}" +
         ".line-modal-backdrop{position:absolute;inset:0;background:rgba(28,25,23,.55);}" +
@@ -68,6 +81,8 @@
     }
 
     document.addEventListener("click", function (e) {
+        var fp = e.target.closest ? e.target.closest(".foodpanda-link") : null;
+        if (fp && !fp.getAttribute("href")) e.preventDefault();
         var btn = e.target.closest ? e.target.closest("[data-line-open]") : null;
         if (!btn) return;
         e.preventDefault();
