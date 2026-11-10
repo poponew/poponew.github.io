@@ -464,7 +464,7 @@ function shopContactLineHtml() {
                 '<span class="text-stone-300"> ｜ </span>' +
                 '<span class="delivery-pair">' +
                 '<a class="uber-eats-link" href="https://www.ubereats.com/store/poponew-%E6%B3%A1%E6%B3%A1%E7%89%9B%E6%89%8B%E4%BD%9C%E7%94%9C%E9%BB%9E/o-7ZvxOAXQOOYQ-uYDVdrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" aria-label="Uber Eats"><span class="delivery-area-note"><span class="scooter" aria-hidden="true">🛵</span> 高雄可外送唷</span>' + uberEatsLogoSvg() + '</a>' +
-                '<span class="text-stone-300"> ｜ </span>' +
+                '<span class="text-stone-300"> ｜&nbsp; </span>' +
                 '<a class="foodpanda-link" href="" aria-label="foodpanda">' + foodpandaLogoHtml() + '</a>' +
                 '</span>' +
                 '</p>';
