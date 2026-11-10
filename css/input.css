@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@media (max-width: 768px) {
+  .text-xs,
+  .allergen-note,
+  .card-new-mark,
+  .card-stock-note,
+  .shop-search-meta,
+  .shop-search-close,
+  .flavor-lb-hint,
+  .line-modal-hint,
+  .delivery-area-note { font-size: 0.875rem !important; }
+  .text-\[10px\] { font-size: 11px !important; }
+  .text-\[11px\] { font-size: 12px !important; }
+}

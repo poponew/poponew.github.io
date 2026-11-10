@@ -1472,6 +1472,7 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             if (isNew) h.push('                    <span class="card-new-mark">【新品】<\/span>');
             h.push('                    <h1 id="product-page-title" class="product-page-title">' + cleanGroupName + '<\/h1>');
             h.push('                <\/div>');
+            h.push('            <\/div>');
             var guideTags = String(tag || "").split(/[,，]/).map(function(t) { return t.trim(); });
             function hasGuideTag(name) { return guideTags.indexOf(name) !== -1; }
             var keepHref = "keep.html#cookie";
@@ -1513,13 +1514,11 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
                 if (hashAt >= 0) keepHref = keepHref.slice(0, hashAt);
                 keepHref += "?mark=" + encodeURIComponent(keepMark) + hash;
             }
-            h.push('                <div class="font-zoom">');
+            h.push('            <div class="font-zoom">');
             h.push('                <p class="text-stone-500 text-sm leading-relaxed">' + cleanDesc + '<\/p>');
             h.push('                ' + productAllergenNoteHtml());
             h.push('                <p class="mt-3"><a href="' + keepHref + '" class="text-sm font-semibold text-amber-700 hover:text-amber-800 underline underline-offset-2">' + keepLabel + '<\/a></p>');
-            h.push('                <\/div>');
-            h.push('            <\/div>');
-            h.push('            <div id="cookie-list" class="space-y-3 mb-8">');
+            h.push('            <div id="cookie-list" class="space-y-3 mb-8 mt-6">');
             (items || []).forEach(function(p) {
                 h.push('                ' + flavorRowHtml(p));
             });
@@ -1535,17 +1534,18 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('                <\/div>');
             h.push('                <button onclick="saveToCartAndGo()" class="h-12 px-6 bg-amber-700 hover:bg-amber-800 text-white font-medium rounded-xl transition shadow-md flex items-center justify-center gap-1 active:scale-95 text-xm h-auto md:h-12">前往結帳<\/button>');
             h.push('            <\/div>');
+            h.push('            <\/div>');
             h.push('        <\/div>');
             h.push('    <\/div>');
 
             h.push('    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl mt-3 md:-mt-3 p-5 md:p-6 flex items-center gap-4 md:gap-5 border border-stone-100">');
 
-            h.push('        <div>');
+            h.push('        <div class="font-zoom">');
             h.push('            ' + shopContactLineHtml());
             h.push('            ' + shopFooterPolicyHtml());
             h.push('        <\/div>');
             h.push('    <\/div>');
-            h.push('    <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.<\/p>');
+            h.push('    <p class="font-zoom text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.<\/p>');
 
             h.push('    <script>');
             h.push('        function shop() { var s = window.shopSettings || {}; return { shippingFee: parseInt(s.shippingFee,10)||80, freeShipping: parseInt(s.freeShipping,10)||1000, minOrder: parseInt(s.minOrder,10)||500, codLimit: parseInt(s.codLimit,10)||2000, bulkOrder: parseInt(s.bulkOrder,10)||5000 }; }');
