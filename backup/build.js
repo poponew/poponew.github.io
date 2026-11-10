@@ -1058,7 +1058,7 @@ function buildIndexHtml(groupsList, productsList) {
     indexHtml.push('    <\/nav>');
     indexHtml.push('    <div id="shop-search-layer" class="shop-search-layer" hidden>');
     indexHtml.push('        <div class="shop-search-backdrop" id="shop-search-backdrop"><\/div>');
-    indexHtml.push('        <div class="shop-search-panel" role="dialog" aria-label="搜尋商品">');
+    indexHtml.push('        <div class="shop-search-panel font-zoom" role="dialog" aria-label="搜尋商品">');
     indexHtml.push('            <div class="shop-search-bar">');
     indexHtml.push('                <input id="shop-search-input" type="search" placeholder="搜尋商品或口味" autocomplete="off" enterkeyhint="search">');
     indexHtml.push('                <button type="button" id="shop-search-close" class="shop-search-close">關閉<\/button>');
@@ -1072,8 +1072,8 @@ function buildIndexHtml(groupsList, productsList) {
     indexHtml.push('        <button type="button" onclick="changeFontSize(1)" title="放大字型" class="w-9 h-8 flex items-center justify-center text-sm font-bold text-stone-700 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A+</button>');
     indexHtml.push('    <\/div>');
     indexHtml.push('    <div class="max-w-5xl mx-auto px-4 mb-8">');
-    indexHtml.push('        <p id="shop-home-lead" class="text-stone-600 text-sm leading-snug text-center mt-5 mb-5">📢 ' + escapeAttr(homeLead) + '<\/p>');
-    indexHtml.push('        <div class="flex flex-wrap items-center justify-center gap-1.5 mb-6" id="category-tags">');
+    indexHtml.push('        <p id="shop-home-lead" class="font-zoom text-stone-600 text-sm leading-snug text-center mt-5 mb-5">📢 ' + escapeAttr(homeLead) + '<\/p>');
+    indexHtml.push('        <div class="font-zoom flex flex-wrap items-center justify-center gap-1.5 mb-6" id="category-tags">');
     indexHtml.push('          <button type="button" onclick="filterCategory(\'all\', this)" class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-amber-700 text-white shadow-sm transition">全部商品<\/button>');
     allTags.forEach(function(t) {
         indexHtml.push('          <button type="button" onclick=\'filterCategory(' + JSON.stringify(t) + ', this)\' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">' + escapeAttr(t) + '<\/button>');
@@ -1100,10 +1100,10 @@ function buildIndexHtml(groupsList, productsList) {
             indexHtml.push('                <\/div>');
             indexHtml.push('                ');
             indexHtml.push('                <!-- 2. 文字與售價區塊：貼合底部與售價 -->');
-            indexHtml.push('                <div class="p-4 flex-grow flex flex-col justify-between">');
+            indexHtml.push('                <div class="font-zoom p-4 flex-grow flex flex-col justify-between">');
             indexHtml.push('                    <div class="mt-auto">');
             indexHtml.push('                        <h2 class="text-lg font-bold text-stone-700 mb-1 group-hover:text-stone-800 transition flex items-start leading-tight">' + newMarkHtml + g.name + '<\/h2>');
-            indexHtml.push('                        <p class="font-zoom text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">' + formatDescHtml(g.desc) + '<\/p>');
+            indexHtml.push('                        <p class="text-stone-500 text-xs leading-relaxed mb-0 line-clamp-2">' + formatDescHtml(g.desc) + '<\/p>');
             indexHtml.push('                    <\/div>');
             indexHtml.push('                    <div class="pt-2 border-t border-stone-100 flex justify-between items-center mt-3">');
             indexHtml.push('                        <span class="text-sm text-stone-400">售價 <span class="text-base font-bold text-amber-700">' + formatGroupPriceHtml(g.name, productsList) + '<\/span>' + groupStockNoteHtml(stockKind) + '<\/span>');
@@ -1116,12 +1116,12 @@ function buildIndexHtml(groupsList, productsList) {
 
     indexHtml.push('    <footer class="max-w-2xl mx-auto px-4 pb-12">');
     indexHtml.push('        <div class="bg-white shadow-md rounded-2xl p-5 flex items-center gap-4 border border-stone-100 mt-8">');
-    indexHtml.push('            <div class="text-left">');
+    indexHtml.push('            <div class="font-zoom text-left">');
     indexHtml.push('                ' + shopContactLineHtml());
     indexHtml.push('                ' + shopFooterPolicyHtml());
     indexHtml.push('            <\/div>');
     indexHtml.push('        <\/div>');
-    indexHtml.push('        <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.<\/p>');
+    indexHtml.push('        <p class="font-zoom text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.<\/p>');
     indexHtml.push('    <\/footer>');
 
     var searchItems = (productsList || []).map(function(p) {
@@ -1954,12 +1954,12 @@ function buildKeepHtml(keepText) {
             h.push('        <\/div>');
             h.push('    <\/div>');
             h.push('    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl mt-3 md:-mt-3 p-5 md:p-6 flex items-center gap-4 md:gap-5 border border-stone-100">');
-            h.push('        <div>');
+            h.push('        <div class="font-zoom">');
             h.push('            ' + shopContactLineHtml());
             h.push('            ' + shopFooterPolicyHtml());
             h.push('        <\/div>');
             h.push('    <\/div>');
-            h.push('    <p class="text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.<\/p>');
+            h.push('    <p class="font-zoom text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.<\/p>');
             h.push('    <script>');
             h.push('        function openKeepTarget() {');
             h.push('            var id = (location.hash || "").replace("#", "");');

@@ -28,12 +28,17 @@
     </style>
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-16">
-    <nav class="p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40">
+    <nav class="relative p-4 flex justify-between items-center border-b sticky top-0 bg-white/90 backdrop-blur-md z-40">
         <a href="index.html" class="text-xl font-bold text-amber-800 tracking-wider">Poponew甜點</a>
         <a href="order-search.html" class="text-sm font-medium text-amber-800 underline underline-offset-2">訂單查詢</a>
+        <div class="absolute top-[calc(100%+10px)] right-4 flex items-center bg-white/95 backdrop-blur-md rounded-xl p-1 border border-stone-200 shadow-md z-30">
+            <button type="button" onclick="changeFontSize(-1)" title="縮小字型" class="w-8 h-7 flex items-center justify-center text-xs font-bold text-stone-600 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A-</button>
+            <button type="button" onclick="resetFontSize()" title="重設字型" class="px-2 h-7 flex items-center justify-center text-xs font-medium text-stone-400 hover:text-amber-800 transition">預設</button>
+            <button type="button" onclick="changeFontSize(1)" title="放大字型" class="w-8 h-7 flex items-center justify-center text-sm font-bold text-stone-700 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A+</button>
+        </div>
     </nav>
 
-    <div class="max-w-md mx-auto px-4 my-8">
+    <div class="font-zoom max-w-md mx-auto px-4 my-8">
         <div class="bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
             <h1 class="text-2xl font-bold text-amber-800 text-center">通知已匯款</h1>
             <p class="text-stone-500 text-sm text-center mt-2 leading-relaxed">這只是通知店家「我已匯款」，還要等對完帳才算出貨。貨到付款不用填這頁。</p>
@@ -128,6 +133,22 @@
                 localStorage.setItem(storageKey(id), String(Date.now()));
                 showDone(false);
             });
+        }
+        let currentFontSize = parseInt(localStorage.getItem("poponew_font_size")) || 16;
+        applyFontSize(currentFontSize);
+        function changeFontSize(delta) {
+            currentFontSize = Math.min(Math.max(currentFontSize + delta * 2, 14), 22);
+            applyFontSize(currentFontSize);
+        }
+        function resetFontSize() {
+            currentFontSize = 16;
+            applyFontSize(currentFontSize);
+        }
+        function applyFontSize(size) {
+            document.documentElement.style.fontSize = "16px";
+            localStorage.setItem("poponew_font_size", size);
+            var scale = (parseInt(size, 10) || 16) / 16;
+            document.querySelectorAll(".font-zoom").forEach(function(el) { el.style.zoom = scale === 1 ? "" : String(scale); });
         }
     </script>
 </body>

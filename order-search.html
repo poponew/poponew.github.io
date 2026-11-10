@@ -54,7 +54,7 @@
 </div>
 </nav>
 
-<div class="max-w-2xl mx-auto px-4 my-8">
+<div class="font-zoom max-w-2xl mx-auto px-4 my-8">
     <!-- 頁頭標題 (恢復乾淨無按鈕衝突) -->
     <header class="text-center py-6 px-4 bg-white rounded-2xl shadow-sm border border-stone-100 mb-6">
         <h1 class="text-3xl font-extrabold text-amber-800 tracking-wider">🔍 訂單進度查詢</h1>
@@ -422,8 +422,10 @@
         }
 
         function applyFontSize(size) {
-            document.documentElement.style.fontSize = size + 'px';
+            document.documentElement.style.fontSize = '16px';
             localStorage.setItem('poponew_font_size', size);
+            var scale = (parseInt(size, 10) || 16) / 16;
+            document.querySelectorAll('.font-zoom').forEach(function(el) { el.style.zoom = scale === 1 ? '' : String(scale); });
         }
     </script>
     <script src="js/shop-settings.js"></script>
