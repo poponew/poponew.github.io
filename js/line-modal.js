@@ -1,8 +1,5 @@
 (function () {
-    var LINE_ID = "@534euhut";
-    var LINE_ADD = "https://line.me/R/ti/p/@534euhut";
     var LINE_QR = "images/line-qr.png";
-    var LINE_QR_FALLBACK = "https://qr-official.line.me/sid/L/534euhut.png";
 
     var style = document.createElement("style");
     style.textContent =
@@ -14,7 +11,7 @@
         ".uber-eats-link{position:relative;display:inline-flex;align-items:center;flex-wrap:nowrap;white-space:nowrap;gap:0;margin:0;padding:0;font:inherit;font-weight:700;color:#292524;text-decoration:none;vertical-align:middle;}" +
         ".uber-eats-link:hover{color:#06C167;}" +
         ".uber-eats-link .uber-eats-logo{display:block;flex-shrink:0;width:76px;height:22px;}" +
-        ".foodpanda-link{display:inline-flex;align-items:center;flex-wrap:nowrap;white-space:nowrap;gap:0;margin:0;padding:0;font:inherit;font-weight:700;color:#D70F64;text-decoration:none;vertical-align:middle;}" +
+        ".foodpanda-link{position:relative;display:inline-flex;align-items:center;flex-wrap:nowrap;white-space:nowrap;gap:0;margin:0;padding:0;font:inherit;font-weight:700;color:#D70F64;text-decoration:none;vertical-align:middle;}" +
         ".foodpanda-link:hover{color:#b00c50;}" +
         ".foodpanda-link .foodpanda-logo{display:block;flex-shrink:0;width:114px;height:22px;object-fit:contain;}" +
         ".delivery-pair{display:inline-flex;align-items:center;vertical-align:middle;white-space:nowrap;}" +
@@ -37,6 +34,23 @@
         ".line-modal-open:hover{background:#05b34c;}";
     document.head.appendChild(style);
 
+    function currentLine() {
+        var fallbackUrl = "https://line.me/R/ti/p/@534euhut";
+        var fallbackId = "@534euhut";
+        var links = window.shopSettings && window.shopSettings.footerLinks;
+        var row = null;
+        if (links && links.length) {
+            for (var i = 0; i < links.length; i++) {
+                if (links[i] && links[i].id === "line" && links[i].url) row = links[i];
+            }
+        }
+        var url = row ? String(row.url) : fallbackUrl;
+        var id = fallbackId;
+        var matched = url.match(/@([A-Za-z0-9._-]+)/);
+        if (matched) id = "@" + matched[1];
+        return { url: url, id: id };
+    }
+
     function ensureModal() {
         if (document.getElementById("line-modal")) return;
         var wrap = document.createElement("div");
@@ -46,20 +60,23 @@
         wrap.setAttribute("role", "dialog");
         wrap.setAttribute("aria-modal", "true");
         wrap.setAttribute("aria-labelledby", "line-modal-title");
+        var line = currentLine();
+        var qrSrc = line.id === "@534euhut" ? LINE_QR : ("https://qr-official.line.me/sid/L/" + line.id.replace(/^@/, "") + ".png");
+        var qrFallback = "https://qr-official.line.me/sid/L/" + line.id.replace(/^@/, "") + ".png";
         wrap.innerHTML =
             '<div class="line-modal-backdrop" data-line-close="1"></div>' +
             '<div class="line-modal-card">' +
             '<button type="button" class="line-modal-close" data-line-close="1" aria-label="關閉">×</button>' +
             '<h3 id="line-modal-title" class="line-modal-title">加入官方LINE</h3>' +
-            '<p class="line-modal-id">' + LINE_ID + '</p>' +
-            '<img class="line-modal-qr" src="' + LINE_QR + '" alt="官方 LINE 加入好友條碼" width="200" height="200">' +
+            '<p class="line-modal-id">' + line.id + '</p>' +
+            '<img class="line-modal-qr" src="' + qrSrc + '" alt="官方 LINE 加入好友條碼" width="200" height="200">' +
             '<p class="line-modal-hint">請用 LINE 掃描條碼加入好友。<br>手機可改按下方按鈕直接開啟。</p>' +
-            '<a class="line-modal-open" href="' + LINE_ADD + '" target="_blank" rel="noopener">用 LINE 開啟</a>' +
+            '<a class="line-modal-open" href="' + line.url + '" target="_blank" rel="noopener">用 LINE 開啟</a>' +
             "</div>";
         document.body.appendChild(wrap);
         var img = wrap.querySelector(".line-modal-qr");
         img.addEventListener("error", function () {
-            if (img.src.indexOf("qr-official.line.me") === -1) img.src = LINE_QR_FALLBACK;
+            if (img.getAttribute("src") !== qrFallback) img.src = qrFallback;
         });
         wrap.addEventListener("click", function (e) {
             if (e.target && e.target.getAttribute("data-line-close")) closeModal();
@@ -81,8 +98,8 @@
     }
 
     document.addEventListener("click", function (e) {
-        var fp = e.target.closest ? e.target.closest(".foodpanda-link") : null;
-        if (fp && !fp.getAttribute("href")) e.preventDefault();
+        var bare = e.target.closest ? e.target.closest(".foodpanda-link, .uber-eats-link") : null;
+        if (bare && !bare.getAttribute("href")) e.preventDefault();
         var btn = e.target.closest ? e.target.closest("[data-line-open]") : null;
         if (!btn) return;
         e.preventDefault();
@@ -92,4 +109,25 @@
     document.addEventListener("keydown", function (e) {
         if (e.key === "Escape") closeModal();
     });
+
+    function syncDeliveryNote() {
+        var links = window.shopSettings && window.shopSettings.footerLinks;
+        if (!links || !links.length) return;
+        var uberOn = false;
+        var pandaOn = false;
+        var seen = false;
+        for (var i = 0; i < links.length; i++) {
+            var row = links[i];
+            if (!row) continue;
+            if (row.id === "uber") { seen = true; uberOn = row.enabled !== false; }
+            if (row.id === "foodpanda") { seen = true; pandaOn = row.enabled !== false; }
+        }
+        if (!seen || uberOn || pandaOn) return;
+        var notes = document.querySelectorAll(".delivery-area-note");
+        for (var n = 0; n < notes.length; n++) {
+            if (notes[n].parentNode) notes[n].parentNode.removeChild(notes[n]);
+        }
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", syncDeliveryNote);
+    else syncDeliveryNote();
 })();

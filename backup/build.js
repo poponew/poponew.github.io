@@ -179,6 +179,9 @@ for (let i = 1; i < lines.length; i++) {
     } else if (type === 'pause') {
         shopSettings.ordersPaused = parts[4] === 'true' || parts[4] === '1';
         shopSettings.ordersPausedNote = parts[7] || parts[5] || shopSettings.ordersPausedNote;
+    } else if (type === 'link') {
+        if (!Array.isArray(shopSettings.footerLinks)) shopSettings.footerLinks = [];
+        shopSettings.footerLinks.push({ id: parts[1] || '', title: parts[2] || '', url: parts[3] || '', enabled: parts[4] !== 'false' && parts[4] !== '0' });
     } else if (type === 'keep') {
         keepNote = parts[9] || '';
     } else if (type === 'group') {
@@ -308,7 +311,7 @@ function clipMetaText(str, max) {
 function seoMetaLines(title, description, image) {
             var t = escapeAttr(title);
             var d = escapeAttr(description);
-            var imgRaw = image || 'images/scone.jpg';
+            var imgRaw = String(image || 'images/scone.webp').replace(/\.jpe?g(\?.*)?$/i, '.webp$1');
             if (!/^https?:\/\//i.test(imgRaw)) imgRaw = siteAbsUrl(imgRaw);
             var img = escapeAttr(imgRaw);
             var brand = escapeAttr(shopBrand());
@@ -442,7 +445,8 @@ function getShopSettings() {
                 discountStart: parseYmd(shopSettings.discountStart),
                 discountEnd: parseYmd(shopSettings.discountEnd),
                 ordersPaused: !!shopSettings.ordersPaused,
-                ordersPausedNote: String(shopSettings.ordersPausedNote || '').trim() || '手工甜點趕製中，先暫停新訂單，免得讓大家等太久。已經下單的不用擔心，會照常做、照常寄。恢復時會在官方 LINE 跟大家說。'
+                ordersPausedNote: String(shopSettings.ordersPausedNote || '').trim() || '手工甜點趕製中，先暫停新訂單，免得讓大家等太久。已經下單的不用擔心，會照常做、照常寄。恢復時會在官方 LINE 跟大家說。',
+                footerLinks: normalizeFooterLinks(shopSettings.footerLinks)
             };
         }
 
@@ -458,16 +462,79 @@ function foodpandaLogoHtml() {
             return '<img class="foodpanda-logo" src="images/foodpanda-logo.png" alt="" width="114" height="22">';
         }
 
+function defaultFooterLinks() {
+            return [
+                { id: 'line', title: '官方LINE', url: 'https://line.me/R/ti/p/@534euhut', enabled: true },
+                { id: 'uber', title: 'Uber Eats', url: 'https://www.ubereats.com/store/poponew-%E6%B3%A1%E6%B3%A1%E7%89%9B%E6%89%8B%E4%BD%9C%E7%94%9C%E9%BB%9E/o-7ZvxOAXQOOYQ-uYDVdrg?diningMode=DELIVERY', enabled: true },
+                { id: 'foodpanda', title: 'foodpanda', url: '', enabled: true }
+            ];
+        }
+
+function normalizeFooterLinkUrl(id, raw) {
+            var value = String(raw || '').trim();
+            if (!value) return '';
+            if (id === 'line' && value.charAt(0) === '@') return 'https://line.me/R/ti/p/' + value;
+            if (value.slice(0, 2) === '//') value = 'https:' + value;
+            if (/^http:\/\//i.test(value)) value = 'https://' + value.slice(7);
+            if (!/^https:\/\//i.test(value)) return '';
+            return value;
+        }
+
+function normalizeFooterLinks(list) {
+            var defaults = defaultFooterLinks();
+            var byId = {};
+            (Array.isArray(list) ? list : []).forEach(function(row) {
+                if (row && row.id) byId[row.id] = row;
+            });
+            return defaults.map(function(base) {
+                var row = byId[base.id] || {};
+                var title = String(row.title != null ? row.title : base.title).trim() || base.title;
+                var enabled = row.enabled == null ? base.enabled : !!row.enabled;
+                var rawUrl = row.url != null ? row.url : base.url;
+                return {
+                    id: base.id,
+                    title: title,
+                    url: normalizeFooterLinkUrl(base.id, rawUrl),
+                    enabled: enabled
+                };
+            });
+        }
+
+function footerLinkHrefAttrs(url) {
+            if (!url) return ' href=""';
+            return ' href="' + escapeAttr(url) + '" target="_blank" rel="noopener noreferrer"';
+        }
+
 function shopContactLineHtml() {
-            return '<p class="shop-contact-line text-stone-500 text-[11px] md:text-xs leading-relaxed">' +
-                '<button type="button" class="line-open-btn" data-line-open>' + lineLogoSvg() + '<span>官方LINE</span></button>' +
-                '<span class="text-stone-300"> ｜ </span>' +
-                '<span class="delivery-pair">' +
-                '<a class="uber-eats-link" href="https://www.ubereats.com/store/poponew-%E6%B3%A1%E6%B3%A1%E7%89%9B%E6%89%8B%E4%BD%9C%E7%94%9C%E9%BB%9E/o-7ZvxOAXQOOYQ-uYDVdrg?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer" aria-label="Uber Eats"><span class="delivery-area-note"><span class="scooter" aria-hidden="true">🛵</span> 高雄可外送唷</span>' + uberEatsLogoSvg() + '</a>' +
-                '<span class="text-stone-300"> ｜&nbsp; </span>' +
-                '<a class="foodpanda-link" href="" aria-label="foodpanda">' + foodpandaLogoHtml() + '</a>' +
-                '</span>' +
-                '</p>';
+            var links = normalizeFooterLinks(shopSettings.footerLinks);
+            var byId = {};
+            links.forEach(function(row) { byId[row.id] = row; });
+            var line = byId.line;
+            var uber = byId.uber;
+            var panda = byId.foodpanda;
+            var chunks = [];
+            if (line && line.enabled) {
+                chunks.push('<button type="button" class="line-open-btn" data-line-open>' + lineLogoSvg() + '<span>' + escapeAttr(line.title) + '</span></button>');
+            }
+            var delivery = [];
+            var showDeliveryNote = !!((uber && uber.enabled) || (panda && panda.enabled));
+            var noteHtml = showDeliveryNote ? '<span class="delivery-area-note"><span class="scooter" aria-hidden="true">🛵</span> 高雄可外送唷</span>' : '';
+            if (uber && uber.enabled) {
+                delivery.push('<a class="uber-eats-link"' + footerLinkHrefAttrs(uber.url) + ' aria-label="' + escapeAttr(uber.title) + '">' + noteHtml + uberEatsLogoSvg() + '</a>');
+                noteHtml = '';
+            }
+            if (panda && panda.enabled) {
+                delivery.push('<a class="foodpanda-link"' + footerLinkHrefAttrs(panda.url) + ' aria-label="' + escapeAttr(panda.title) + '">' + noteHtml + foodpandaLogoHtml() + '</a>');
+            }
+            if (delivery.length === 2) {
+                chunks.push('<span class="delivery-pair">' + delivery[0] + '<span class="text-stone-300"> ｜&nbsp; </span>' + delivery[1] + '</span>');
+            } else if (delivery.length === 1) {
+                chunks.push(delivery[0]);
+            }
+            if (!chunks.length) return '';
+            var html = chunks[0];
+            for (var i = 1; i < chunks.length; i++) html += '<span class="text-stone-300"> ｜ </span>' + chunks[i];
+            return '<p class="shop-contact-line text-stone-500 text-[11px] md:text-xs leading-relaxed">' + html + '</p>';
         }
 
 function shopFooterPolicyHtml() {
@@ -690,37 +757,19 @@ function shopDiscountHelpersJs() {
                 '        return String(src || "").replace(/\\.jpe?g(\\?.*)?$/i, ".webp$1");',
                 '    };',
                 '    window.shopPictureHtml = function (src, attrs) {',
-                '        var jpg = String(src || "");',
-                '        return \'<picture><source srcset="\' + window.shopWebpPath(jpg) + \'" type="image/webp"><img src="\' + jpg + \'"\' + (attrs ? (" " + attrs) : "") + "></picture>";',
+                '        var webp = window.shopWebpPath(src);',
+                '        return \'<picture><source srcset="\' + webp + \'" type="image/webp"><img src="\' + webp + \'"\' + (attrs ? (" " + attrs) : "") + "></picture>";',
                 '    };',
                 '    window.shopSetPictureSrc = function (img, src) {',
                 '        if (!img) return;',
-                '        img._shopWebpFail = false;',
-                '        img.src = src;',
+                '        var webp = window.shopWebpPath(src);',
+                '        img.src = webp;',
                 '        var pic = img.parentNode;',
                 '        if (pic && pic.tagName === "PICTURE") {',
                 '            var source = pic.querySelector(\'source[type="image/webp"]\');',
-                '            if (source) source.srcset = window.shopWebpPath(src);',
+                '            if (source) source.srcset = webp;',
                 '        }',
                 '    };',
-                '    function shopFallbackJpg(img) {',
-                '        if (!img || img._shopWebpFail) return;',
-                '        var jpg = img.getAttribute("src") || "";',
-                '        if (/\\.webp(\\?|$)/i.test(jpg)) jpg = jpg.replace(/\\.webp(\\?.*)?$/i, ".jpg$1");',
-                '        if (!/\\.jpe?g(\\?|$)/i.test(jpg)) return;',
-                '        var pic = img.parentNode;',
-                '        if (pic && pic.tagName === "PICTURE") {',
-                '            var sources = pic.querySelectorAll("source");',
-                '            for (var i = 0; i < sources.length; i++) sources[i].remove();',
-                '        }',
-                '        img._shopWebpFail = true;',
-                '        img.src = "";',
-                '        img.src = jpg;',
-                '    }',
-                '    document.addEventListener("error", function (e) {',
-                '        var t = e.target;',
-                '        if (t && t.tagName === "IMG") shopFallbackJpg(t);',
-                '    }, true);',
                 '    function shopNtMark(s) {',
                 '        return String(s).replace(/NT\\$/g, \'<span class="shop-nt">NT$</span>\');',
                 '    }',
@@ -1046,7 +1095,7 @@ function buildIndexHtml(groupsList, productsList) {
             var cardWebp = String(g.img || "").replace(/\.jpe?g$/i, ".webp");
             indexHtml.push('                    <picture>');
             indexHtml.push('                        <source srcset="' + cardWebp + '" type="image/webp">');
-            indexHtml.push('                        <img loading="lazy" decoding="async" src="' + g.img + '" alt="' + g.name + '" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">');
+            indexHtml.push('                        <img loading="lazy" decoding="async" src="' + cardWebp + '" alt="' + g.name + '" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">');
             indexHtml.push('                    </picture>');
             indexHtml.push('                <\/div>');
             indexHtml.push('                ');
@@ -1068,7 +1117,6 @@ function buildIndexHtml(groupsList, productsList) {
     indexHtml.push('    <footer class="max-w-2xl mx-auto px-4 pb-12">');
     indexHtml.push('        <div class="bg-white shadow-md rounded-2xl p-5 flex items-center gap-4 border border-stone-100 mt-8">');
     indexHtml.push('            <div class="text-left">');
-    indexHtml.push('                <h4 class="brand-mark font-bold text-amber-700 text-base md:text-lg mb-1">Poponew手作甜點<\/h4>');
     indexHtml.push('                ' + shopContactLineHtml());
     indexHtml.push('                ' + shopFooterPolicyHtml());
     indexHtml.push('            <\/div>');
@@ -1409,9 +1457,10 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('        <\/div>');
             
             h.push('        <div id="product-gallery" class="w-full min-w-full aspect-square flex items-center justify-center bg-stone-100 shrink-0 relative overflow-hidden">');
+            var galleryWebp = String(img || "").replace(/\.jpe?g$/i, ".webp");
             h.push('            <picture>');
-            h.push('                <source id="product-gallery-webp" type="image/webp" srcset="' + String(img || "").replace(/\.jpe?g$/i, ".webp") + '">');
-            h.push('                <img id="product-gallery-img" src="' + img + '" alt="' + cleanGroupName + '" class="w-full h-full object-cover" draggable="false">');
+            h.push('                <source id="product-gallery-webp" type="image/webp" srcset="' + galleryWebp + '">');
+            h.push('                <img id="product-gallery-img" src="' + galleryWebp + '" alt="' + cleanGroupName + '" class="w-full h-full object-cover" draggable="false">');
             h.push('            </picture>');
             h.push('            <button type="button" id="product-gallery-prev" hidden class="hidden absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 text-stone-800 shadow-md border border-stone-200 flex items-center justify-center text-2xl leading-none hover:bg-white active:scale-95" aria-label="上一張">&#8249;<\/button>');
             h.push('            <button type="button" id="product-gallery-next" hidden class="hidden absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 text-stone-800 shadow-md border border-stone-200 flex items-center justify-center text-2xl leading-none hover:bg-white active:scale-95" aria-label="下一張">&#8250;<\/button>');
@@ -1492,7 +1541,6 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl mt-3 md:-mt-3 p-5 md:p-6 flex items-center gap-4 md:gap-5 border border-stone-100">');
 
             h.push('        <div>');
-            h.push('            <h4 class="brand-mark font-bold text-amber-700 text-base md:text-lg mb-1">Poponew手作甜點<\/h4>');
             h.push('            ' + shopContactLineHtml());
             h.push('            ' + shopFooterPolicyHtml());
             h.push('        <\/div>');
@@ -1585,7 +1633,7 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('                return null;');
             h.push('            }');
             h.push('            window.products.forEach(function(p) {');
-            h.push('                var imgUrl = "images/thumb/" + p.id + ".jpg";');
+            h.push('                var imgUrl = "images/thumb/" + p.id + ".webp";');
             h.push('                var imgTester = new Image();');
             h.push('                imgTester.onload = function() {');
             h.push('                    var targetLeftPart = document.getElementById("product-info-left-" + p.id);');
@@ -1907,7 +1955,6 @@ function buildKeepHtml(keepText) {
             h.push('    <\/div>');
             h.push('    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl mt-3 md:-mt-3 p-5 md:p-6 flex items-center gap-4 md:gap-5 border border-stone-100">');
             h.push('        <div>');
-            h.push('            <h4 class="brand-mark font-bold text-amber-700 text-base md:text-lg mb-1">Poponew手作甜點<\/h4>');
             h.push('            ' + shopContactLineHtml());
             h.push('            ' + shopFooterPolicyHtml());
             h.push('        <\/div>');

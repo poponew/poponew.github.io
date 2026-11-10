@@ -22,7 +22,27 @@ window.shopSettings = {
     "discountStart": "",
     "discountEnd": "",
     "ordersPaused": false,
-    "ordersPausedNote": "臨時有事，先暫停接單。已下單不受影響。恢復下單時會在官方 LINE 推播，造成不便還請見諒~"
+    "ordersPausedNote": "臨時有事，先暫停接單。已下單不受影響。恢復下單時會在官方 LINE 推播，造成不便還請見諒~",
+    "footerLinks": [
+        {
+            "id": "line",
+            "title": "官方LINE",
+            "url": "https://line.me/R/ti/p/@534euhut",
+            "enabled": true
+        },
+        {
+            "id": "uber",
+            "title": "Uber Eats",
+            "url": "https://www.ubereats.com/store/poponew-%E6%B3%A1%E6%B3%A1%E7%89%9B%E6%89%8B%E4%BD%9C%E7%94%9C%E9%BB%9E/o-7ZvxOAXQOOYQ-uYDVdrg?diningMode=DELIVERY",
+            "enabled": true
+        },
+        {
+            "id": "foodpanda",
+            "title": "foodpanda",
+            "url": "",
+            "enabled": false
+        }
+    ]
 };
 (function () {
     function shopTierList() {
@@ -227,37 +247,19 @@ window.shopSettings = {
         return String(src || "").replace(/\.jpe?g(\?.*)?$/i, ".webp$1");
     };
     window.shopPictureHtml = function (src, attrs) {
-        var jpg = String(src || "");
-        return '<picture><source srcset="' + window.shopWebpPath(jpg) + '" type="image/webp"><img src="' + jpg + '"' + (attrs ? (" " + attrs) : "") + "></picture>";
+        var webp = window.shopWebpPath(src);
+        return '<picture><source srcset="' + webp + '" type="image/webp"><img src="' + webp + '"' + (attrs ? (" " + attrs) : "") + "></picture>";
     };
     window.shopSetPictureSrc = function (img, src) {
         if (!img) return;
-        img._shopWebpFail = false;
-        img.src = src;
+        var webp = window.shopWebpPath(src);
+        img.src = webp;
         var pic = img.parentNode;
         if (pic && pic.tagName === "PICTURE") {
             var source = pic.querySelector('source[type="image/webp"]');
-            if (source) source.srcset = window.shopWebpPath(src);
+            if (source) source.srcset = webp;
         }
     };
-    function shopFallbackJpg(img) {
-        if (!img || img._shopWebpFail) return;
-        var jpg = img.getAttribute("src") || "";
-        if (/\.webp(\?|$)/i.test(jpg)) jpg = jpg.replace(/\.webp(\?.*)?$/i, ".jpg$1");
-        if (!/\.jpe?g(\?|$)/i.test(jpg)) return;
-        var pic = img.parentNode;
-        if (pic && pic.tagName === "PICTURE") {
-            var sources = pic.querySelectorAll("source");
-            for (var i = 0; i < sources.length; i++) sources[i].remove();
-        }
-        img._shopWebpFail = true;
-        img.src = "";
-        img.src = jpg;
-    }
-    document.addEventListener("error", function (e) {
-        var t = e.target;
-        if (t && t.tagName === "IMG") shopFallbackJpg(t);
-    }, true);
     function shopNtMark(s) {
         return String(s).replace(/NT\$/g, '<span class="shop-nt">NT$</span>');
     }
