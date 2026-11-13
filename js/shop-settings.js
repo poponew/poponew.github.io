@@ -1,17 +1,17 @@
 window.shopSettings = {
     "shippingFee": 120,
-    "freeShipping": 1000,
+    "freeShipping": 999,
     "shippingTiers": [
         {
             "min": 0,
             "fee": 120
         },
         {
-            "min": 500,
+            "min": 499,
             "fee": 80
         },
         {
-            "min": 1000,
+            "min": 999,
             "fee": 0
         }
     ],
@@ -23,6 +23,7 @@ window.shopSettings = {
     "discountEnd": "",
     "ordersPaused": false,
     "ordersPausedNote": "臨時有事，先暫停接單。已下單不受影響。恢復下單時會在官方 LINE 推播，造成不便還請見諒~",
+    "newAutoPin": false,
     "footerLinks": [
         {
             "id": "line",

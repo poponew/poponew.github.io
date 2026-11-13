@@ -163,7 +163,7 @@ function parseDiscountFold(value) {
             return Math.round(n * 10) / 10;
         }
 
-let shopSettings = { shippingFee: 120, freeShipping: 1000, shippingTiers: [], minOrder: 300, codLimit: 2000, bulkOrder: 5000, discountFold: 10, discountStart: '', discountEnd: '', homeLead: '', ordersPaused: false, ordersPausedNote: '手工甜點趕製中，先暫停新訂單，免得讓大家等太久。已經下單的不用擔心，會照常做、照常寄。恢復時會在官方 LINE 跟大家說。' };
+let shopSettings = { shippingFee: 120, freeShipping: 1000, shippingTiers: [], minOrder: 300, codLimit: 2000, bulkOrder: 5000, discountFold: 10, discountStart: '', discountEnd: '', homeLead: '', ordersPaused: false, ordersPausedNote: '手工甜點趕製中，先暫停新訂單，免得讓大家等太久。已經下單的不用擔心，會照常做、照常寄。恢復時會在官方 LINE 跟大家說。', newAutoPin: true };
 
 for (let i = 1; i < lines.length; i++) {
     let parts = parseCSVRow(lines[i]);
@@ -179,6 +179,8 @@ for (let i = 1; i < lines.length; i++) {
     } else if (type === 'pause') {
         shopSettings.ordersPaused = parts[4] === 'true' || parts[4] === '1';
         shopSettings.ordersPausedNote = parts[7] || parts[5] || shopSettings.ordersPausedNote;
+    } else if (type === 'newpin') {
+        shopSettings.newAutoPin = parts[4] !== 'false' && parts[4] !== '0';
     } else if (type === 'link') {
         if (!Array.isArray(shopSettings.footerLinks)) shopSettings.footerLinks = [];
         shopSettings.footerLinks.push({ id: parts[1] || '', title: parts[2] || '', url: parts[3] || '', enabled: parts[4] !== 'false' && parts[4] !== '0' });
@@ -446,6 +448,7 @@ function getShopSettings() {
                 discountEnd: parseYmd(shopSettings.discountEnd),
                 ordersPaused: !!shopSettings.ordersPaused,
                 ordersPausedNote: String(shopSettings.ordersPausedNote || '').trim() || '手工甜點趕製中，先暫停新訂單，免得讓大家等太久。已經下單的不用擔心，會照常做、照常寄。恢復時會在官方 LINE 跟大家說。',
+                newAutoPin: shopSettings.newAutoPin !== false,
                 footerLinks: normalizeFooterLinks(shopSettings.footerLinks)
             };
         }
@@ -1168,13 +1171,14 @@ function buildIndexHtml(groupsList, productsList) {
     indexHtml.push('            return array;');
     indexHtml.push('        }');
     indexHtml.push('');
-    indexHtml.push('        // 2. 頁面載入時：新品自動置頂 30 天 → 手動置頂 → 其餘隨機');
+    indexHtml.push('        // 2. 頁面載入時：新品置頂開啟時，30 天內新品 → 手動置頂 → 其餘隨機');
     indexHtml.push('        document.addEventListener("DOMContentLoaded", function() {');
     indexHtml.push('            var container = document.getElementById("product-list");');
     indexHtml.push('            if (!container) return;');
-    indexHtml.push('            var newCards = Array.from(container.querySelectorAll(".product-card[data-new=\'true\']"));');
-    indexHtml.push('            var pinnedCards = Array.from(container.querySelectorAll(".product-card[data-pinned=\'true\']:not([data-new=\'true\'])"));');
-    indexHtml.push('            var normalCards = Array.from(container.querySelectorAll(".product-card:not([data-pinned=\'true\']):not([data-new=\'true\'])"));');
+    indexHtml.push('            var pinNew = !window.shopSettings || window.shopSettings.newAutoPin !== false;');
+    indexHtml.push('            var newCards = pinNew ? Array.from(container.querySelectorAll(".product-card[data-new=\'true\']")) : [];');
+    indexHtml.push('            var pinnedCards = Array.from(container.querySelectorAll(pinNew ? ".product-card[data-pinned=\'true\']:not([data-new=\'true\'])" : ".product-card[data-pinned=\'true\']"));');
+    indexHtml.push('            var normalCards = Array.from(container.querySelectorAll(pinNew ? ".product-card:not([data-pinned=\'true\']):not([data-new=\'true\'])" : ".product-card:not([data-pinned=\'true\'])"));');
     indexHtml.push('            shuffleArray(newCards).concat(pinnedCards).concat(shuffleArray(normalCards)).forEach(function(card) {');
     indexHtml.push('                container.appendChild(card);');
     indexHtml.push('            });');
