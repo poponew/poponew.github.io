@@ -1,6 +1,6 @@
 window.shopSettings = {
     "shippingFee": 120,
-    "freeShipping": 999,
+    "freeShipping": 888,
     "shippingTiers": [
         {
             "min": 0,
@@ -11,7 +11,7 @@ window.shopSettings = {
             "fee": 80
         },
         {
-            "min": 999,
+            "min": 888,
             "fee": 0
         }
     ],
