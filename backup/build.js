@@ -825,8 +825,10 @@ function shopDiscountHelpersJs() {
                 '    function applyHomeLeadDiscount() {',
                 '        var lead = document.getElementById("shop-home-lead") || document.querySelector(".max-w-5xl p.text-center");',
                 '        if (!lead) return;',
+                '        var more = lead.querySelector("a.home-lead-more");',
+                '        if (more) more.remove();',
                 '        if (!lead.getAttribute("data-shop-lead")) {',
-                '            var raw = String(lead.textContent || "").replace(/^📢\\s*/, "").replace(/^全店\\s+[\\d.]+\\s+折優惠中(?:（[^）]*）)?！/, "").trim();',
+                '            var raw = String(lead.textContent || "").replace(/^📢\\s*/, "").replace(/^全店\\s+[\\d.]+\\s+折優惠中(?:（[^）]*）)?！/, "").replace(/[（(]\\s*運費說明\\s*[）)]/g, "").trim();',
                 '            lead.setAttribute("data-shop-lead", raw);',
                 '        }',
                 '        var prefix = shopDiscountLeadPrefix();',
@@ -835,6 +837,10 @@ function shopDiscountHelpersJs() {
                 '            lead.innerHTML = "📢 <span class=\\"shop-sale-lead\\" style=\\"background:#fef3c7;color:#78350f;font-weight:600;padding:0.12em 0.45em;border-radius:0.4rem\\">" + prefix + "</span>" + base;',
                 '        } else {',
                 '            lead.textContent = "📢 " + base;',
+                '        }',
+                '        if (more) {',
+                '            lead.appendChild(document.createTextNode(" "));',
+                '            lead.appendChild(more);',
                 '        }',
                 '        var old = document.getElementById("shop-sale-banner");',
                 '        if (old) {',
@@ -1075,7 +1081,7 @@ function buildIndexHtml(groupsList, productsList) {
     indexHtml.push('        <button type="button" onclick="changeFontSize(1)" title="放大字型" class="w-9 h-8 flex items-center justify-center text-sm font-bold text-stone-700 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A+</button>');
     indexHtml.push('    <\/div>');
     indexHtml.push('    <div class="max-w-5xl mx-auto px-4 mb-8">');
-    indexHtml.push('        <p id="shop-home-lead" class="font-zoom text-stone-600 text-sm leading-snug text-center mt-5 mb-5">📢 ' + escapeAttr(homeLead) + '<\/p>');
+    indexHtml.push('        <p id="shop-home-lead" class="font-zoom text-stone-600 text-sm leading-snug text-center mt-5 mb-5">📢 ' + escapeAttr(homeLead) + ' <a class="home-lead-more font-semibold text-amber-700" href="faq.html#faq-ship" style="text-decoration:none"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-2px;margin-right:0.2em"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>運費說明<\/a><\/p>');
     indexHtml.push('        <div class="font-zoom flex flex-wrap items-center justify-center gap-1.5 mb-6" id="category-tags">');
     indexHtml.push('          <button type="button" onclick="filterCategory(\'all\', this)" class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-amber-700 text-white shadow-sm transition">全部商品<\/button>');
     allTags.forEach(function(t) {

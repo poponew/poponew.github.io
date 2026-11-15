@@ -313,8 +313,10 @@ window.shopSettings = {
     function applyHomeLeadDiscount() {
         var lead = document.getElementById("shop-home-lead") || document.querySelector(".max-w-5xl p.text-center");
         if (!lead) return;
+        var more = lead.querySelector("a.home-lead-more");
+        if (more) more.remove();
         if (!lead.getAttribute("data-shop-lead")) {
-            var raw = String(lead.textContent || "").replace(/^📢\s*/, "").replace(/^全店\s+[\d.]+\s+折優惠中(?:（[^）]*）)?！/, "").trim();
+            var raw = String(lead.textContent || "").replace(/^📢\s*/, "").replace(/^全店\s+[\d.]+\s+折優惠中(?:（[^）]*）)?！/, "").replace(/[（(]\s*運費說明\s*[）)]/g, "").trim();
             lead.setAttribute("data-shop-lead", raw);
         }
         var prefix = shopDiscountLeadPrefix();
@@ -323,6 +325,10 @@ window.shopSettings = {
             lead.innerHTML = "📢 <span class=\"shop-sale-lead\" style=\"background:#fef3c7;color:#78350f;font-weight:600;padding:0.12em 0.45em;border-radius:0.4rem\">" + prefix + "</span>" + base;
         } else {
             lead.textContent = "📢 " + base;
+        }
+        if (more) {
+            lead.appendChild(document.createTextNode(" "));
+            lead.appendChild(more);
         }
         var old = document.getElementById("shop-sale-banner");
         if (old) {
