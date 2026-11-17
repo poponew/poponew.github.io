@@ -13,7 +13,7 @@
         ".uber-eats-link .uber-eats-logo{display:block;flex-shrink:0;width:76px;height:22px;}" +
         ".foodpanda-link{position:relative;display:inline-flex;align-items:center;flex-wrap:nowrap;white-space:nowrap;gap:0;margin:0;padding:0;font:inherit;font-weight:700;color:#D70F64;text-decoration:none;vertical-align:middle;}" +
         ".foodpanda-link:hover{color:#b00c50;}" +
-        ".foodpanda-link .foodpanda-logo{display:block;flex-shrink:0;width:114px;height:22px;object-fit:contain;}" +
+        ".foodpanda-link .foodpanda-logo{display:block;flex-shrink:0;width:96px;height:18px;object-fit:contain;}" +
         ".delivery-pair{display:inline-flex;align-items:center;vertical-align:middle;white-space:nowrap;}" +
         ".delivery-area-note{position:absolute;left:calc(100% - 28px);bottom:calc(100% + 12px);display:inline-flex;align-items:center;padding:3px 9px 4px;border:1.5px solid #a8a29e;border-radius:12px;background:#fff;color:#44403c;font-family:ui-sans-serif,system-ui,sans-serif;font-size:12px;font-weight:700;line-height:1.3;white-space:nowrap;box-shadow:0 6px 12px rgba(68,64,60,.16);z-index:2;pointer-events:none;}" +
         ".delivery-area-note::before{content:\"\";position:absolute;left:6px;top:100%;border-width:6px 6px 0;border-style:solid;border-color:#a8a29e transparent transparent;}" +

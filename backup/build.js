@@ -462,7 +462,7 @@ function uberEatsLogoSvg() {
         }
 
 function foodpandaLogoHtml() {
-            return '<img class="foodpanda-logo" src="images/foodpanda-logo.png" alt="" width="114" height="22">';
+            return '<img class="foodpanda-logo" src="images/foodpanda-logo.png" alt="" width="96" height="18">';
         }
 
 function defaultFooterLinks() {

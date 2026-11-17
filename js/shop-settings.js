@@ -40,8 +40,8 @@ window.shopSettings = {
         {
             "id": "foodpanda",
             "title": "foodpanda",
-            "url": "",
-            "enabled": false
+            "url": "https://www.foodpanda.com.tw/restaurant/qsz7/poponew-shou-zuo-tian-dian-qsz7",
+            "enabled": true
         }
     ]
 };

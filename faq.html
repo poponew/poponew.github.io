@@ -34,18 +34,42 @@
             },
             {
                 "@type": "Question",
-                "name": "運費怎麼算？可以超商取貨嗎？",
+                "name": "可以用貨到付款嗎？",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "滿 NT$299 就能下單，小份量也能輕鬆嘗鮮。全店滿 NT$888 免運。滿 NT$499，運費只要 NT$80。未滿 NT$499，運費 NT$120。為了保持甜點的新鮮美味，全店一律使用低溫冷凍宅配，一趟實際運費是 NT$160，我們會幫你分擔一部分。目前不提供超商取貨或常溫寄送，敬請見諒。"
+                    "text": "可以選銀行轉帳或貨到付款。單筆訂單滿 NT$2,000 以上時，不提供貨到付款，請改用轉帳。"
                 }
             },
             {
                 "@type": "Question",
-                "name": "可以用貨到付款嗎？",
+                "name": "有開發票嗎？",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "可以選銀行轉帳或貨到付款。單筆訂單達 NT$ 2,000 以上時，不提供貨到付款，請改用轉帳。"
+                    "text": "本店為免用統一發票之小規模營業人。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "怎麼查訂單？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "請到訂單查詢，輸入手機號碼或訂單編號。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "大量訂單怎麼辦？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "大宗送禮或單筆超過 NT$5,000，請先透過官方 LINE，或到聯絡我們留言。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "運費怎麼算？可以超商取貨嗎？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "為了保持甜點的新鮮美味，全店一律使用低溫冷凍宅配，目前不提供超商取貨或常溫寄送。全店滿 NT$888 免運。滿 NT$499，運費只要 NT$80。未滿 NT$499，運費 NT$120。滿 NT$299 就能下單，小份量也能輕鬆嘗鮮。冷凍運費約 NT$160，我們幫您分擔一部分。"
                 }
             },
             {
@@ -90,18 +114,10 @@
             },
             {
                 "@type": "Question",
-                "name": "有開發票嗎？對蛋奶過敏可以吃嗎？",
+                "name": "對蛋奶過敏可以吃嗎？",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "本店為免用統一發票之小規模營業人。含蛋、牛奶；產線另有麩質穀物及堅果。對上述成分過敏者不適合食用。"
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "如何查訂單？大量訂購怎麼辦？",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "請到訂單查詢頁，輸入手機號碼或訂單編號。大宗送禮或單筆超過 NT$ 5,000，請先透過官方 LINE 或聯絡我們洽詢檔期。"
+                    "text": "含蛋、牛奶；產線另有麩質穀物及堅果。對上述成分過敏者不適合食用。"
                 }
             },
             {
@@ -126,7 +142,8 @@
             font-display: swap;
         }
         .brand-mark { font-family: "poponew", sans-serif; }
-        .qa details { border: 1px solid #e7e5e4; border-radius: 1rem; background: #fff; scroll-margin-top: 4.75rem; }
+        .qa details { border: 1px solid #e7e5e4; border-radius: 1rem; background: #fff; }
+        #faq-ship { scroll-margin-top: 6.75rem; }
         .qa details + details { margin-top: 0.75rem; }
         .qa summary {
             cursor: pointer;
@@ -134,6 +151,11 @@
             font-weight: 700;
             color: #292524;
             padding: 1rem 1.1rem;
+        }
+        .qa summary:focus,
+        .qa summary:focus-visible {
+            outline: none;
+            box-shadow: none;
         }
         .qa summary::-webkit-details-marker { display: none; }
         .qa summary::before { content: "▸ "; color: #b45309; }
@@ -144,6 +166,8 @@
         .qa .answer b { white-space: nowrap; }
         .qa .ship-lines { list-style: none; margin: 0.45rem 0 0; padding: 0; }
         .qa .ship-lines li + li { margin-top: 0.15rem; }
+        .qa-group { margin: 1.5rem 0.15rem 0.65rem; color: #b45309; font-size: 1rem; font-weight: 700; line-height: 1.4; }
+        .qa-group:first-child { margin-top: 0; }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-12">
@@ -169,6 +193,7 @@
             </header>
 
             <div class="qa font-zoom">
+                <p class="qa-group">訂購與付款</p>
                 <details id="faq-order" open>
                     <summary>要怎麼訂購？</summary>
                     <div class="answer">
@@ -176,24 +201,46 @@
                     </div>
                 </details>
 
-                <details id="faq-ship">
-                    <summary>運費怎麼算？可以超商取貨嗎？</summary>
+                <details>
+                    <summary>可以用貨到付款嗎？</summary>
                     <div class="answer">
-                        <p>滿 <b data-shop="minOrderPlain">NT$299</b> 就能下單，小份量也能輕鬆嘗鮮 😊</p>
+                        <p>可以選銀行轉帳或貨到付款。單筆訂單滿 <b data-shop="codLimitPlain">NT$2,000</b> 以上時，不提供貨到付款，請改用轉帳。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>有開發票嗎？</summary>
+                    <div class="answer">
+                        <p>本店為免用統一發票之小規模營業人。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>怎麼查訂單？</summary>
+                    <div class="answer">
+                        <p>請到<a href="order-search.html">訂單查詢</a>，輸入手機號碼或訂單編號。</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>大量訂單怎麼辦？</summary>
+                    <div class="answer">
+                        <p>大宗送禮或單筆超過 <b data-shop="bulkOrderPlain">NT$5,000</b>，請先透過<button type="button" class="line-open-btn line-open-btn-inline" data-line-open><svg class="line-logo" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#06C755"/><path fill="#fff" d="M12.03 5.55c-3.68 0-6.66 2.38-6.66 5.32 0 2.62 2.32 4.82 5.46 5.23.21.04.47.13.54.3.06.15.04.38.02.53l-.09.53c-.03.18-.13.65.58.35 1.16-.49 3.14-1.84 4.3-3.15C17.4 13.02 18 11.66 18 10.87c0-2.94-2.98-5.32-5.97-5.32z"/></svg><span>官方LINE</span></button>，或到<a href="ask.html">聯絡我們</a>留言。</p>
+                    </div>
+                </details>
+
+                <p class="qa-group">寄送與運費</p>
+                <details>
+                    <summary id="faq-ship">運費怎麼算？可以超商取貨嗎？</summary>
+                    <div class="answer">
+                        <p>為了保持甜點的新鮮美味，全店一律使用低溫冷凍宅配，目前不提供超商取貨或常溫寄送。</p>
                         <p class="mt-3">全店滿 <b data-shop="freeMin">NT$888</b> 免運 🎉</p>
                         <ul class="ship-lines" id="faq-ship-tiers">
                             <li>・滿 <b>NT$499</b>，運費只要 <b>NT$80</b></li>
                             <li>・未滿 <b>NT$499</b>，運費 <b>NT$120</b></li>
                         </ul>
-                        <p class="mt-3">為了保持甜點的新鮮美味，全店一律使用低溫冷凍宅配，一趟實際運費是 <b>NT$160</b>，我們會幫你分擔一部分 ❤️</p>
-                        <p class="mt-2">目前不提供超商取貨或常溫寄送，敬請見諒。</p>
-                    </div>
-                </details>
-
-                <details>
-                    <summary>可以用貨到付款嗎？</summary>
-                    <div class="answer">
-                        <p>可以選銀行轉帳或貨到付款。單筆訂單達 <b data-shop="codLimit">NT$ 2,000</b> 以上時，不提供貨到付款，請改用轉帳。</p>
+                        <p class="mt-3">滿 <b data-shop="minOrderPlain">NT$299</b> 就能下單，小份量也能輕鬆嘗鮮 😊</p>
+                        <p class="mt-2">冷凍運費約 <b>NT$160</b>，我們幫您分擔一部分 ❤️</p>
                     </div>
                 </details>
 
@@ -203,6 +250,14 @@
                         <p>商品皆為手工現做。下單完成（轉帳需完成對帳）後，預計 <strong>3～5 個工作天</strong>（不含例假日）依序排單出貨，出貨後會發 email 通知。也可以通過<a href="order-search.html">查詢訂單</a>了解訂單目前進度。</p>
                         <p class="mt-2">備註的指定到貨日與時段是「希望到貨時間」，實際配送依物流路線與司機安排為準。</p>
                         <p class="mt-2">逢中秋、年節等物流高峰，可能順延 1～3 天，請提早預訂。</p>
+                    </div>
+                </details>
+
+                <p class="qa-group">收貨與保存</p>
+                <details>
+                    <summary>對蛋奶過敏可以吃嗎？</summary>
+                    <div class="answer">
+                        <p>⚠️ 含蛋、牛奶；產線另有麩質穀物及堅果。對上述成分過敏者不適合食用。</p>
                     </div>
                 </details>
 
@@ -223,6 +278,15 @@
                 </details>
 
                 <details>
+                    <summary>送禮或請別人代收，要注意什麼？</summary>
+                    <div class="answer">
+                        <p>送禮請事先與收件人確認時間。因未告知而拒收，恕不補寄或退款。訂單請另留訂購人聯絡方式，方便通知。</p>
+                        <p class="mt-2">若請管理室或親友代收，務必告知需<strong>低溫冷凍保存</strong>。代收保存不當導致失溫變質，本店無法賠償。</p>
+                    </div>
+                </details>
+
+                <p class="qa-group">取消與售後</p>
+                <details>
                     <summary>可以退換貨嗎？有 7 天鑑賞期嗎？</summary>
                     <div class="answer">
                         <p>生鮮、易腐敗食品依法<strong>不適用 7 天鑑賞期</strong>。</p>
@@ -231,34 +295,10 @@
                 </details>
 
                 <details>
-                    <summary>送禮或請別人代收，要注意什麼？</summary>
-                    <div class="answer">
-                        <p>送禮請事先與收件人確認時間。因未告知而拒收，恕不補寄或退款。訂單請另留訂購人聯絡方式，方便通知。</p>
-                        <p class="mt-2">若請管理室或親友代收，務必告知需<strong>低溫冷凍保存</strong>。代收保存不當導致失溫變質，本店無法賠償。</p>
-                    </div>
-                </details>
-
-                <details>
-                    <summary>有開發票嗎？對蛋奶過敏可以吃嗎？</summary>
-                    <div class="answer">
-                        <p>本店為免用統一發票之小規模營業人。</p>
-                        <p class="mt-2">⚠️ 含蛋、牛奶；產線另有麩質穀物及堅果。對上述成分過敏者不適合食用。</p>
-                    </div>
-                </details>
-
-                <details>
-                    <summary>如何查訂單？大量訂購怎麼辦？</summary>
-                    <div class="answer">
-                        <p>請到<a href="order-search.html">訂單查詢</a>，輸入手機號碼或訂單編號。</p>
-                        <p class="mt-2">大宗送禮或單筆超過 <b data-shop="bulkOrder">NT$ 5,000</b>，請先透過官方 LINE 或<a href="ask.html">聯絡我們</a>洽詢檔期。</p>
-                    </div>
-                </details>
-
-                <details>
                     <summary>商品顯示缺貨，或還有其他問題？</summary>
                     <div class="answer">
                         <p>標示缺貨或售完的口味暫時無法加購，歡迎改選其他品項，或稍後再回來看看。</p>
-                        <p class="mt-2">其他問題請<button type="button" class="line-open-btn" data-line-open><svg class="line-logo" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#06C755"/><path fill="#fff" d="M12.03 5.55c-3.68 0-6.66 2.38-6.66 5.32 0 2.62 2.32 4.82 5.46 5.23.21.04.47.13.54.3.06.15.04.38.02.53l-.09.53c-.03.18-.13.65.58.35 1.16-.49 3.14-1.84 4.3-3.15C17.4 13.02 18 11.66 18 10.87c0-2.94-2.98-5.32-5.97-5.32z"/></svg><span>官方LINE</span></button>，或到<a href="ask.html">聯絡我們</a>留言。</p>
+                        <p class="mt-2">其他問題請<button type="button" class="line-open-btn line-open-btn-inline" data-line-open><svg class="line-logo" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#06C755"/><path fill="#fff" d="M12.03 5.55c-3.68 0-6.66 2.38-6.66 5.32 0 2.62 2.32 4.82 5.46 5.23.21.04.47.13.54.3.06.15.04.38.02.53l-.09.53c-.03.18-.13.65.58.35 1.16-.49 3.14-1.84 4.3-3.15C17.4 13.02 18 11.66 18 10.87c0-2.94-2.98-5.32-5.97-5.32z"/></svg><span>官方LINE</span></button>，或到<a href="ask.html">聯絡我們</a>留言。</p>
                     </div>
                 </details>
             </div>
@@ -275,11 +315,6 @@
     <script>
         (function() {
             var s = window.shopSettings || {};
-            function money(n, fallback) {
-                var v = parseInt(n, 10);
-                if (!v) v = fallback;
-                return "NT$ " + v.toLocaleString();
-            }
             function moneyPlain(n) {
                 var v = parseInt(n, 10);
                 if (!isFinite(v)) v = 0;
@@ -308,8 +343,8 @@
             var map = {
                 freeMin: moneyPlain(freeMin),
                 minOrderPlain: moneyPlain(parseInt(s.minOrder, 10) || 299),
-                codLimit: money(s.codLimit, 2000),
-                bulkOrder: money(s.bulkOrder, 5000)
+                codLimitPlain: moneyPlain(parseInt(s.codLimit, 10) || 2000),
+                bulkOrderPlain: moneyPlain(parseInt(s.bulkOrder, 10) || 5000)
             };
             document.querySelectorAll("[data-shop]").forEach(function(el) {
                 var key = el.getAttribute("data-shop");
@@ -335,23 +370,33 @@
     </script>
     <script>
         (function() {
+            function scrollToTitle(el) {
+                if (!el) return;
+                var bar = document.querySelector(".sticky.top-0");
+                var barH = bar ? bar.offsetHeight : 96;
+                var top = el.getBoundingClientRect().top + window.pageYOffset - barH - 10;
+                window.scrollTo(0, Math.max(0, top));
+            }
             function openFromHash() {
                 var hash = location.hash;
                 var order = document.getElementById("faq-order");
-                var ship = document.getElementById("faq-ship");
+                var shipTitle = document.getElementById("faq-ship");
+                var ship = shipTitle ? shipTitle.closest("details") : null;
                 if (hash === "#faq-ship") {
                     if (order) order.open = false;
                     if (ship) ship.open = true;
-                    if (ship && ship.scrollIntoView) ship.scrollIntoView({ block: "start" });
+                    scrollToTitle(shipTitle);
+                    if (shipTitle && shipTitle.blur) shipTitle.blur();
                     return;
                 }
                 if (hash === "#faq-order" && order) {
                     order.open = true;
-                    if (order.scrollIntoView) order.scrollIntoView({ block: "start" });
+                    scrollToTitle(order.querySelector("summary") || order);
                 }
             }
             if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", openFromHash);
             else openFromHash();
+            window.addEventListener("load", openFromHash);
             window.addEventListener("hashchange", openFromHash);
         })();
     </script>
