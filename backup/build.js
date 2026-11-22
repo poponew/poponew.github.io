@@ -189,7 +189,10 @@ for (let i = 1; i < lines.length; i++) {
     } else if (type === 'group') {
         groups.push(parseGroupRecord(parts));
     } else if (type === 'product') {
-        products.push({ id: parseInt(parts[1]), group: parts[2], url: parts[3], name: parts[4], weight: sanitizeCsvGhostQuote(parts[5]), price: parseInt(parts[6]) || 0, note: sanitizeCsvGhostQuote(parts[7]), soldOut: parts[12] === 'true' });
+        var productRow = { id: parseInt(parts[1]), group: parts[2], url: parts[3], name: parts[4], weight: sanitizeCsvGhostQuote(parts[5]), price: parseInt(parts[6]) || 0, note: sanitizeCsvGhostQuote(parts[7]), soldOut: parts[12] === 'true' };
+        var productSale = parseInt(parts[16], 10) || 0;
+        if (productSale > 0) productRow.salePrice = productSale;
+        products.push(productRow);
     }
 }
 migrateGroupListedAt(groups);
@@ -346,12 +349,26 @@ function gaTagLines() {
             ];
         }
 
+function productSalePrice(p) {
+            var o = parseInt(p && p.price, 10) || 0;
+            var s = parseInt(p && p.salePrice, 10) || 0;
+            return (s > 0 && s < o) ? s : 0;
+        }
+
 function formatGroupPriceHtml(groupName, productsList) {
             const items = (productsList || []).filter(function(p) { return p.group === groupName; });
-            const prices = items.map(function(p) { return parseInt(p.price, 10) || 0; }).filter(function(n) { return n > 0; });
-            const minPrice = prices.length ? Math.min.apply(null, prices) : 0;
+            var best = null;
+            items.forEach(function(p) {
+                var o = parseInt(p.price, 10) || 0;
+                if (o <= 0) return;
+                var s = productSalePrice(p);
+                var pay = s || o;
+                if (!best || pay < best.pay) best = { o: o, s: s, pay: pay };
+            });
+            var minPrice = best ? best.o : 0;
             var fromAttr = items.length > 1 ? ' data-shop-price-from="1"' : '';
-            return '<span data-shop-price="' + minPrice + '"' + fromAttr + '><span class="shop-nt">NT$</span> ' + minPrice + (items.length > 1 ? ' <span class="text-xs font-medium">起</span>' : '') + '</span>';
+            var saleAttr = best && best.s ? ' data-shop-sale="' + best.s + '"' : '';
+            return '<span data-shop-price="' + minPrice + '"' + saleAttr + fromAttr + '><span class="shop-nt">NT$</span> ' + minPrice + (items.length > 1 ? ' <span class="text-xs font-medium">起</span>' : '') + '</span>';
         }
 
 function isProductOutOfStock(p) {
@@ -595,7 +612,7 @@ function shopDiscountHelpersJs() {
                 '    window.shopShippingTip = function (subtotal, minOrder) {',
                 '        var n = parseInt(subtotal, 10) || 0;',
                 '        var floor = parseInt(minOrder, 10) || 0;',
-                '        if (n <= 0) return "⚠️ 本商店最低結帳金額為 NT$ " + floor + " 元唷！";',
+                '        if (n <= 0) return "再加購 NT$ " + Math.max(Math.ceil(floor - n), 1) + " 就能下單囉！😊\\n全店滿 NT$ " + floor + " 即可結帳，再多挑一樣小點心吧～";',
                 '        var q = window.shopShippingQuote(n);',
                 '        if (!q.next) {',
                 '            if (q.fee <= 0) return "已達免運門檻！";',
@@ -620,10 +637,12 @@ function shopDiscountHelpersJs() {
                 '        if (s.discountEnd && t > s.discountEnd) return false;',
                 '        return true;',
                 '    };',
-                '    window.shopSalePrice = function (original) {',
-                '        var n = parseInt(original, 10) || 0;',
-                '        if (!window.shopDiscountActive()) return n;',
-                '        return Math.round(n * shopDiscountFold() / 10);',
+                '    window.shopSalePrice = function (original, sale) {',
+                '        var o = parseInt(original, 10) || 0;',
+                '        var s = parseInt(sale, 10) || 0;',
+                '        if (s > 0 && s < o) return s;',
+                '        if (!window.shopDiscountActive()) return o;',
+                '        return Math.round(o * shopDiscountFold() / 10);',
                 '    };',
                 '    var SHOP_PAUSE_NOTE = "手工甜點趕製中，先暫停新訂單，免得讓大家等太久。已經下單的不用擔心，會照常做、照常寄。恢復時會在官方 LINE 跟大家說。";',
                 '    window.shopOrdersPaused = function () {',
@@ -779,7 +798,7 @@ function shopDiscountHelpersJs() {
                 '    window.shopPriceHtml = function (original, opt) {',
                 '        opt = opt || {};',
                 '        var o = parseInt(original, 10) || 0;',
-                '        var n = window.shopSalePrice(o);',
+                '        var n = window.shopSalePrice(o, opt.sale);',
                 '        var from = opt.from ? \' <span class="text-xs font-medium">起</span>\' : (opt.suffix || "");',
                 '        if (n === o) return shopNtMark("NT$ ") + o + from;',
                 '        return \'<s class="shop-old-price text-sm font-normal" style="text-decoration:line-through;color:#a8a29e;font-weight:400;font-size:0.875rem">\' + shopNtMark("NT$ ") + o + "</s> <span class=\\"shop-sale-price\\">" + shopNtMark("NT$ ") + n + "</span>" + from;',
@@ -792,8 +811,11 @@ function shopDiscountHelpersJs() {
                 '            var key = String(p.group || "");',
                 '            if (!key) return;',
                 '            counts[key] = (counts[key] || 0) + 1;',
-                '            var price = parseInt(p.price, 10) || 0;',
-                '            if (mins[key] == null || price < mins[key]) mins[key] = price;',
+                '            var orig = parseInt(p.price, 10) || 0;',
+                '            var sale = parseInt(p.salePrice, 10) || 0;',
+                '            if (!(sale > 0 && sale < orig)) sale = 0;',
+                '            var pay = sale || orig;',
+                '            if (mins[key] == null || pay < mins[key].pay) mins[key] = { pay: pay, orig: orig, sale: sale };',
                 '        });',
                 '        document.querySelectorAll("a.product-card").forEach(function (card) {',
                 '            var h2 = card.querySelector("h2");',
@@ -802,7 +824,9 @@ function shopDiscountHelpersJs() {
                 '            if (mins[name] == null) return;',
                 '            var box = card.querySelector(".text-amber-700");',
                 '            if (!box) return;',
-                '            box.setAttribute("data-shop-price", String(mins[name]));',
+                '            box.setAttribute("data-shop-price", String(mins[name].orig));',
+                '            if (mins[name].sale) box.setAttribute("data-shop-sale", String(mins[name].sale));',
+                '            else box.removeAttribute("data-shop-sale");',
                 '            if (counts[name] > 1) box.setAttribute("data-shop-price-from", "1");',
                 '        });',
                 '    }',
@@ -812,7 +836,11 @@ function shopDiscountHelpersJs() {
                 '            if (!left) return;',
                 '            var priceEl = left.querySelector("p.text-amber-700") || left.querySelector("p:last-of-type");',
                 '            if (!priceEl) return;',
-                '            priceEl.setAttribute("data-shop-price", String(parseInt(p.price, 10) || 0));',
+                '            var orig = parseInt(p.price, 10) || 0;',
+                '            var sale = parseInt(p.salePrice, 10) || 0;',
+                '            priceEl.setAttribute("data-shop-price", String(orig));',
+                '            if (sale > 0 && sale < orig) priceEl.setAttribute("data-shop-sale", String(sale));',
+                '            else priceEl.removeAttribute("data-shop-sale");',
                 '        });',
                 '    }',
                 '    function shopDiscountLeadPrefix() {',
@@ -897,7 +925,7 @@ function shopDiscountHelpersJs() {
                 '        wrapCheckoutPause();',
                 '        watchLightboxPrice();',
                 '        document.querySelectorAll("[data-shop-price]").forEach(function (el) {',
-                '            el.innerHTML = window.shopPriceHtml(el.getAttribute("data-shop-price"), { from: el.getAttribute("data-shop-price-from") });',
+                '            el.innerHTML = window.shopPriceHtml(el.getAttribute("data-shop-price"), { from: el.getAttribute("data-shop-price-from"), sale: el.getAttribute("data-shop-sale") });',
                 '        });',
                 '        shopEnsureNt();',
                 '        window.shopLockCheckoutButtons();',
@@ -1135,13 +1163,16 @@ function buildIndexHtml(groupsList, productsList) {
 
     var searchItems = (productsList || []).map(function(p) {
         var note = String(p.note || "");
-        return {
+        var searchItem = {
             name: String(p.name || ""),
             group: String(p.group || ""),
             url: String(p.url || ""),
             price: parseInt(p.price, 10) || 0,
             soldOut: !!(p.soldOut) || note.indexOf("缺貨") !== -1 || note.indexOf("售完") !== -1
         };
+        var searchSale = productSalePrice(p);
+        if (searchSale) searchItem.salePrice = searchSale;
+        return searchItem;
     }).filter(function(p) { return p.name && p.url && !hiddenNames[p.group]; });
     indexHtml.push('    <script>window.shopSearch = ' + JSON.stringify(searchItems) + ';<\/script>');
 
@@ -1239,7 +1270,7 @@ function buildIndexHtml(groupsList, productsList) {
     indexHtml.push('                var hits = items.filter(function(p) { return (p.name + " " + p.group).toLowerCase().indexOf(q) !== -1; }).slice(0, 12);');
     indexHtml.push('                if (!hits.length) { box.innerHTML = "<p class=\'shop-search-hint\'>找不到「" + esc(q) + "」</p>"; return; }');
     indexHtml.push('                box.innerHTML = hits.map(function(p) {');
-    indexHtml.push('                    var extra = p.soldOut ? "<span class=\'shop-search-sold\'>已售完</span>" : (window.shopPriceHtml ? window.shopPriceHtml(p.price) : ("NT$ " + p.price));');
+    indexHtml.push('                    var extra = p.soldOut ? "<span class=\'shop-search-sold\'>已售完</span>" : (window.shopPriceHtml ? window.shopPriceHtml(p.price, { sale: p.salePrice }) : ("NT$ " + p.price));');
     indexHtml.push('                    var meta = (p.group && p.group !== p.name) ? (esc(p.group) + " · " + extra) : extra;');
     indexHtml.push('                    return "<a class=\'shop-search-item\' href=\'" + esc(p.url) + "\'><span class=\'shop-search-name\'>" + esc(p.name) + "</span><span class=\'shop-search-meta\'>" + meta + "</span></a>";');
     indexHtml.push('                }).join("");');
@@ -1371,11 +1402,13 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
                 var cleanWeight = String(p.weight || "").replace(/"/g, "").replace(/&quot;/g, "").replace(/g/gi, "").trim();
                 var weightHtml = cleanWeight ? '<p class="text-xs text-stone-400">約 ' + escapeText(cleanWeight) + 'g</p>' : '';
                 var price = parseInt(p.price, 10) || 0;
+                var sale = productSalePrice(p);
+                var saleAttr = sale ? ' data-shop-sale="' + sale + '"' : '';
                 return '<div class="p-4 bg-stone-50 rounded-xl border border-stone-200 hover:border-amber-200 transition space-y-2" data-product-id="' + pid + '">' +
                     '<h3 class="font-medium text-stone-800 text-sm w-full mb-1">' + rawName + noteHtml + '</h3>' +
                     '<div class="flex justify-between items-center w-full">' +
                     '<div class="flex gap-3 items-center" id="product-info-left-' + pid + '">' +
-                    '<div>' + weightHtml + '<p class="text-sm text-amber-700 font-semibold mt-0.5" data-shop-price="' + price + '">NT$ ' + price + '</p></div></div>' +
+                    '<div>' + weightHtml + '<p class="text-sm text-amber-700 font-semibold mt-0.5" data-shop-price="' + price + '"' + saleAttr + '>NT$ ' + price + '</p></div></div>' +
                     actionHtml + '</div></div>';
             }
 
@@ -1404,8 +1437,14 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('        window.products = ' + JSON.stringify(items, null, 4) + ';');
             
             var lookup = {};
-            (allPriceItems || items).forEach(function(p) { lookup[p.id] = p.price; });
+            var saleLookup = {};
+            (allPriceItems || items).forEach(function(p) {
+                lookup[p.id] = p.price;
+                var sale = productSalePrice(p);
+                if (sale) saleLookup[p.id] = sale;
+            });
             h.push('        window.allProductsLookup = ' + JSON.stringify(lookup) + ';');
+            h.push('        window.shopSaleLookup = ' + JSON.stringify(saleLookup) + ';');
             h.push('    <\/script>');
             
             h.push('    <style>');
@@ -1579,16 +1618,16 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('            var cleanWeight = String(p.weight || "").replace(/"/g, "").replace(/&quot;/g, "").replace(/g/gi, "").trim();');
             h.push('            var weightHtml = cleanWeight ? "<p class=\'text-xs text-stone-400\'>約 " + cleanWeight + "g<\/p>" : "";');
             
-            h.push('            itemDiv.innerHTML = "<h3 class=\'font-medium text-stone-800 text-sm w-full mb-1\'>" + rawName + noteHtml + "<\/h3><div class=\'flex justify-between items-center w-full\'><div class=\'flex gap-3 items-center\' id=\'product-info-left-" + p.id + "\'><div>" + weightHtml + "<p class=\'text-sm text-amber-700 font-semibold mt-0.5\' data-shop-price=\'" + p.price + "\'>NT$ " + p.price + "<\/p><\/div><\/div>" + actionHtml + "<\/div>";');           
+            h.push('            itemDiv.innerHTML = "<h3 class=\'font-medium text-stone-800 text-sm w-full mb-1\'>" + rawName + noteHtml + "<\/h3><div class=\'flex justify-between items-center w-full\'><div class=\'flex gap-3 items-center\' id=\'product-info-left-" + p.id + "\'><div>" + weightHtml + "<p class=\'text-sm text-amber-700 font-semibold mt-0.5\' data-shop-price=\'" + p.price + "\'" + ((parseInt(p.salePrice, 10) > 0 && parseInt(p.salePrice, 10) < (parseInt(p.price, 10) || 0)) ? (" data-shop-sale=\'" + (parseInt(p.salePrice, 10) || 0) + "\'") : "") + ">NT$ " + p.price + "<\/p><\/div><\/div>" + actionHtml + "<\/div>";');           
             h.push('            container.appendChild(itemDiv);');
             h.push('        });');
             h.push('        }');
 
             h.push('        function updateQty(id, change) { var input = document.getElementById("qty-" + id); var currentQty = parseInt(input && input.value, 10) || 0; currentQty = Math.max(0, currentQty + change); if (currentQty > 20) { currentQty = 20; alert("單品數量上限為20"); } if (input) input.value = currentQty; if (currentQty === 0) { delete cart[id]; } else { cart[id] = currentQty; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); calculatePageTotal(); updateCartCount(); if (window.syncFlavorLightboxQty) window.syncFlavorLightboxQty(); }');
             
-            h.push('        function calculatePageTotal() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0) : (window.allProductsLookup[id] || 0)) * cart[id]; } document.getElementById("entire-cart-total").innerText = entireCartTotal; var tipElement = document.getElementById("free-shipping-tip"); tipElement.innerText = window.shopShippingTip ? window.shopShippingTip(entireCartTotal, cfg.minOrder) : ("⚠️ 本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元唷！"); var bulkTip = document.getElementById("bulk-order-tip"); if (bulkTip) { if (entireCartTotal > cfg.bulkOrder) { bulkTip.classList.remove("hidden"); bulkTip.innerText = "您的訂購數量較大，屬於大宗/企業訂單。為了保障您的權益與確認出貨檔期，請直接透過網站下方聯絡方式聯繫我們由專人為您服務！"; } else { bulkTip.classList.add("hidden"); bulkTip.innerText = ""; } } var codTip = document.getElementById("cod-limit-tip"); if (codTip) { if (entireCartTotal > cfg.codLimit) { codTip.classList.remove("hidden"); codTip.innerText = "單筆滿 NT$ " + cfg.codLimit.toLocaleString() + " 不提供貨到付款，結帳時請改用轉帳匯款。"; } else { codTip.classList.add("hidden"); codTip.innerText = ""; } } }'); 
+            h.push('        function calculatePageTotal() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0, window.shopSaleLookup && window.shopSaleLookup[id]) : (window.allProductsLookup[id] || 0)) * cart[id]; } document.getElementById("entire-cart-total").innerText = entireCartTotal; var tipElement = document.getElementById("free-shipping-tip"); tipElement.innerText = window.shopShippingTip ? window.shopShippingTip(entireCartTotal, cfg.minOrder) : ("⚠️ 本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元唷！"); var bulkTip = document.getElementById("bulk-order-tip"); if (bulkTip) { if (entireCartTotal > cfg.bulkOrder) { bulkTip.classList.remove("hidden"); bulkTip.innerText = "您的訂購數量較大，屬於大宗/企業訂單。為了保障您的權益與確認出貨檔期，請直接透過網站下方聯絡方式聯繫我們由專人為您服務！"; } else { bulkTip.classList.add("hidden"); bulkTip.innerText = ""; } } var codTip = document.getElementById("cod-limit-tip"); if (codTip) { if (entireCartTotal > cfg.codLimit) { codTip.classList.remove("hidden"); codTip.innerText = "單筆滿 NT$ " + cfg.codLimit.toLocaleString() + " 不提供貨到付款，結帳時請改用轉帳匯款。"; } else { codTip.classList.add("hidden"); codTip.innerText = ""; } } }'); 
             
-            h.push('        function saveToCartAndGo() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0) : (window.allProductsLookup[id] || 0)) * cart[id]; } if (entireCartTotal === 0) { alert("您目前尚未選擇任何數量唷！"); return; } if (entireCartTotal < cfg.minOrder) { alert("抱歉！本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元，目前綜合累計為 NT$ " + entireCartTotal + " 元，請再多選購一些甜點唷！"); return; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); window.location.href = "cart.html"; }');
+            h.push('        function saveToCartAndGo() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0, window.shopSaleLookup && window.shopSaleLookup[id]) : (window.allProductsLookup[id] || 0)) * cart[id]; } if (entireCartTotal === 0) { alert("您目前尚未選擇任何數量唷！"); return; } if (entireCartTotal < cfg.minOrder) { alert("再加購 NT$ " + Math.max(Math.ceil(cfg.minOrder - entireCartTotal), 1) + " 就能下單囉！😊\\n全店滿 NT$ " + cfg.minOrder + " 即可結帳，再多挑一樣小點心吧～"); return; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); window.location.href = "cart.html"; }');
             
             h.push('        function updateCartCount() { var count = 0; for (var id in cart) { count += cart[id]; } document.getElementById("cart-count").innerText = count; }');
             h.push('        calculatePageTotal(); updateCartCount();');
@@ -1657,7 +1696,7 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('                    }');
             h.push('                    var exists = false;');
             h.push('                    for (var i = 0; i < gallery.length; i++) { if (Number(gallery[i].id) === Number(p.id)) exists = true; }');
-            h.push('                    if (!exists) gallery.push({ id: p.id, src: imgUrl, name: String(p.name || "").trim(), price: parseInt(p.price, 10) || 0 });');
+            h.push('                    if (!exists) gallery.push({ id: p.id, src: imgUrl, name: String(p.name || "").trim(), price: parseInt(p.price, 10) || 0, salePrice: parseInt(p.salePrice, 10) || 0 });');
             h.push('                    gallery.sort(function(a, b) { return flavorOrder(a.id) - flavorOrder(b.id); });');
             h.push('                };');
             h.push('                imgTester.src = imgUrl;');
@@ -1683,7 +1722,7 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('            function renderLbCart() {');
             h.push('                var item = currentItem();');
             h.push('                if (!item) return;');
-            h.push('                document.getElementById("lb-price").innerHTML = window.shopPriceHtml ? window.shopPriceHtml(item.price) : ("NT$ " + item.price);');
+            h.push('                document.getElementById("lb-price").innerHTML = window.shopPriceHtml ? window.shopPriceHtml(item.price, { sale: item.salePrice }) : ("NT$ " + item.price);');
             h.push('                var wrap = document.getElementById("lb-qty-wrap");');
             h.push('                var sold = document.getElementById("lb-soldout");');
             h.push('                var qtyEl = document.getElementById("lb-qty");');
@@ -2053,7 +2092,8 @@ function buildProductsLookupBlock(productsList, groupsList) {
             });
             var lines = items.map(function(p) {
                 var weight = String(p.weight || '').replace(/"/g, '').trim();
-                return '            ' + JSON.stringify(String(p.id)) + ': { name: ' + JSON.stringify(String(p.name || '')) + ', weight: ' + JSON.stringify(weight) + ', price: ' + (parseInt(p.price, 10) || 0) + ' },';
+                var sale = productSalePrice(p);
+                return '            ' + JSON.stringify(String(p.id)) + ': { name: ' + JSON.stringify(String(p.name || '')) + ', weight: ' + JSON.stringify(weight) + ', price: ' + (parseInt(p.price, 10) || 0) + (sale ? (', salePrice: ' + sale) : '') + ' },';
             });
             return '        const productsLookup = {\n' + lines.join('\n') + '\n        };';
         }

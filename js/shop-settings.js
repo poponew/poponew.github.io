@@ -83,7 +83,7 @@ window.shopSettings = {
     window.shopShippingTip = function (subtotal, minOrder) {
         var n = parseInt(subtotal, 10) || 0;
         var floor = parseInt(minOrder, 10) || 0;
-        if (n <= 0) return "⚠️ 本商店最低結帳金額為 NT$ " + floor + " 元唷！";
+        if (n <= 0) return "再加購 NT$ " + Math.max(Math.ceil(floor - n), 1) + " 就能下單囉！😊\n全店滿 NT$ " + floor + " 即可結帳，再多挑一樣小點心吧～";
         var q = window.shopShippingQuote(n);
         if (!q.next) {
             if (q.fee <= 0) return "已達免運門檻！";
@@ -108,10 +108,12 @@ window.shopSettings = {
         if (s.discountEnd && t > s.discountEnd) return false;
         return true;
     };
-    window.shopSalePrice = function (original) {
-        var n = parseInt(original, 10) || 0;
-        if (!window.shopDiscountActive()) return n;
-        return Math.round(n * shopDiscountFold() / 10);
+    window.shopSalePrice = function (original, sale) {
+        var o = parseInt(original, 10) || 0;
+        var s = parseInt(sale, 10) || 0;
+        if (s > 0 && s < o) return s;
+        if (!window.shopDiscountActive()) return o;
+        return Math.round(o * shopDiscountFold() / 10);
     };
     var SHOP_PAUSE_NOTE = "手工甜點趕製中，先暫停新訂單，免得讓大家等太久。已經下單的不用擔心，會照常做、照常寄。恢復時會在官方 LINE 跟大家說。";
     window.shopOrdersPaused = function () {
@@ -267,7 +269,7 @@ window.shopSettings = {
     window.shopPriceHtml = function (original, opt) {
         opt = opt || {};
         var o = parseInt(original, 10) || 0;
-        var n = window.shopSalePrice(o);
+        var n = window.shopSalePrice(o, opt.sale);
         var from = opt.from ? ' <span class="text-xs font-medium">起</span>' : (opt.suffix || "");
         if (n === o) return shopNtMark("NT$ ") + o + from;
         return '<s class="shop-old-price text-sm font-normal" style="text-decoration:line-through;color:#a8a29e;font-weight:400;font-size:0.875rem">' + shopNtMark("NT$ ") + o + "</s> <span class=\"shop-sale-price\">" + shopNtMark("NT$ ") + n + "</span>" + from;
@@ -280,8 +282,11 @@ window.shopSettings = {
             var key = String(p.group || "");
             if (!key) return;
             counts[key] = (counts[key] || 0) + 1;
-            var price = parseInt(p.price, 10) || 0;
-            if (mins[key] == null || price < mins[key]) mins[key] = price;
+            var orig = parseInt(p.price, 10) || 0;
+            var sale = parseInt(p.salePrice, 10) || 0;
+            if (!(sale > 0 && sale < orig)) sale = 0;
+            var pay = sale || orig;
+            if (mins[key] == null || pay < mins[key].pay) mins[key] = { pay: pay, orig: orig, sale: sale };
         });
         document.querySelectorAll("a.product-card").forEach(function (card) {
             var h2 = card.querySelector("h2");
@@ -290,7 +295,9 @@ window.shopSettings = {
             if (mins[name] == null) return;
             var box = card.querySelector(".text-amber-700");
             if (!box) return;
-            box.setAttribute("data-shop-price", String(mins[name]));
+            box.setAttribute("data-shop-price", String(mins[name].orig));
+            if (mins[name].sale) box.setAttribute("data-shop-sale", String(mins[name].sale));
+            else box.removeAttribute("data-shop-sale");
             if (counts[name] > 1) box.setAttribute("data-shop-price-from", "1");
         });
     }
@@ -300,7 +307,11 @@ window.shopSettings = {
             if (!left) return;
             var priceEl = left.querySelector("p.text-amber-700") || left.querySelector("p:last-of-type");
             if (!priceEl) return;
-            priceEl.setAttribute("data-shop-price", String(parseInt(p.price, 10) || 0));
+            var orig = parseInt(p.price, 10) || 0;
+            var sale = parseInt(p.salePrice, 10) || 0;
+            priceEl.setAttribute("data-shop-price", String(orig));
+            if (sale > 0 && sale < orig) priceEl.setAttribute("data-shop-sale", String(sale));
+            else priceEl.removeAttribute("data-shop-sale");
         });
     }
     function shopDiscountLeadPrefix() {
@@ -385,7 +396,7 @@ window.shopSettings = {
         wrapCheckoutPause();
         watchLightboxPrice();
         document.querySelectorAll("[data-shop-price]").forEach(function (el) {
-            el.innerHTML = window.shopPriceHtml(el.getAttribute("data-shop-price"), { from: el.getAttribute("data-shop-price-from") });
+            el.innerHTML = window.shopPriceHtml(el.getAttribute("data-shop-price"), { from: el.getAttribute("data-shop-price-from"), sale: el.getAttribute("data-shop-sale") });
         });
         shopEnsureNt();
         window.shopLockCheckoutButtons();

@@ -215,8 +215,8 @@
             "5": { name: "醇黑榛果巧克力軟餅乾", weight: "", price: 120 },
             "6": { name: "柑橘奶酪軟餅乾", weight: "", price: 130 },
             "7": { name: "經典Oreo奶酪軟餅乾", weight: "", price: 130 },
-            "8": { name: "抹茶柚子巴斯克 (6吋切片)", weight: "120", price: 140 },
-            "9": { name: "抹茶柚子巴斯克 (6吋整顆)", weight: "720", price: 840 },
+            "8": { name: "抹茶柚子巴斯克 (6吋切片)", weight: "120", price: 145 },
+            "9": { name: "抹茶柚子巴斯克 (6吋整顆)", weight: "720", price: 860 },
             "10": { name: "日式焙茶巴斯克(6吋切片)", weight: "120", price: 145 },
             "11": { name: "鐵觀音巴斯克(6吋切片)", weight: "120", price: 140 },
             "12": { name: "日式焙茶巴斯克(6吋整顆)", weight: "720", price: 870 },
@@ -279,10 +279,10 @@
             "69": { name: "迷你小司康", weight: "", price: 130 },
             "70": { name: "經典原味奶酪司康", weight: "", price: 90 },
             "71": { name: "70%巧克力奶酪司康", weight: "", price: 115 },
-            "72": { name: "Oreo巧克力奶酪司康", weight: "", price: 120 },
-            "73": { name: "伯爵茶柑橘奶酪司康", weight: "", price: 110 },
+            "72": { name: "Oreo巧克力奶酪司康", weight: "", price: 125 },
+            "73": { name: "伯爵茶柑橘奶酪司康", weight: "", price: 115 },
             "74": { name: "草莓蔓越莓乾奶酪司康", weight: "", price: 130 },
-            "75": { name: "抹茶白巧蔓越莓奶酪司康", weight: "", price: 130 },
+            "75": { name: "抹茶白巧蔓越莓奶酪司康", weight: "", price: 135 },
             "76": { name: "金黃乳酪起司奶酪司康", weight: "", price: 125 },
             "77": { name: "酷黑藍莓果醬奶酪司康", weight: "", price: 130 },
             "78": { name: "一口酥迷你布列塔尼", weight: "", price: 120 },
@@ -300,6 +300,7 @@
             "90": { name: "法式酒漬果乾磅蛋糕", weight: "", price: 95 },
             "91": { name: "草莓乾布朗尼俄羅斯棉花糖", weight: "", price: 140 },
             "92": { name: "巧克力布朗尼俄羅斯棉花糖", weight: "", price: 140 },
+            "93": { name: "焙茶珍珠糖奶酪司康", weight: "", price: 125 },
         };
 
         function shopCfg() {
@@ -313,8 +314,8 @@
             };
         }
 
-        function saleUnit(price) {
-            return window.shopSalePrice ? window.shopSalePrice(price) : (parseInt(price, 10) || 0);
+        function saleUnit(price, sale) {
+            return window.shopSalePrice ? window.shopSalePrice(price, sale) : (parseInt(price, 10) || 0);
         }
 
         let cart = JSON.parse(localStorage.getItem('poponew_cart')) || {};
@@ -405,11 +406,11 @@
                 const p = productsLookup[id];
                 if (!p) continue;
 
-                var unit = saleUnit(p.price);
+                var unit = saleUnit(p.price, p.salePrice);
                 var origin = parseInt(p.price, 10) || 0;
                 originalSubtotal += origin * qty;
                 productSubtotal += unit * qty;
-                var priceLine = (window.shopDiscountActive && window.shopDiscountActive())
+                var priceLine = unit < origin
                     ? `<s class="text-stone-400 font-normal" style="text-decoration:line-through">NT$ ${p.price}</s> NT$ ${unit} x ${qty}`
                     : `NT$ ${p.price} x ${qty}`;
 
@@ -576,7 +577,7 @@ function submitOrder(event) {
             if(!document.getElementById('not-robot').checked){alert('請勾選我不是機器人');return;}
             const cfg = shopCfg();
             if (productSubtotal < cfg.minOrder) {
-                alert('抱歉！本商店最低結帳金額為 NT$ ' + cfg.minOrder + ' 元，目前小計為 NT$ ' + productSubtotal + ' 元。');
+                alert('再加購 NT$ ' + Math.max(Math.ceil(cfg.minOrder - productSubtotal), 1) + ' 就能下單囉！😊\n全店滿 NT$ ' + cfg.minOrder + ' 即可結帳，再多挑一樣小點心吧～');
                 return;
             }
             saveCustomerProfile();
@@ -592,7 +593,7 @@ function submitOrder(event) {
             }
             for (const [id, qty] of Object.entries(cart)) {
                 const p = productsLookup[id];
-                if (p) orderDetailsText += `${p.name} (約 ${p.weight || '120g'}) x ${qty} (NT$ ${saleUnit(p.price) * qty})\n`;
+                if (p) orderDetailsText += `${p.name} (約 ${p.weight || '120g'}) x ${qty} (NT$ ${saleUnit(p.price, p.salePrice) * qty})\n`;
             }
             orderDetailsText += `冷凍宅配運費：NT$ ${shippingFee}\n`;
 

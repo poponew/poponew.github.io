@@ -144,6 +144,8 @@
         .brand-mark { font-family: "poponew", sans-serif; }
         .qa details { border: 1px solid #e7e5e4; border-radius: 1rem; background: #fff; }
         #faq-ship { scroll-margin-top: 6.75rem; }
+        .qa details.faq-ship-card { background: #fffbeb; border-color: #f6e7b8; }
+        .qa details.faq-ship-card[open] summary { border-bottom-color: #f6e7b8; }
         .qa details + details { margin-top: 0.75rem; }
         .qa summary {
             cursor: pointer;
@@ -230,7 +232,7 @@
                 </details>
 
                 <p class="qa-group">寄送與運費</p>
-                <details>
+                <details class="faq-ship-card">
                     <summary id="faq-ship">運費怎麼算？可以超商取貨嗎？</summary>
                     <div class="answer">
                         <p>為了保持甜點的新鮮美味，全店一律使用低溫冷凍宅配，目前不提供超商取貨或常溫寄送。</p>
