@@ -270,14 +270,15 @@ window.shopSettings = {
         opt = opt || {};
         var o = parseInt(original, 10) || 0;
         var n = window.shopSalePrice(o, opt.sale);
-        var from = opt.from ? ' <span class="text-xs font-medium">起</span>' : (opt.suffix || "");
+        var from = (opt.from ? ' <span class="text-xs font-medium">起</span>' : "") + (opt.suffix || "");
         if (n === o) return shopNtMark("NT$ ") + o + from;
-        return '<s class="shop-old-price text-sm font-normal" style="text-decoration:line-through;color:#a8a29e;font-weight:400;font-size:0.875rem">' + shopNtMark("NT$ ") + o + "</s> <span class=\"shop-sale-price\">" + shopNtMark("NT$ ") + n + "</span>" + from;
+        return '<span class="shop-old-price text-sm font-normal" style="color:#a8a29e;font-weight:400;font-size:0.875rem">' + shopNtMark("NT$ ") + '<s style="text-decoration:line-through">' + o + "</s></span> <span class=\"shop-sale-price\">" + shopNtMark("NT$ ") + n + "</span>" + from;
     };
     function bindIndexCardPrices() {
         if (!window.shopSearch || !window.shopSearch.length) return;
         var mins = {};
         var counts = {};
+        var packOf = {};
         window.shopSearch.forEach(function (p) {
             var key = String(p.group || "");
             if (!key) return;
@@ -287,6 +288,9 @@ window.shopSettings = {
             if (!(sale > 0 && sale < orig)) sale = 0;
             var pay = sale || orig;
             if (mins[key] == null || pay < mins[key].pay) mins[key] = { pay: pay, orig: orig, sale: sale };
+            var mates = window.shopSearch.filter(function (x) { return String(x.group || "") === key; });
+            var pack = shopPackCount(p, mates);
+            if (pack >= 2 && (packOf[key] == null || pack < packOf[key])) packOf[key] = pack;
         });
         document.querySelectorAll("a.product-card").forEach(function (card) {
             var h2 = card.querySelector("h2");
@@ -298,8 +302,25 @@ window.shopSettings = {
             box.setAttribute("data-shop-price", String(mins[name].orig));
             if (mins[name].sale) box.setAttribute("data-shop-sale", String(mins[name].sale));
             else box.removeAttribute("data-shop-sale");
+            if (packOf[name] >= 2) box.setAttribute("data-shop-pack", String(packOf[name]));
+            else box.removeAttribute("data-shop-pack");
             if (counts[name] > 1) box.setAttribute("data-shop-price-from", "1");
         });
+    }
+    function shopPackCount(product, list) {
+        var o = parseInt(product && product.price, 10) || 0;
+        var s = parseInt(product && product.salePrice, 10) || 0;
+        if (!(s > 0 && s < o)) return 0;
+        var packs = 0;
+        (list || []).forEach(function (p) {
+            if (!p || p === product) return;
+            if (product.id != null && p.id != null && String(p.id) === String(product.id)) return;
+            var unit = parseInt(p.price, 10) || 0;
+            if (unit <= 0 || unit >= o || o % unit !== 0) return;
+            var n = o / unit;
+            if (n >= 2 && (packs === 0 || n < packs)) packs = n;
+        });
+        return packs;
     }
     function bindProductRowPrices() {
         (window.products || []).forEach(function (p) {
@@ -312,6 +333,7 @@ window.shopSettings = {
             priceEl.setAttribute("data-shop-price", String(orig));
             if (sale > 0 && sale < orig) priceEl.setAttribute("data-shop-sale", String(sale));
             else priceEl.removeAttribute("data-shop-sale");
+            priceEl.removeAttribute("data-shop-pack");
         });
     }
     function shopDiscountLeadPrefix() {
@@ -396,7 +418,9 @@ window.shopSettings = {
         wrapCheckoutPause();
         watchLightboxPrice();
         document.querySelectorAll("[data-shop-price]").forEach(function (el) {
-            el.innerHTML = window.shopPriceHtml(el.getAttribute("data-shop-price"), { from: el.getAttribute("data-shop-price-from"), sale: el.getAttribute("data-shop-sale") });
+            var pack = parseInt(el.getAttribute("data-shop-pack"), 10) || 0;
+            var suffix = pack >= 2 ? '<span class="shop-pack-note">' + pack + '入優惠中</span>' : "";
+            el.innerHTML = window.shopPriceHtml(el.getAttribute("data-shop-price"), { from: el.getAttribute("data-shop-price-from"), sale: el.getAttribute("data-shop-sale"), suffix: suffix });
         });
         shopEnsureNt();
         window.shopLockCheckoutButtons();
@@ -405,7 +429,7 @@ window.shopSettings = {
         if (document.getElementById("shop-nt-style")) return;
         var st = document.createElement("style");
         st.id = "shop-nt-style";
-        st.textContent = ".shop-nt{font-size:calc(1em - 4px);font-weight:inherit;}.keep-body .shop-nt{font-size:calc(1em - 4px)!important;}";
+        st.textContent = ".shop-nt{font-size:calc(1em - 4px);font-weight:inherit;}.keep-body .shop-nt{font-size:calc(1em - 4px)!important;}.shop-pack-note{display:inline-block;font-size:0.75rem;font-weight:600;color:#78350f;background:#fef3c7;margin-left:0.35rem;padding:0.12em 0.45em;border-radius:0.4rem;vertical-align:0.05em}";
         document.head.appendChild(st);
     }
     var ntBusy = false;
