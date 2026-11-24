@@ -1049,7 +1049,7 @@ function buildIndexHtml(groupsList, productsList) {
             tags.forEach(t => tagSet.add(t));
         }
     });
-    let allTags = Array.from(tagSet);
+    let allTags = Array.from(tagSet).filter(function(t) { return t !== '優惠商品'; });
 
     var indexTitle = shopBrand() + '｜手工司康、巴斯克、美式軟餅乾、生乳捲、比利時鬆餅、布朗尼';
     var indexDesc = shopBrand() + '提供手工司康、巴斯克乳酪蛋糕與餅乾。全店滿 NT$ ' + (parseInt(shopSettings.freeShipping, 10) || 1000).toLocaleString('en-US') + ' 免運。';
@@ -1102,6 +1102,8 @@ function buildIndexHtml(groupsList, productsList) {
     indexHtml.push('        .shop-search-sold { color: #a8a29e; }');
     indexHtml.push('        body.shop-search-open { overflow: hidden; }');
     indexHtml.push('        .card-new-mark { font-family: ui-sans-serif, system-ui, sans-serif !important; color: #b45309; font-weight: 700; font-size: 0.75rem; line-height: 1; flex-shrink: 0; margin-right: 0.2em; white-space: nowrap; }');
+    indexHtml.push('        #category-tags .tag-sale { background:#fef3c7; color:#78350f; border:1px solid #fcd34d; }');
+    indexHtml.push('        #category-tags .tag-sale.bg-amber-700 { background:#d97706; color:#fff; border-color:#d97706; }');
     indexHtml.push('        .card-stock-note { margin-left: 0.4rem; font-size: 0.75rem; font-weight: 600; color: #78716c; }');
     indexHtml.push('    </style>');
     indexHtml.push('<\/head>');
@@ -1136,6 +1138,7 @@ function buildIndexHtml(groupsList, productsList) {
     indexHtml.push('        <p id="shop-home-lead" class="font-zoom text-stone-600 text-sm leading-snug text-center mt-5 mb-5">📢 ' + escapeAttr(homeLead) + ' <a class="home-lead-more font-semibold text-amber-700" href="faq.html#faq-ship" style="text-decoration:none"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-2px;margin-right:0.2em"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>運費說明<\/a><\/p>');
     indexHtml.push('        <div class="font-zoom flex flex-wrap items-center justify-center gap-1.5 mb-6" id="category-tags">');
     indexHtml.push('          <button type="button" onclick="filterCategory(\'all\', this)" class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-amber-700 text-white shadow-sm transition">全部商品<\/button>');
+    indexHtml.push('          <button type="button" onclick="filterCategory(\'優惠商品\', this)" class="tag-btn tag-sale px-3 py-1 rounded-full text-sm font-semibold shadow-sm transition">優惠商品<\/button>');
     allTags.forEach(function(t) {
         indexHtml.push('          <button type="button" onclick=\'filterCategory(' + JSON.stringify(t) + ', this)\' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">' + escapeAttr(t) + '<\/button>');
     });
