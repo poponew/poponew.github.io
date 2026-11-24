@@ -2116,8 +2116,11 @@ function buildProductsLookupBlock(productsList, groupsList) {
             });
             var lines = items.map(function(p) {
                 var weight = String(p.weight || '').replace(/"/g, '').trim();
+                var note = String(p.note || '').replace(/"/g, '').trim();
+                var page = String(p.url || '').replace(/"/g, '').trim();
+                if (!/^[A-Za-z0-9._-]+\.html$/.test(page)) page = '';
                 var sale = productSalePrice(p);
-                return '            ' + JSON.stringify(String(p.id)) + ': { name: ' + JSON.stringify(String(p.name || '')) + ', weight: ' + JSON.stringify(weight) + ', price: ' + (parseInt(p.price, 10) || 0) + (sale ? (', salePrice: ' + sale) : '') + ' },';
+                return '            ' + JSON.stringify(String(p.id)) + ': { name: ' + JSON.stringify(String(p.name || '')) + ', weight: ' + JSON.stringify(weight) + ', note: ' + JSON.stringify(note) + ', url: ' + JSON.stringify(page) + ', price: ' + (parseInt(p.price, 10) || 0) + (sale ? (', salePrice: ' + sale) : '') + ' },';
             });
             return '        const productsLookup = {\n' + lines.join('\n') + '\n        };';
         }
