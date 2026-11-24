@@ -101,10 +101,10 @@
                 <button type="button" onclick="changeFontSize(1)" title="放大字型" class="w-8 h-7 flex items-center justify-center text-sm font-bold text-stone-700 hover:bg-stone-100 hover:text-amber-800 rounded-lg transition active:scale-95">A+</button>
             </div>
         </div>
-        <div id="product-gallery" class="w-full min-w-full aspect-square flex items-center justify-center bg-stone-100 shrink-0 relative overflow-hidden">
-            <picture>
+        <div id="product-gallery" class="w-full min-w-full bg-stone-100 shrink-0 relative overflow-hidden">
+            <picture class="block w-full">
                 <source id="product-gallery-webp" type="image/webp" srcset="images/lmptbsk.webp">
-                <img id="product-gallery-img" src="images/lmptbsk.webp" alt="蘭姆葡萄巴斯克" class="w-full h-full object-cover" draggable="false">
+                <img id="product-gallery-img" src="images/lmptbsk.webp" alt="蘭姆葡萄巴斯克" class="block w-full h-auto" draggable="false">
             </picture>
             <button type="button" id="product-gallery-prev" hidden class="hidden absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 text-stone-800 shadow-md border border-stone-200 flex items-center justify-center text-2xl leading-none hover:bg-white active:scale-95" aria-label="上一張">&#8249;</button>
             <button type="button" id="product-gallery-next" hidden class="hidden absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 text-stone-800 shadow-md border border-stone-200 flex items-center justify-center text-2xl leading-none hover:bg-white active:scale-95" aria-label="下一張">&#8250;</button>

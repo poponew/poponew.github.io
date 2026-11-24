@@ -1529,11 +1529,11 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('            <\/div>');
             h.push('        <\/div>');
             
-            h.push('        <div id="product-gallery" class="w-full min-w-full aspect-square flex items-center justify-center bg-stone-100 shrink-0 relative overflow-hidden">');
+            h.push('        <div id="product-gallery" class="w-full min-w-full bg-stone-100 shrink-0 relative overflow-hidden">');
             var galleryWebp = String(img || "").replace(/\.jpe?g$/i, ".webp");
-            h.push('            <picture>');
+            h.push('            <picture class="block w-full">');
             h.push('                <source id="product-gallery-webp" type="image/webp" srcset="' + galleryWebp + '">');
-            h.push('                <img id="product-gallery-img" src="' + galleryWebp + '" alt="' + cleanGroupName + '" class="w-full h-full object-cover" draggable="false">');
+            h.push('                <img id="product-gallery-img" src="' + galleryWebp + '" alt="' + cleanGroupName + '" class="block w-full h-auto" draggable="false">');
             h.push('            </picture>');
             h.push('            <button type="button" id="product-gallery-prev" hidden class="hidden absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 text-stone-800 shadow-md border border-stone-200 flex items-center justify-center text-2xl leading-none hover:bg-white active:scale-95" aria-label="上一張">&#8249;<\/button>');
             h.push('            <button type="button" id="product-gallery-next" hidden class="hidden absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 text-stone-800 shadow-md border border-stone-200 flex items-center justify-center text-2xl leading-none hover:bg-white active:scale-95" aria-label="下一張">&#8250;<\/button>');
