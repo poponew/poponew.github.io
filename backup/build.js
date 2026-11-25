@@ -399,7 +399,7 @@ function groupStockNoteHtml(stockKind) {
         }
 
 function productAllergenNoteHtml() {
-            return '<p class="allergen-note">⚠️ 含蛋、牛奶；產線另有麩質穀物及堅果。對上述成分過敏者不適合食用。<a href="faq.html">常見問題</a></p>';
+            return '<p class="allergen-note">⚠️ 含蛋、牛奶；產線另有麩質穀物及堅果。對上述成分過敏者不適合食用。</p>';
         }
 
 function soldOutBadgeHtml(forJs) {
