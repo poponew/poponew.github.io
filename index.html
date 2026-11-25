@@ -94,10 +94,10 @@
         <div class="font-zoom flex flex-wrap items-center justify-center gap-1.5 mb-6" id="category-tags">
           <button type="button" onclick="filterCategory('all', this)" class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-amber-700 text-white shadow-sm transition">全部商品</button>
           <button type="button" onclick="filterCategory('優惠商品', this)" class="tag-btn tag-sale px-3 py-1 rounded-full text-sm font-semibold shadow-sm transition">優惠商品</button>
-          <button type="button" onclick='filterCategory("迷你一口系列", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">迷你一口系列</button>
           <button type="button" onclick='filterCategory("職人手工餅乾", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">職人手工餅乾</button>
           <button type="button" onclick='filterCategory("巴斯克乳酪蛋糕", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">巴斯克乳酪蛋糕</button>
           <button type="button" onclick='filterCategory("生乳捲", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">生乳捲</button>
+          <button type="button" onclick='filterCategory("迷你一口系列", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">迷你一口系列</button>
           <button type="button" onclick='filterCategory("人氣單品", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">人氣單品</button>
           <button type="button" onclick='filterCategory("手作司康", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">手作司康</button>
           <button type="button" onclick='filterCategory("磅蛋糕", this)' class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-amber-50 hover:text-amber-800 transition">磅蛋糕</button>
@@ -105,7 +105,7 @@
           <a href="faq.html" class="tag-btn px-3 py-1 rounded-full text-sm font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition">常見問題</a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-list">
-            <a href="minimix.html" data-tag="迷你一口系列, 優惠商品" data-pinned="true" data-new="true" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
+            <a href="minimix.html" data-tag="優惠商品" data-pinned="true" data-new="true" class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-stone-100 flex flex-col justify-between hover:shadow-lg hover:-translate-y-0.5 transition duration-200 block group">
                 <!-- 1. 圖片容器：加大高度，展現豐富質感 -->
                 <div class="h-56 bg-stone-400 overflow-hidden">
                     <picture>
@@ -1013,7 +1013,36 @@
                 }
             });
             applyHomeImagePriority();
+            writeTagHash(selectedTag);
         }
+        function currentTagHash() {
+            var raw = (location.hash || "").replace(/^#/, "");
+            if (!raw) return "";
+            try { return decodeURIComponent(raw); } catch (e) { return raw; }
+        }
+        function writeTagHash(selectedTag) {
+            var next = (!selectedTag || selectedTag === "all") ? "" : selectedTag;
+            if (currentTagHash() === next) return;
+            try {
+                var base = location.pathname + location.search;
+                history.replaceState(null, "", next ? (base + "#" + encodeURIComponent(next)) : base);
+            } catch (e) {}
+        }
+        function applyTagFromLocation() {
+            var tag = currentTagHash();
+            var buttons = document.querySelectorAll("#category-tags button");
+            var found = null;
+            buttons.forEach(function(b) {
+                var label = (b.textContent || "").trim();
+                var value = label === "全部商品" ? "all" : label;
+                if ((tag === "" && value === "all") || value === tag) found = b;
+            });
+            if (!found) return;
+            var label = (found.textContent || "").trim();
+            filterCategory(label === "全部商品" ? "all" : label, found);
+        }
+        document.addEventListener("DOMContentLoaded", applyTagFromLocation);
+        window.addEventListener("hashchange", applyTagFromLocation);
         (function() {
             var layer = document.getElementById("shop-search-layer");
             var input = document.getElementById("shop-search-input");
