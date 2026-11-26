@@ -1522,13 +1522,16 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             
             var lookup = {};
             var saleLookup = {};
+            var nameLookup = {};
             (allPriceItems || items).forEach(function(p) {
                 lookup[p.id] = p.price;
+                nameLookup[p.id] = p.name || '';
                 var sale = productSalePrice(p);
                 if (sale) saleLookup[p.id] = sale;
             });
             h.push('        window.allProductsLookup = ' + JSON.stringify(lookup) + ';');
             h.push('        window.shopSaleLookup = ' + JSON.stringify(saleLookup) + ';');
+            h.push('        window.allProductsNames = ' + JSON.stringify(nameLookup) + ';');
             h.push('    <\/script>');
             
             h.push('    <style>');
@@ -1708,6 +1711,10 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('        });');
             h.push('        }');
 
+            h.push('        function ga4Track(name, params) { if (typeof gtag === "function") gtag("event", name, params); }');
+            h.push('        function ga4UnitPrice(id) { return window.shopSalePrice ? window.shopSalePrice((window.allProductsLookup && window.allProductsLookup[id]) || 0, window.shopSaleLookup && window.shopSaleLookup[id]) : ((window.allProductsLookup && window.allProductsLookup[id]) || 0); }');
+            h.push('        function ga4ItemName(id) { if (window.allProductsNames && window.allProductsNames[id] != null) return String(window.allProductsNames[id]); if (window.allProductsNames && window.allProductsNames[String(id)] != null) return String(window.allProductsNames[String(id)]); if (window.products) { for (var ni = 0; ni < window.products.length; ni++) { if (String(window.products[ni].id) === String(id)) return window.products[ni].name || ""; } } return ""; }');
+            h.push('        function ga4CartItems(qtyMap) { var items = []; for (var cid in qtyMap) { if (!Object.prototype.hasOwnProperty.call(qtyMap, cid)) continue; var qty = parseInt(qtyMap[cid], 10) || 0; if (qty <= 0) continue; var unit = ga4UnitPrice(cid); items.push({ item_id: String(cid), item_name: ga4ItemName(cid), price: unit, quantity: qty }); } return items; }');
             h.push('        function updateQty(id, change) {');
             h.push('            var input = document.getElementById("qty-" + id);');
             h.push('            var prevQty = parseInt(input && input.value, 10) || 0;');
@@ -1719,17 +1726,12 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('            calculatePageTotal();');
             h.push('            updateCartCount();');
             h.push('            if (window.syncFlavorLightboxQty) window.syncFlavorLightboxQty();');
-            h.push('            // Meta Pixel');
-            h.push('            if (change > 0 && currentQty > prevQty && window.fbq) {');
+            h.push('            if (change > 0 && currentQty > prevQty) {');
             h.push('                var added = currentQty - prevQty;');
-            h.push('                var pname = "";');
-            h.push('                if (window.products) {');
-            h.push('                    for (var pi = 0; pi < window.products.length; pi++) {');
-            h.push('                        if (String(window.products[pi].id) === String(id)) { pname = window.products[pi].name; break; }');
-            h.push('                    }');
-            h.push('                }');
-            h.push('                var unit = window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0, window.shopSaleLookup && window.shopSaleLookup[id]) : ((window.allProductsLookup && window.allProductsLookup[id]) || 0);');
-            h.push('                fbq("track", "AddToCart", { content_name: pname, value: unit * added, currency: "TWD" });');
+            h.push('                var pname = ga4ItemName(id);');
+            h.push('                var unit = ga4UnitPrice(id);');
+            h.push('                if (window.fbq) fbq("track", "AddToCart", { content_name: pname, value: unit * added, currency: "TWD" });');
+            h.push('                ga4Track("add_to_cart", { currency: "TWD", value: unit * added, items: [{ item_id: String(id), item_name: pname, price: unit, quantity: added }] });');
             h.push('            }');
             h.push('        }');
             
@@ -1738,10 +1740,12 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('        function saveToCartAndGo() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0, window.shopSaleLookup && window.shopSaleLookup[id]) : (window.allProductsLookup[id] || 0)) * cart[id]; } if (entireCartTotal === 0) { alert("您目前尚未選擇任何數量唷！"); return; } if (entireCartTotal < cfg.minOrder) { alert("再加購 NT$ " + Math.max(Math.ceil(cfg.minOrder - entireCartTotal), 1) + " 就能下單囉！😊\\n全店滿 NT$ " + cfg.minOrder + " 即可結帳，再多挑一樣小點心吧～"); return; } localStorage.setItem("poponew_cart", JSON.stringify(cart));');
             h.push('            // Meta Pixel');
             h.push('            if (window.fbq) fbq("track", "InitiateCheckout", { value: entireCartTotal, currency: "TWD" });');
+            h.push('            ga4Track("begin_checkout", { currency: "TWD", value: entireCartTotal, items: ga4CartItems(cart) });');
             h.push('            window.location.href = "cart.html"; }');
             
             h.push('        function updateCartCount() { var count = 0; for (var id in cart) { count += cart[id]; } document.getElementById("cart-count").innerText = count; }');
             h.push('        calculatePageTotal(); updateCartCount();');
+            h.push('        (function trackViewItem() { if (typeof gtag !== "function" || !window.products || !window.products.length) return; var items = []; var total = 0; for (var vi = 0; vi < window.products.length; vi++) { var vp = window.products[vi]; var unit = ga4UnitPrice(vp.id); items.push({ item_id: String(vp.id), item_name: vp.name || "", price: unit, quantity: 1 }); total += unit; } gtag("event", "view_item", { currency: "TWD", value: total, items: items }); })();');
             h.push('        window.addEventListener("pagehide", function() { localStorage.setItem("poponew_cart", JSON.stringify(cart)); });');
             h.push('        window.addEventListener("pageshow", function() { cart = JSON.parse(localStorage.getItem("poponew_cart")) || {}; if (window.products) { window.products.forEach(function(p) { var input = document.getElementById("qty-" + p.id); if (input) input.value = cart[p.id] || 0; }); } calculatePageTotal(); updateCartCount(); if (window.syncFlavorLightboxQty) window.syncFlavorLightboxQty(); });');
             

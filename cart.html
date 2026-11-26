@@ -564,13 +564,14 @@ document.getElementById('subtotal-price').innerText = productSubtotal;
             if (cart[id] <= 0) delete cart[id];
             localStorage.setItem('poponew_cart', JSON.stringify(cart));
             renderCart();
-            // Meta Pixel
             var newQty = cart[id] || 0;
-            if (change > 0 && newQty > prevQty && window.fbq) {
+            if (change > 0 && newQty > prevQty) {
                 var p = productsLookup[id];
                 var pname = p ? p.name : "";
                 var unit = p ? saleUnit(p.price, p.salePrice) : 0;
-                fbq("track", "AddToCart", { content_name: pname, value: unit * (newQty - prevQty), currency: "TWD" });
+                var added = newQty - prevQty;
+                if (window.fbq) fbq("track", "AddToCart", { content_name: pname, value: unit * added, currency: "TWD" });
+                if (typeof gtag === "function") gtag("event", "add_to_cart", { currency: "TWD", value: unit * added, items: [{ item_id: String(id), item_name: pname, price: unit, quantity: added }] });
             }
         }
 
@@ -808,9 +809,19 @@ function submitOrder(event) {
             var idEl = document.getElementById('success-order-id');
             if (idEl) idEl.innerText = orderId || '';
             document.getElementById('custom-alert-modal').classList.remove('hidden');
+            var purchaseItems = [];
+            for (var pid in cart) {
+                if (!Object.prototype.hasOwnProperty.call(cart, pid)) continue;
+                var qty = parseInt(cart[pid], 10) || 0;
+                if (qty <= 0) continue;
+                var p = productsLookup[pid];
+                var unit = p ? saleUnit(p.price, p.salePrice) : 0;
+                purchaseItems.push({ item_id: String(pid), item_name: p ? p.name : "", price: unit, quantity: qty });
+            }
+            var purchaseValue = productSubtotal + shippingFee;
             localStorage.removeItem('poponew_cart');
-            // Meta Pixel
-            if (window.fbq) fbq("track", "Purchase", { value: productSubtotal + shippingFee, currency: "TWD" });
+            if (window.fbq) fbq("track", "Purchase", { value: purchaseValue, currency: "TWD" });
+            if (typeof gtag === "function") gtag("event", "purchase", { transaction_id: String(orderId || ""), value: purchaseValue, shipping: shippingFee, currency: "TWD", items: purchaseItems });
         }
 
         // 點擊我知道了，關閉彈出視窗並回首頁
