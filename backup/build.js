@@ -313,14 +313,25 @@ function clipMetaText(str, max) {
             return s.slice(0, max).replace(/[，,。.\s]+$/g, '') + '…';
         }
 
+function faviconLinkLines() {
+            return [
+                '    <link rel="icon" href="favicon.ico" sizes="any">',
+                '    <link rel="apple-touch-icon" href="apple-touch-icon.png">',
+                '    <link rel="manifest" href="site.webmanifest">'
+            ];
+        }
+
 function seoMetaLines(title, description, image) {
             var t = escapeAttr(title);
             var d = escapeAttr(description);
-            var imgRaw = String(image || 'images/scone.webp').replace(/\.jpe?g(\?.*)?$/i, '.webp$1');
+            var imgRaw = String(image || 'images/scone.webp');
+            if (!/og-image\.jpe?g(\?.*)?$/i.test(imgRaw)) {
+                imgRaw = imgRaw.replace(/\.jpe?g(\?.*)?$/i, '.webp$1');
+            }
             if (!/^https?:\/\//i.test(imgRaw)) imgRaw = siteAbsUrl(imgRaw);
             var img = escapeAttr(imgRaw);
             var brand = escapeAttr(shopBrand());
-            return [
+            var lines = [
                 '    <meta name="description" content="' + d + '">',
                 '    <meta property="og:site_name" content="' + brand + '">',
                 '    <meta property="og:locale" content="zh_TW">',
@@ -329,6 +340,12 @@ function seoMetaLines(title, description, image) {
                 '    <meta property="og:description" content="' + d + '">',
                 '    <meta property="og:image" content="' + img + '">'
             ];
+            if (/og-image\.jpe?g(\?.*)?$/i.test(imgRaw)) {
+                lines.push('    <meta property="og:image:width" content="1200">');
+                lines.push('    <meta property="og:image:height" content="630">');
+            }
+            lines.push('    <meta name="twitter:card" content="summary_large_image">');
+            return lines;
         }
 
 function gaMeasurementId() {
@@ -1268,7 +1285,7 @@ function buildIndexHtml(groupsList, productsList) {
 
     var indexTitle = shopBrand() + '｜手工司康、巴斯克、美式軟餅乾、生乳捲、比利時鬆餅、布朗尼';
     var indexDesc = shopBrand() + '提供手工司康、巴斯克乳酪蛋糕與餅乾。全店滿 ' + ruleMoney(ruleValues().free, true) + ' 免運。';
-    var indexImg = (shopGroups[0] && shopGroups[0].img) || 'images/scone.jpg';
+    var indexImg = 'og-image.jpg';
     var indexHtml = [];
     indexHtml.push('<!DOCTYPE html>');
     indexHtml.push('<html lang="zh-TW">');
@@ -1278,6 +1295,7 @@ function buildIndexHtml(groupsList, productsList) {
     gaTagLines().forEach(function(line) { indexHtml.push(line); });
     indexHtml.push('    <title>' + escapeAttr(indexTitle) + '<\/title>');
     seoMetaLines(indexTitle, indexDesc, indexImg).forEach(function(line) { indexHtml.push(line); });
+    faviconLinkLines().forEach(function(line) { indexHtml.push(line); });
     indexHtml.push('    <link rel="stylesheet" href="css/tailwind.css">');
     indexHtml.push('    <script src="js/shop-settings.js"><\/script>');
     // 💡 在此處加入 @font-face 與標題字型指定
@@ -1703,6 +1721,7 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             gaTagLines().forEach(function(line) { h.push(line); });
             h.push('    <title>' + pageTitle + '<\/title>');
             seoMetaLines(pageTitle, pageDesc, img).forEach(function(line) { h.push(line); });
+            faviconLinkLines().forEach(function(line) { h.push(line); });
             h.push('    <link rel="stylesheet" href="css/tailwind.css">');
             h.push('    <script src="js/shop-settings.js"><\/script>');
             h.push('    <script>');
@@ -2253,7 +2272,8 @@ function buildKeepHtml(keepText) {
             h.push('    <meta name="viewport" content="width=device-width, initial-scale=1.0">');
             gaTagLines().forEach(function(line) { h.push(line); });
             h.push('    <title>' + keepTitle + '<\/title>');
-            seoMetaLines(keepTitle, keepDesc, 'images/scone.jpg').forEach(function(line) { h.push(line); });
+            seoMetaLines(keepTitle, keepDesc, 'og-image.jpg').forEach(function(line) { h.push(line); });
+            faviconLinkLines().forEach(function(line) { h.push(line); });
             h.push('    <link rel="stylesheet" href="css/tailwind.css">');
             h.push('    <style>');
             h.push('        @font-face { font-family: "poponew"; src: url("fonts/poponew.woff2") format("woff2"); font-weight: bold; font-style: normal; font-display: swap; }');
