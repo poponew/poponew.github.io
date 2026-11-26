@@ -60,8 +60,8 @@ window.shopSettings = {
             var fee = parseInt(s.shippingFee, 10);
             if (!isFinite(fee) || fee < 0) fee = 120;
             var free = parseInt(s.freeShipping, 10);
-            if (!isFinite(free) || free < 0) free = 1000;
-            rows = [{ min: 0, fee: fee }, { min: free, fee: 0 }];
+            if (!isFinite(free) || free < 0) free = 888;
+            rows = [{ min: 0, fee: fee }, { min: 499, fee: 80 }, { min: free, fee: 0 }];
         }
         var map = {};
         rows.forEach(function (row) { map[row.min] = row; });

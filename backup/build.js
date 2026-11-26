@@ -163,13 +163,13 @@ function parseDiscountFold(value) {
             return Math.round(n * 10) / 10;
         }
 
-let shopSettings = { shippingFee: 120, freeShipping: 1000, shippingTiers: [], minOrder: 300, codLimit: 2000, bulkOrder: 5000, discountFold: 10, discountStart: '', discountEnd: '', homeLead: '', ordersPaused: false, ordersPausedNote: '手工甜點趕製中，先暫停新訂單，免得讓大家等太久。已經下單的不用擔心，會照常做、照常寄。恢復時會在官方 LINE 跟大家說。', newAutoPin: true };
+let shopSettings = { shippingFee: 120, freeShipping: 888, shippingTiers: [], minOrder: 299, codLimit: 2000, bulkOrder: 5000, discountFold: 10, discountStart: '', discountEnd: '', homeLead: '', ordersPaused: false, ordersPausedNote: '手工甜點趕製中，先暫停新訂單，免得讓大家等太久。已經下單的不用擔心，會照常做、照常寄。恢復時會在官方 LINE 跟大家說。', newAutoPin: true };
 
 for (let i = 1; i < lines.length; i++) {
     let parts = parseCSVRow(lines[i]);
     let type = parts[0];
     if (type === 'settings') {
-        shopSettings = Object.assign({}, shopSettings, { shippingFee: parseInt(parts[5], 10) || 80, freeShipping: parseInt(parts[6], 10) || 1000, minOrder: parseInt(parts[7], 10) || 300, codLimit: parseInt(parts[8], 10) || 2000, bulkOrder: parseInt(parts[9], 10) || 5000, homeLead: parts[4] || '' });
+        shopSettings = Object.assign({}, shopSettings, { shippingFee: parseInt(parts[5], 10) || 120, freeShipping: parseInt(parts[6], 10) || 888, minOrder: parseInt(parts[7], 10) || 299, codLimit: parseInt(parts[8], 10) || 2000, bulkOrder: parseInt(parts[9], 10) || 5000, homeLead: parts[4] || '' });
     } else if (type === 'ship') {
         shopSettings.shippingTiers.push({ min: parseInt(parts[5], 10), fee: parseInt(parts[6], 10) });
     } else if (type === 'discount') {
@@ -376,6 +376,191 @@ function metaPixelLines() {
             ];
         }
 
+function ruleValues() {
+            var s = getShopSettings();
+            var tiers = (s.shippingTiers || []).map(function(row) {
+                return { min: parseInt(row.min, 10) || 0, fee: parseInt(row.fee, 10) || 0 };
+            }).sort(function(a, b) { return a.min - b.min; });
+            var base = parseInt(s.shippingFee, 10);
+            return {
+                tiers: tiers,
+                paid: tiers.filter(function(row) { return row.fee > 0; }),
+                baseFee: isFinite(base) ? base : 0,
+                free: parseInt(s.freeShipping, 10) || 0,
+                min: parseInt(s.minOrder, 10) || 0,
+                cod: parseInt(s.codLimit, 10) || 0,
+                bulk: parseInt(s.bulkOrder, 10) || 0
+            };
+        }
+
+function ruleMoney(n, spaced) {
+            var v = parseInt(n, 10);
+            if (!isFinite(v)) v = 0;
+            return 'NT$' + (spaced ? ' ' : '') + v.toLocaleString('en-US');
+        }
+
+function ruleApplyTokens(text) {
+            var r = ruleValues();
+            var out = String(text == null ? '' : text);
+            out = out.replace(/\{\{\s*(免運|free)\s*\}\}/g, function() { return ruleMoney(r.free, false); });
+            out = out.replace(/\{\{\s*(最低|min)\s*\}\}/g, function() { return ruleMoney(r.min, false); });
+            return out;
+        }
+
+function ruleHomeLead(text) {
+            var r = ruleValues();
+            var t = String(text == null ? '' : text).trim();
+            var m = t.match(/^((?:全店)?滿\s*NT\$\s*)[\d,]+(\s*元即享免運費(?:冷凍)?宅配！?)$/);
+            if (m && r.free > 0) t = m[1] + r.free.toLocaleString('en-US') + m[2];
+            return ruleApplyTokens(t);
+        }
+
+function ruleTiersLiteral(tiers) {
+            return '[' + tiers.map(function(row) { return '{ min: ' + row.min + ', fee: ' + row.fee + ' }'; }).join(', ') + ']';
+        }
+
+function ruleFallbackRowsJs() {
+            var r = ruleValues();
+            var parts = ['{ min: 0, fee: fee }'];
+            r.tiers.forEach(function(row, i) {
+                if (i === 0 || row.fee <= 0) return;
+                parts.push('{ min: ' + row.min + ', fee: ' + row.fee + ' }');
+            });
+            if (r.free > 0) parts.push('{ min: free, fee: 0 }');
+            return '[' + parts.join(', ') + ']';
+        }
+
+function ruleCartConfigLines(r) {
+            return [
+                '        function shopCfg() {',
+                '            var s = window.shopSettings || {};',
+                '            return {',
+                '                shippingFee: parseInt(s.shippingFee, 10) || ' + r.baseFee + ',',
+                '                freeShipping: parseInt(s.freeShipping, 10) || ' + r.free + ',',
+                '                minOrder: parseInt(s.minOrder, 10) || ' + r.min + ',',
+                '                codLimit: parseInt(s.codLimit, 10) || ' + r.cod + ',',
+                '                bulkOrder: parseInt(s.bulkOrder, 10) || ' + r.bulk,
+                '            };',
+                '        }',
+                '        function shopCfgTiers() {',
+                '            if (window.shopShippingTiers) return window.shopShippingTiers();',
+                '            var s = window.shopSettings || {};',
+                '            if (Array.isArray(s.shippingTiers) && s.shippingTiers.length) return s.shippingTiers;',
+                '            return ' + ruleTiersLiteral(r.tiers) + ';',
+                '        }',
+                '        function shopCfgQuote(subtotal) {',
+                '            if (window.shopShippingQuote) return window.shopShippingQuote(subtotal);',
+                '            var n = parseInt(subtotal, 10) || 0;',
+                '            if (n < 0) n = 0;',
+                '            var list = shopCfgTiers().slice().sort(function (a, b) { return (a.min - b.min); });',
+                '            var current = list[0] || { min: 0, fee: ' + r.baseFee + ' };',
+                '            var next = null;',
+                '            list.forEach(function (row) {',
+                '                if (n >= row.min) current = row;',
+                '                else if (!next) next = row;',
+                '            });',
+                '            return { fee: current.fee, next: next };',
+                '        }'
+            ];
+        }
+
+function ruleReplaceBlock(html, name, lines, label) {
+            var begin = '// RULES-SYNC:BEGIN ' + name;
+            var end = '// RULES-SYNC:END ' + name;
+            var bi = html.indexOf(begin);
+            var ei = html.indexOf(end);
+            if (bi < 0 || ei < 0 || ei < bi) {
+                console.error('⚠️ ' + label + ' 找不到標記 ' + name + '，這一段沒有更新');
+                return html;
+            }
+            var bLineEnd = html.indexOf('\n', bi);
+            var eLineStart = html.lastIndexOf('\n', ei) + 1;
+            var eol = html.charAt(bLineEnd - 1) === '\r' ? '\r\n' : '\n';
+            return html.slice(0, bLineEnd + 1) + lines.join(eol) + eol + html.slice(eLineStart);
+        }
+
+function ruleReplaceCount(html, re, fn, label, minCount) {
+            var n = 0;
+            var out = html.replace(re, function() { n++; return fn.apply(null, arguments); });
+            if (n < minCount) console.error('⚠️ ' + label + ' 找不到預期的文字（' + n + '/' + minCount + '），這一處沒有更新');
+            return out;
+        }
+
+function ruleSyncCartHtml(html) {
+            var r = ruleValues();
+            if (r.free > 0) {
+                html = ruleReplaceCount(html, /(購物車結帳。全店滿 NT\$ )[\d,]+( 免運。)/g, function(m, a, b) {
+                    return a + r.free.toLocaleString('en-US') + b;
+                }, 'cart.html 的 meta/OG 說明', 2);
+            }
+            html = ruleReplaceCount(html, /(id="shipping-fee-text"[^>]*>NT\$ )[\d,]+(<\/span>)/, function(m, a, b) {
+                return a + r.baseFee.toLocaleString('en-US') + b;
+            }, 'cart.html 的初始運費文字', 1);
+            return ruleReplaceBlock(html, 'cart-config', ruleCartConfigLines(r), 'cart.html');
+        }
+
+function ruleSyncFaqHtml(html) {
+            var r = ruleValues();
+            var money = function(v) { return ruleMoney(v, false); };
+            var vals = { freeMin: r.free, minOrderPlain: r.min, codLimitPlain: r.cod, bulkOrderPlain: r.bulk };
+            if (r.free > 0) {
+                html = ruleReplaceCount(html, /(data-shop="(freeMin|minOrderPlain|codLimitPlain|bulkOrderPlain)">)NT\$[\d,]+(<\/b>)/g, function(m, a, key, b) {
+                    return a + money(vals[key]) + b;
+                }, 'faq.html 的規則數字', 4);
+                var paid = r.paid.slice().sort(function(a, b) { return b.min - a.min; });
+                var sentences = paid.map(function(row, i) {
+                    if (row.min > 0) return '滿 ' + money(row.min) + '，運費只要 ' + money(row.fee) + '。';
+                    return '未滿 ' + money(i > 0 ? paid[i - 1].min : r.free) + '，運費 ' + money(row.fee) + '。';
+                });
+                var lis = paid.map(function(row, i) {
+                    if (row.min > 0) return '・滿 <b>' + money(row.min) + '</b>，運費只要 <b>' + money(row.fee) + '</b>';
+                    return '・未滿 <b>' + money(i > 0 ? paid[i - 1].min : r.free) + '</b>，運費 <b>' + money(row.fee) + '</b>';
+                });
+                html = ruleReplaceCount(html, /(<ul class="ship-lines" id="faq-ship-tiers">)([\s\S]*?)(<\/ul>)/, function(m, a, inner, b) {
+                    var eol = (inner.match(/\r?\n/) || ['\n'])[0];
+                    var liIndent = (inner.match(/\n([ \t]*)<li>/) || [0, '    '])[1];
+                    var tail = (inner.match(/\n([ \t]*)$/) || [0, ''])[1];
+                    return a + eol + lis.map(function(l) { return liIndent + '<li>' + l + '</li>'; }).join(eol) + eol + tail + b;
+                }, 'faq.html 的運費分級清單', 1);
+                html = ruleReplaceCount(html, /(全店一律使用低溫冷凍宅配，目前不提供超商取貨或常溫寄送。)全店滿 NT\$[\d,]+ 免運。.*?小份量也能輕鬆嘗鮮。/, function(m, a) {
+                    return a + '全店滿 ' + money(r.free) + ' 免運。' + sentences.join('') + '滿 ' + money(r.min) + ' 就能下單，小份量也能輕鬆嘗鮮。';
+                }, 'faq.html 結構化資料的運費說明', 1);
+                html = ruleReplaceCount(html, /(var freeMin = freeRow \? freeRow\.min : \(parseInt\(s\.freeShipping, 10\) \|\| )\d+(\);)/, function(m, a, b) {
+                    return a + r.free + b;
+                }, 'faq.html 程式的免運備援值', 1);
+            }
+            html = ruleReplaceCount(html, /(單筆訂單滿 )NT\$[\d,]+( 以上時，不提供貨到付款，請改用轉帳。)/g, function(m, a, b) {
+                return a + money(r.cod) + b;
+            }, 'faq.html 結構化資料的貨到付款上限', 1);
+            html = ruleReplaceCount(html, /(大宗送禮或單筆超過 )NT\$[\d,]+(，請先透過官方 LINE)/g, function(m, a, b) {
+                return a + money(r.bulk) + b;
+            }, 'faq.html 結構化資料的大宗門檻', 1);
+            html = ruleReplaceCount(html, /(minOrderPlain: moneyPlain\(parseInt\(s\.minOrder, 10\) \|\| )\d+(\))/, function(m, a, b) {
+                return a + r.min + b;
+            }, 'faq.html 程式的最低訂購備援值', 1);
+            html = ruleReplaceCount(html, /(codLimitPlain: moneyPlain\(parseInt\(s\.codLimit, 10\) \|\| )\d+(\))/, function(m, a, b) {
+                return a + r.cod + b;
+            }, 'faq.html 程式的貨到付款備援值', 1);
+            html = ruleReplaceCount(html, /(bulkOrderPlain: moneyPlain\(parseInt\(s\.bulkOrder, 10\) \|\| )\d+(\))/, function(m, a, b) {
+                return a + r.bulk + b;
+            }, 'faq.html 程式的大宗備援值', 1);
+            return html;
+        }
+
+function ruleSyncStaticPages(outDir) {
+            [['cart.html', ruleSyncCartHtml], ['faq.html', ruleSyncFaqHtml]].forEach(function(item) {
+                var p = path.join(outDir, item[0]);
+                if (!fs.existsSync(p)) {
+                    console.error('❌ 找不到 ' + item[0] + '，略過商店規則同步');
+                    return;
+                }
+                var before = fs.readFileSync(p, 'utf8');
+                var after = item[1](before);
+                if (after !== before) fs.writeFileSync(p, after, 'utf8');
+                console.log('✅ 已同步商店規則：' + item[0] + (after !== before ? '（有變動）' : '（無變動）'));
+            });
+        }
+
 function productSalePrice(p) {
             var o = parseInt(p && p.price, 10) || 0;
             var s = parseInt(p && p.salePrice, 10) || 0;
@@ -451,15 +636,18 @@ function normalizeShippingTiers(list) {
         }
 
 function defaultShippingTiers() {
-            return [{ min: 0, fee: 120 }, { min: 500, fee: 80 }, { min: 1000, fee: 0 }];
+            return [{ min: 0, fee: 120 }, { min: 499, fee: 80 }, { min: 888, fee: 0 }];
         }
 
 function legacyShippingTiers(fee, free) {
             var amount = parseInt(fee, 10);
-            if (!isFinite(amount) || amount < 0) amount = 80;
+            if (!isFinite(amount) || amount < 0) amount = 120;
             var door = parseInt(free, 10);
-            if (!isFinite(door) || door < 0) door = 1000;
-            return normalizeShippingTiers([{ min: 0, fee: amount }, { min: door, fee: 0 }]);
+            if (!isFinite(door) || door < 0) door = 888;
+            var rows = [{ min: 0, fee: amount }];
+            if (door > 499) rows.push({ min: 499, fee: 80 });
+            rows.push({ min: door, fee: 0 });
+            return normalizeShippingTiers(rows);
         }
 
 function shippingPairFromTiers(tiers) {
@@ -484,7 +672,7 @@ function getShopSettings() {
                 shippingFee: pair.shippingFee,
                 freeShipping: pair.freeShipping,
                 shippingTiers: pair.shippingTiers,
-                minOrder: parseInt(shopSettings.minOrder, 10) || 300,
+                minOrder: parseInt(shopSettings.minOrder, 10) || 299,
                 codLimit: parseInt(shopSettings.codLimit, 10) || 2000,
                 bulkOrder: parseInt(shopSettings.bulkOrder, 10) || 5000,
                 discountFold: parseDiscountFold(shopSettings.discountFold),
@@ -614,10 +802,10 @@ function shopDiscountHelpersJs() {
                 '        });',
                 '        if (!rows.length) {',
                 '            var fee = parseInt(s.shippingFee, 10);',
-                '            if (!isFinite(fee) || fee < 0) fee = 120;',
+                '            if (!isFinite(fee) || fee < 0) fee = ' + ruleValues().baseFee + ';',
                 '            var free = parseInt(s.freeShipping, 10);',
-                '            if (!isFinite(free) || free < 0) free = 1000;',
-                '            rows = [{ min: 0, fee: fee }, { min: free, fee: 0 }];',
+                '            if (!isFinite(free) || free < 0) free = ' + ruleValues().free + ';',
+                '            rows = ' + ruleFallbackRowsJs() + ';',
                 '        }',
                 '        var map = {};',
                 '        rows.forEach(function (row) { map[row.min] = row; });',
@@ -1068,7 +1256,7 @@ function buildIndexHtml(groupsList, productsList) {
             (groupsList || []).forEach(function(g) {
                 if (groupIsHidden(g) && g && g.name) hiddenNames[g.name] = true;
             });
-            var homeLead = String(shopSettings.homeLead || '').trim() || ('全店滿 NT$ ' + (parseInt(shopSettings.freeShipping, 10) || 1000).toLocaleString('en-US') + ' 元即享免運費宅配！');
+            var homeLead = ruleHomeLead(String(shopSettings.homeLead || '').trim() || ('全店滿 ' + ruleMoney(ruleValues().free, true) + ' 元即享免運費宅配！'));
     let tagSet = new Set();
     shopGroups.forEach(g => {
         if (g.tag) {
@@ -1079,7 +1267,7 @@ function buildIndexHtml(groupsList, productsList) {
     let allTags = Array.from(tagSet).filter(function(t) { return t !== '優惠商品'; });
 
     var indexTitle = shopBrand() + '｜手工司康、巴斯克、美式軟餅乾、生乳捲、比利時鬆餅、布朗尼';
-    var indexDesc = shopBrand() + '提供手工司康、巴斯克乳酪蛋糕與餅乾。全店滿 NT$ ' + (parseInt(shopSettings.freeShipping, 10) || 1000).toLocaleString('en-US') + ' 免運。';
+    var indexDesc = shopBrand() + '提供手工司康、巴斯克乳酪蛋糕與餅乾。全店滿 ' + ruleMoney(ruleValues().free, true) + ' 免運。';
     var indexImg = (shopGroups[0] && shopGroups[0].img) || 'images/scone.jpg';
     var indexHtml = [];
     indexHtml.push('<!DOCTYPE html>');
@@ -1685,7 +1873,8 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('    <p class="font-zoom text-center text-stone-400 text-[10px] md:text-[11px] py-6">Copyright &copy; 2026 Poponew. All rights reserved.<\/p>');
 
             h.push('    <script>');
-            h.push('        function shop() { var s = window.shopSettings || {}; return { shippingFee: parseInt(s.shippingFee,10)||80, freeShipping: parseInt(s.freeShipping,10)||1000, minOrder: parseInt(s.minOrder,10)||500, codLimit: parseInt(s.codLimit,10)||2000, bulkOrder: parseInt(s.bulkOrder,10)||5000 }; }');
+            var ruleCfg = ruleValues();
+            h.push('        function shop() { var s = window.shopSettings || {}; return { shippingFee: parseInt(s.shippingFee,10)||' + ruleCfg.baseFee + ', freeShipping: parseInt(s.freeShipping,10)||' + ruleCfg.free + ', minOrder: parseInt(s.minOrder,10)||' + ruleCfg.min + ', codLimit: parseInt(s.codLimit,10)||' + ruleCfg.cod + ', bulkOrder: parseInt(s.bulkOrder,10)||' + ruleCfg.bulk + ' }; }');
             h.push('        var cart = JSON.parse(localStorage.getItem("poponew_cart")) || {};');
             h.push('        var container = document.getElementById("cookie-list");');
             h.push('        if (container && !container.querySelector("[data-product-id]")) {');
@@ -2241,13 +2430,14 @@ fs.writeFileSync(path.join(jsDir, 'shop-settings.js'), buildShopSettingsJs(), 'u
 console.log('✅ 已更新：js/shop-settings.js');
 fs.writeFileSync(path.join(outDir, 'index.html'), buildIndexHtml(groups, products), 'utf8');
 console.log('✅ 已更新：index.html');
-fs.writeFileSync(path.join(outDir, 'keep.html'), buildKeepHtml(keepNote), 'utf8');
+fs.writeFileSync(path.join(outDir, 'keep.html'), buildKeepHtml(ruleApplyTokens(keepNote)), 'utf8');
 console.log('✅ 已更新：keep.html');
 fs.writeFileSync(path.join(outDir, 'robots.txt'), buildRobotsTxt(), 'utf8');
 console.log('✅ 已更新：robots.txt');
 fs.writeFileSync(path.join(outDir, 'sitemap.xml'), buildSitemapXml(groups), 'utf8');
 console.log('✅ 已更新：sitemap.xml');
 updateCartHtmlLookup(path.join(outDir, 'cart.html'), products, groups);
+ruleSyncStaticPages(outDir);
 
 let updatedCount = 0;
 groups.forEach(g => {

@@ -13,12 +13,12 @@
     </script>
     <title>購物車結帳 - Poponew手作甜點</title>
     <meta name="robots" content="noindex, follow">
-    <meta name="description" content="Poponew手作甜點購物車結帳。全店滿 NT$ 1,000 免運。">
+    <meta name="description" content="Poponew手作甜點購物車結帳。全店滿 NT$ 888 免運。">
     <meta property="og:site_name" content="Poponew手作甜點">
     <meta property="og:locale" content="zh_TW">
     <meta property="og:type" content="website">
     <meta property="og:title" content="購物車結帳 - Poponew手作甜點">
-    <meta property="og:description" content="Poponew手作甜點購物車結帳。全店滿 NT$ 1,000 免運。">
+    <meta property="og:description" content="Poponew手作甜點購物車結帳。全店滿 NT$ 888 免運。">
     <meta property="og:image" content="https://poponew.github.io/images/scone.webp">
     <link rel="stylesheet" href="css/tailwind.css">
     <script src="js/shop-settings.js"></script>
@@ -249,14 +249,14 @@ src="https://www.facebook.com/tr?id=1111093081976670&ev=PageView&noscript=1"
             "21": { name: "萊姆葡萄司康", weight: "", note: "", url: "scone.html", price: 75 },
             "22": { name: "蔓越莓司康", weight: "", note: "", url: "scone.html", price: 70 },
             "23": { name: "鹹蛋黃司康", weight: "", note: "", url: "scone.html", price: 75 },
-            "24": { name: "迷你小司康(小歪歪)", weight: "", note: "11顆11種口味", url: "scone.html", price: 120 },
+            "24": { name: "迷你小司康(小歪歪)", weight: "", note: "11顆11種口味", url: "scone.html", price: 130 },
             "25": { name: "經典原味列日鬆餅", weight: "", note: "", url: "blssb.html", price: 60 },
             "26": { name: "抹茶白巧列日鬆餅", weight: "", note: "", url: "blssb.html", price: 70 },
             "27": { name: "巧克力豆列日鬆餅", weight: "", note: "", url: "blssb.html", price: 70 },
             "28": { name: "蔓越莓列日鬆餅", weight: "", note: "", url: "blssb.html", price: 70 },
             "29": { name: "蘭姆酒葡萄乾列日鬆餅", weight: "", note: "", url: "blssb.html", price: 70 },
             "30": { name: "鐵觀音柑橘列日鬆餅", weight: "", note: "", url: "blssb.html", price: 70 },
-            "31": { name: "小星星迷你一口小鬆餅", weight: "", note: "5種口味12顆", url: "blssb.html", price: 110 },
+            "31": { name: "小星星迷你一口小鬆餅", weight: "", note: "5種口味12顆", url: "blssb.html", price: 120 },
             "32": { name: "蘭姆鳳梨巴斯克(6吋切片)", weight: "120", note: "", url: "lmppbsk.html", price: 145 },
             "33": { name: "蘭姆鳳梨巴斯克(6吋整顆)", weight: "720", note: "需5~7工作天出貨", url: "lmppbsk.html", price: 870 },
             "34": { name: "雙重巧克力巴斯克(6吋切片)", weight: "120", note: "", url: "cklbsk.html", price: 135 },
@@ -278,7 +278,7 @@ src="https://www.facebook.com/tr?id=1111093081976670&ev=PageView&noscript=1"
             "50": { name: "鹽之花布列塔尼酥餅", weight: "", note: "", url: "bltn.html", price: 80 },
             "51": { name: "鹹蛋黃布列塔尼酥餅", weight: "", note: "", url: "bltn.html", price: 85 },
             "52": { name: "巧克力豆布列塔尼酥餅", weight: "", note: "", url: "bltn.html", price: 85 },
-            "53": { name: "一口酥迷你布列塔尼", weight: "", note: "(3種口味9小顆/份)", url: "bltn.html", price: 100 },
+            "53": { name: "一口酥迷你布列塔尼", weight: "", note: "(3種口味9小顆/份)", url: "bltn.html", price: 120 },
             "54": { name: "布朗尼恐龍寶貝蛋餅乾", weight: "", note: "", url: "bbegg.html", price: 75 },
             "55": { name: "柑橘恐龍寶貝蛋餅乾", weight: "", note: "", url: "bbegg.html", price: 75 },
             "56": { name: "奶油乳酪恐龍寶貝蛋餅乾", weight: "", note: "", url: "bbegg.html", price: 75 },
@@ -331,16 +331,37 @@ src="https://www.facebook.com/tr?id=1111093081976670&ev=PageView&noscript=1"
             "103": { name: "組合包＋布朗尼球球", weight: "", note: "", url: "minimix.html", price: 690, salePrice: 588 },
         };
 
+        // RULES-SYNC:BEGIN cart-config
         function shopCfg() {
             var s = window.shopSettings || {};
             return {
-                shippingFee: parseInt(s.shippingFee, 10) || 80,
-                freeShipping: parseInt(s.freeShipping, 10) || 1000,
-                minOrder: parseInt(s.minOrder, 10) || 500,
+                shippingFee: parseInt(s.shippingFee, 10) || 120,
+                freeShipping: parseInt(s.freeShipping, 10) || 888,
+                minOrder: parseInt(s.minOrder, 10) || 299,
                 codLimit: parseInt(s.codLimit, 10) || 2000,
                 bulkOrder: parseInt(s.bulkOrder, 10) || 5000
             };
         }
+        function shopCfgTiers() {
+            if (window.shopShippingTiers) return window.shopShippingTiers();
+            var s = window.shopSettings || {};
+            if (Array.isArray(s.shippingTiers) && s.shippingTiers.length) return s.shippingTiers;
+            return [{ min: 0, fee: 120 }, { min: 499, fee: 80 }, { min: 888, fee: 0 }];
+        }
+        function shopCfgQuote(subtotal) {
+            if (window.shopShippingQuote) return window.shopShippingQuote(subtotal);
+            var n = parseInt(subtotal, 10) || 0;
+            if (n < 0) n = 0;
+            var list = shopCfgTiers().slice().sort(function (a, b) { return (a.min - b.min); });
+            var current = list[0] || { min: 0, fee: 120 };
+            var next = null;
+            list.forEach(function (row) {
+                if (n >= row.min) current = row;
+                else if (!next) next = row;
+            });
+            return { fee: current.fee, next: next };
+        }
+        // RULES-SYNC:END cart-config
 
         function saleUnit(price, sale) {
             return window.shopSalePrice ? window.shopSalePrice(price, sale) : (parseInt(price, 10) || 0);
@@ -493,11 +514,8 @@ src="https://www.facebook.com/tr?id=1111093081976670&ev=PageView&noscript=1"
             if (window.shopLockCheckoutButtons) window.shopLockCheckoutButtons();
 
             const cfg = shopCfg();
-            var quote = window.shopShippingQuote ? window.shopShippingQuote(productSubtotal) : {
-                fee: productSubtotal >= cfg.freeShipping ? 0 : cfg.shippingFee,
-                next: productSubtotal >= cfg.freeShipping ? null : { min: cfg.freeShipping, fee: 0 }
-            };
-            var tiers = window.shopShippingTiers ? window.shopShippingTiers() : [{ min: 0, fee: cfg.shippingFee }];
+            var quote = shopCfgQuote(productSubtotal);
+            var tiers = shopCfgTiers();
             var baseFee = tiers.length ? tiers[0].fee : cfg.shippingFee;
             shippingFee = quote.fee;
             if (hasItems && shippingFee <= 0) {
