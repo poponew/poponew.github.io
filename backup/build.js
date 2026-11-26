@@ -349,6 +349,33 @@ function gaTagLines() {
             ];
         }
 
+function metaPixelId() {
+            return '1111093081976670';
+        }
+
+function metaPixelLines() {
+            var id = metaPixelId();
+            return [
+                '<!-- Meta Pixel Code -->',
+                '<script>',
+                '!function(f,b,e,v,n,t,s)',
+                '{if(f.fbq)return;n=f.fbq=function(){n.callMethod?',
+                'n.callMethod.apply(n,arguments):n.queue.push(arguments)};',
+                "if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';",
+                'n.queue=[];t=b.createElement(e);t.async=!0;',
+                't.src=v;s=b.getElementsByTagName(e)[0];',
+                "s.parentNode.insertBefore(t,s)}(window, document,'script',",
+                "'https://connect.facebook.net/en_US/fbevents.js');",
+                "fbq('init', '" + id + "');",
+                "fbq('track', 'PageView');",
+                '<\/script>',
+                '<noscript><img height="1" width="1" style="display:none"',
+                'src="https://www.facebook.com/tr?id=' + id + '&ev=PageView&noscript=1"',
+                '/></noscript>',
+                '<!-- End Meta Pixel Code -->'
+            ];
+        }
+
 function productSalePrice(p) {
             var o = parseInt(p && p.price, 10) || 0;
             var s = parseInt(p && p.salePrice, 10) || 0;
@@ -1106,6 +1133,7 @@ function buildIndexHtml(groupsList, productsList) {
     indexHtml.push('        #category-tags .tag-sale.bg-amber-700 { background:#d97706; color:#fff; border-color:#d97706; }');
     indexHtml.push('        .card-stock-note { margin-left: 0.4rem; font-size: 0.75rem; font-weight: 600; color: #78716c; }');
     indexHtml.push('    </style>');
+    metaPixelLines().forEach(function(line) { indexHtml.push(line); });
     indexHtml.push('<\/head>');
     indexHtml.push('<body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-12">');
     indexHtml.push('    <nav class="border-b sticky top-0 bg-white/90 backdrop-blur-md z-40">');
@@ -1544,6 +1572,7 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('        .product-nav-brand { white-space: nowrap; font-size: clamp(0.95rem, 4.4vw, 1.25rem); }');
             h.push('    <\/style>');
             
+            metaPixelLines().forEach(function(line) { h.push(line); });
             h.push('<\/head>');
             h.push('<body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-24">');
             h.push('    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl my-0 md:my-8">');
@@ -1679,11 +1708,37 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('        });');
             h.push('        }');
 
-            h.push('        function updateQty(id, change) { var input = document.getElementById("qty-" + id); var currentQty = parseInt(input && input.value, 10) || 0; currentQty = Math.max(0, currentQty + change); if (currentQty > 20) { currentQty = 20; alert("單品數量上限為20"); } if (input) input.value = currentQty; if (currentQty === 0) { delete cart[id]; } else { cart[id] = currentQty; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); calculatePageTotal(); updateCartCount(); if (window.syncFlavorLightboxQty) window.syncFlavorLightboxQty(); }');
+            h.push('        function updateQty(id, change) {');
+            h.push('            var input = document.getElementById("qty-" + id);');
+            h.push('            var prevQty = parseInt(input && input.value, 10) || 0;');
+            h.push('            var currentQty = Math.max(0, prevQty + change);');
+            h.push('            if (currentQty > 20) { currentQty = 20; alert("單品數量上限為20"); }');
+            h.push('            if (input) input.value = currentQty;');
+            h.push('            if (currentQty === 0) { delete cart[id]; } else { cart[id] = currentQty; }');
+            h.push('            localStorage.setItem("poponew_cart", JSON.stringify(cart));');
+            h.push('            calculatePageTotal();');
+            h.push('            updateCartCount();');
+            h.push('            if (window.syncFlavorLightboxQty) window.syncFlavorLightboxQty();');
+            h.push('            // Meta Pixel');
+            h.push('            if (change > 0 && currentQty > prevQty && window.fbq) {');
+            h.push('                var added = currentQty - prevQty;');
+            h.push('                var pname = "";');
+            h.push('                if (window.products) {');
+            h.push('                    for (var pi = 0; pi < window.products.length; pi++) {');
+            h.push('                        if (String(window.products[pi].id) === String(id)) { pname = window.products[pi].name; break; }');
+            h.push('                    }');
+            h.push('                }');
+            h.push('                var unit = window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0, window.shopSaleLookup && window.shopSaleLookup[id]) : ((window.allProductsLookup && window.allProductsLookup[id]) || 0);');
+            h.push('                fbq("track", "AddToCart", { content_name: pname, value: unit * added, currency: "TWD" });');
+            h.push('            }');
+            h.push('        }');
             
             h.push('        function calculatePageTotal() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0, window.shopSaleLookup && window.shopSaleLookup[id]) : (window.allProductsLookup[id] || 0)) * cart[id]; } document.getElementById("entire-cart-total").innerText = entireCartTotal; var tipElement = document.getElementById("free-shipping-tip"); tipElement.innerText = window.shopShippingTip ? window.shopShippingTip(entireCartTotal, cfg.minOrder) : ("⚠️ 本商店最低結帳金額為 NT$ " + cfg.minOrder + " 元唷！"); var bulkTip = document.getElementById("bulk-order-tip"); if (bulkTip) { if (entireCartTotal > cfg.bulkOrder) { bulkTip.classList.remove("hidden"); bulkTip.innerText = "您的訂購數量較大，屬於大宗/企業訂單。為了保障您的權益與確認出貨檔期，請直接透過網站下方聯絡方式聯繫我們由專人為您服務！"; } else { bulkTip.classList.add("hidden"); bulkTip.innerText = ""; } } var codTip = document.getElementById("cod-limit-tip"); if (codTip) { if (entireCartTotal > cfg.codLimit) { codTip.classList.remove("hidden"); codTip.innerText = "單筆滿 NT$ " + cfg.codLimit.toLocaleString() + " 不提供貨到付款，結帳時請改用轉帳匯款。"; } else { codTip.classList.add("hidden"); codTip.innerText = ""; } } }'); 
             
-            h.push('        function saveToCartAndGo() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0, window.shopSaleLookup && window.shopSaleLookup[id]) : (window.allProductsLookup[id] || 0)) * cart[id]; } if (entireCartTotal === 0) { alert("您目前尚未選擇任何數量唷！"); return; } if (entireCartTotal < cfg.minOrder) { alert("再加購 NT$ " + Math.max(Math.ceil(cfg.minOrder - entireCartTotal), 1) + " 就能下單囉！😊\\n全店滿 NT$ " + cfg.minOrder + " 即可結帳，再多挑一樣小點心吧～"); return; } localStorage.setItem("poponew_cart", JSON.stringify(cart)); window.location.href = "cart.html"; }');
+            h.push('        function saveToCartAndGo() { var cfg = shop(); var entireCartTotal = 0; for (var id in cart) { entireCartTotal += (window.shopSalePrice ? window.shopSalePrice(window.allProductsLookup[id] || 0, window.shopSaleLookup && window.shopSaleLookup[id]) : (window.allProductsLookup[id] || 0)) * cart[id]; } if (entireCartTotal === 0) { alert("您目前尚未選擇任何數量唷！"); return; } if (entireCartTotal < cfg.minOrder) { alert("再加購 NT$ " + Math.max(Math.ceil(cfg.minOrder - entireCartTotal), 1) + " 就能下單囉！😊\\n全店滿 NT$ " + cfg.minOrder + " 即可結帳，再多挑一樣小點心吧～"); return; } localStorage.setItem("poponew_cart", JSON.stringify(cart));');
+            h.push('            // Meta Pixel');
+            h.push('            if (window.fbq) fbq("track", "InitiateCheckout", { value: entireCartTotal, currency: "TWD" });');
+            h.push('            window.location.href = "cart.html"; }');
             
             h.push('        function updateCartCount() { var count = 0; for (var id in cart) { count += cart[id]; } document.getElementById("cart-count").innerText = count; }');
             h.push('        calculatePageTotal(); updateCartCount();');
@@ -2036,6 +2091,7 @@ function buildKeepHtml(keepText) {
             h.push('        .keep-body .keep-mark { background-color: #fef3c7 !important; border-radius: 0.65rem; box-shadow: none; }');
             h.push('        .keep-body li.keep-mark { padding: 0.2rem 0.45rem; }');
             h.push('    <\/style>');
+            metaPixelLines().forEach(function(line) { h.push(line); });
             h.push('<\/head>');
             h.push('<body class="bg-stone-50 text-stone-800 font-sans min-h-screen pb-24">');
             h.push('    <div class="max-w-2xl mx-auto bg-white shadow-md md:rounded-2xl my-0 md:my-8">');
