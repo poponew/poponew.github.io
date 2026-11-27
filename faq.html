@@ -75,7 +75,7 @@
                 "name": "運費怎麼算？可以超商取貨嗎？",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "為了保持甜點的新鮮美味，全店一律使用低溫冷凍宅配，目前不提供超商取貨或常溫寄送。全店滿 NT$888 免運。滿 NT$499，運費只要 NT$80。未滿 NT$499，運費 NT$120。滿 NT$299 就能下單，小份量也能輕鬆嘗鮮。冷凍運費約 NT$160，我們幫您分擔一部分。"
+                    "text": "為了保持甜點的新鮮美味，全店一律使用低溫冷凍宅配，目前不提供超商取貨或常溫寄送。全店滿 NT$888 免運。滿 NT$499，運費只要 NT$80。未滿 NT$499，運費 NT$120。滿 NT$299 就能下單，小份量也能輕鬆嘗鮮。冷凍宅配運費我們幫您分擔一部分：未滿 NT$499 為 NT$120，滿 NT$499 降為 NT$80，滿 NT$888 免運。目前僅配送本島，不寄離島。"
                 }
             },
             {
@@ -263,7 +263,7 @@ src="https://www.facebook.com/tr?id=1111093081976670&ev=PageView&noscript=1"
                             <li>・未滿 <b>NT$499</b>，運費 <b>NT$120</b></li>
                         </ul>
                         <p class="mt-3">滿 <b data-shop="minOrderPlain">NT$299</b> 就能下單，小份量也能輕鬆嘗鮮 😊</p>
-                        <p class="mt-2">冷凍運費約 <b>NT$160</b>，我們幫您分擔一部分 ❤️</p>
+                        <p class="mt-2">冷凍宅配運費我們幫您分擔一部分：未滿 <b data-shop="shipBaseCeiling">NT$499</b> 為 <b data-shop="shipBaseFee">NT$120</b>，滿 <b data-shop="shipMidMin">NT$499</b> 降為 <b data-shop="shipMidFee">NT$80</b>，滿 <b data-shop="freeMin">NT$888</b> 免運。目前僅配送本島，不寄離島。</p>
                     </div>
                 </details>
 
@@ -363,11 +363,23 @@ src="https://www.facebook.com/tr?id=1111093081976670&ev=PageView&noscript=1"
                     return "<li>・未滿 <b>" + moneyPlain(ceiling) + "</b>，運費 <b>" + moneyPlain(row.fee) + "</b></li>";
                 }).join("");
             }
+            var midTier = null;
+            var baseTier = null;
+            paid.forEach(function(row) {
+                if (row.min > 0 && !midTier) midTier = row;
+                if (row.min <= 0) baseTier = row;
+            });
+            if (!midTier) midTier = { min: 499, fee: 80 };
+            if (!baseTier) baseTier = { min: 0, fee: 120 };
             var map = {
                 freeMin: moneyPlain(freeMin),
                 minOrderPlain: moneyPlain(parseInt(s.minOrder, 10) || 299),
                 codLimitPlain: moneyPlain(parseInt(s.codLimit, 10) || 2000),
-                bulkOrderPlain: moneyPlain(parseInt(s.bulkOrder, 10) || 5000)
+                bulkOrderPlain: moneyPlain(parseInt(s.bulkOrder, 10) || 5000),
+                shipBaseCeiling: moneyPlain(midTier.min || freeMin),
+                shipBaseFee: moneyPlain(baseTier.fee),
+                shipMidMin: moneyPlain(midTier.min),
+                shipMidFee: moneyPlain(midTier.fee)
             };
             document.querySelectorAll("[data-shop]").forEach(function(el) {
                 var key = el.getAttribute("data-shop");

@@ -623,10 +623,22 @@ function ruleSyncFaqHtml(html) {
             var money = function(v) { return ruleMoney(v, false); };
             var vals = { freeMin: r.free, minOrderPlain: r.min, codLimitPlain: r.cod, bulkOrderPlain: r.bulk };
             if (r.free > 0) {
-                html = ruleReplaceCount(html, /(data-shop="(freeMin|minOrderPlain|codLimitPlain|bulkOrderPlain)">)NT\$[\d,]+(<\/b>)/g, function(m, a, key, b) {
-                    return a + money(vals[key]) + b;
-                }, 'faq.html 的規則數字', 4);
                 var paid = r.paid.slice().sort(function(a, b) { return b.min - a.min; });
+                var mid = null;
+                var base = null;
+                paid.forEach(function(row) {
+                    if (row.min > 0 && !mid) mid = row;
+                    if (row.min <= 0) base = row;
+                });
+                if (mid) {
+                    vals.shipBaseCeiling = mid.min;
+                    vals.shipMidMin = mid.min;
+                    vals.shipMidFee = mid.fee;
+                }
+                if (base) vals.shipBaseFee = base.fee;
+                html = ruleReplaceCount(html, /(data-shop="(freeMin|minOrderPlain|codLimitPlain|bulkOrderPlain|shipBaseCeiling|shipBaseFee|shipMidMin|shipMidFee)">)NT\$[\d,]+(<\/b>)/g, function(m, a, key, b) {
+                    return a + money(vals[key]) + b;
+                }, 'faq.html 的規則數字', 8);
                 var sentences = paid.map(function(row, i) {
                     if (row.min > 0) return '滿 ' + money(row.min) + '，運費只要 ' + money(row.fee) + '。';
                     return '未滿 ' + money(i > 0 ? paid[i - 1].min : r.free) + '，運費 ' + money(row.fee) + '。';
@@ -641,8 +653,11 @@ function ruleSyncFaqHtml(html) {
                     var tail = (inner.match(/\n([ \t]*)$/) || [0, ''])[1];
                     return a + eol + lis.map(function(l) { return liIndent + '<li>' + l + '</li>'; }).join(eol) + eol + tail + b;
                 }, 'faq.html 的運費分級清單', 1);
-                html = ruleReplaceCount(html, /(全店一律使用低溫冷凍宅配，目前不提供超商取貨或常溫寄送。)全店滿 NT\$[\d,]+ 免運。.*?小份量也能輕鬆嘗鮮。/, function(m, a) {
-                    return a + '全店滿 ' + money(r.free) + ' 免運。' + sentences.join('') + '滿 ' + money(r.min) + ' 就能下單，小份量也能輕鬆嘗鮮。';
+                html = ruleReplaceCount(html, /(全店一律使用低溫冷凍宅配，目前不提供超商取貨或常溫寄送。)全店滿 NT\$[\d,]+ 免運。.*?小份量也能輕鬆嘗鮮。(?:冷凍運費約 NT\$[\d,]+，我們幫您分擔一部分。|冷凍宅配運費我們幫您分擔一部分：未滿 NT\$[\d,]+ 為 NT\$[\d,]+，滿 NT\$[\d,]+ 降為 NT\$[\d,]+，滿 NT\$[\d,]+ 免運。目前僅配送本島，不寄離島。)?/, function(m, a) {
+                    var share = (mid && base)
+                        ? '冷凍宅配運費我們幫您分擔一部分：未滿 ' + money(mid.min) + ' 為 ' + money(base.fee) + '，滿 ' + money(mid.min) + ' 降為 ' + money(mid.fee) + '，滿 ' + money(r.free) + ' 免運。目前僅配送本島，不寄離島。'
+                        : '';
+                    return a + '全店滿 ' + money(r.free) + ' 免運。' + sentences.join('') + '滿 ' + money(r.min) + ' 就能下單，小份量也能輕鬆嘗鮮。' + share;
                 }, 'faq.html 結構化資料的運費說明', 1);
                 html = ruleReplaceCount(html, /(var freeMin = freeRow \? freeRow\.min : \(parseInt\(s\.freeShipping, 10\) \|\| )\d+(\);)/, function(m, a, b) {
                     return a + r.free + b;

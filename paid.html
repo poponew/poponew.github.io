@@ -72,6 +72,10 @@ src="https://www.facebook.com/tr?id=1111093081976670&ev=PageView&noscript=1"
             </div>
             <p id="done-repeat" class="hidden mt-3 text-xs text-stone-500 text-center">這筆訂單先前已回報過，不必再送一次。</p>
 
+            <div id="error-box" class="hidden mt-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm leading-relaxed">
+                <p>通知沒有送出成功，店家可能還沒收到。請再試一次，或透過 <a href="https://line.me/R/ti/p/@534euhut" target="_blank" rel="noopener noreferrer" class="font-semibold text-amber-800 underline underline-offset-2">官方 LINE @534euhut</a> 聯繫我們。</p>
+            </div>
+
             <form id="paid-form" class="mt-6 space-y-4" onsubmit="submitPaid(event)">
                 <div>
                     <label class="block text-sm font-medium text-stone-600 mb-1">訂單編號</label>
@@ -105,11 +109,13 @@ src="https://www.facebook.com/tr?id=1111093081976670&ev=PageView&noscript=1"
         var doneBox = document.getElementById("done-box");
         var doneRepeat = document.getElementById("done-repeat");
         var missingBox = document.getElementById("missing-box");
+        var errorBox = document.getElementById("error-box");
 
         function storageKey(id) { return "poponew_paid_" + id; }
         function showDone(repeat) {
             form.classList.add("hidden");
             missingBox.classList.add("hidden");
+            errorBox.classList.add("hidden");
             doneBox.classList.remove("hidden");
             if (repeat) doneRepeat.classList.remove("hidden");
         }
@@ -122,6 +128,35 @@ src="https://www.facebook.com/tr?id=1111093081976670&ev=PageView&noscript=1"
             document.getElementById("phone").value = phone;
             document.getElementById("last-five").value = lastFive;
             if (localStorage.getItem(storageKey(orderId))) showDone(true);
+        }
+
+
+        function isPaidBackendSuccess(respText) {
+            var rawText = String(respText || "").replace(/^﻿/, "").trim();
+            if (!rawText) return false;
+            if (rawText === "成功") return true;
+            try {
+                var data = JSON.parse(rawText);
+                if (!data || typeof data !== "object") return false;
+                if (data.ok === true || data.success === true) return true;
+                var result = String(data.result || data.status || "").toLowerCase();
+                if (result === "success" || result === "ok" || result === "true" || result === "成功") return true;
+            } catch (err) {}
+            return false;
+        }
+
+        function resetPaidButton() {
+            var btn = document.getElementById("paid-btn");
+            btn.disabled = false;
+            btn.innerText = "再試一次，通知店家";
+        }
+
+        function showPaidError() {
+            form.classList.remove("hidden");
+            doneBox.classList.add("hidden");
+            doneRepeat.classList.add("hidden");
+            errorBox.classList.remove("hidden");
+            resetPaidButton();
         }
 
         function submitPaid(event) {
@@ -140,22 +175,48 @@ src="https://www.facebook.com/tr?id=1111093081976670&ev=PageView&noscript=1"
             var btn = document.getElementById("paid-btn");
             btn.disabled = true;
             btn.innerText = "送出中...";
-            fetch(SHEET_WEB_APP, {
+            errorBox.classList.add("hidden");
+            var finished = false;
+            var controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+            var timeoutId = setTimeout(function() {
+                if (finished) return;
+                finished = true;
+                if (controller) controller.abort();
+                showPaidError();
+            }, 30000);
+            var fetchOpts = {
                 method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify({
                     action: "paid_notice",
                     order_id: id,
                     customer_phone: tel,
                     account_last_five: five
                 })
-            }).then(function() {
-                localStorage.setItem(storageKey(id), String(Date.now()));
-                showDone(false);
-            }).catch(function() {
-                localStorage.setItem(storageKey(id), String(Date.now()));
-                showDone(false);
+            };
+            if (controller) fetchOpts.signal = controller.signal;
+            fetch(SHEET_WEB_APP, fetchOpts)
+            .then(function(res) {
+                if (!res.ok) throw new Error("HTTP " + res.status);
+                return res.text();
+            })
+            .then(function(respText) {
+                if (finished) return;
+                finished = true;
+                clearTimeout(timeoutId);
+                if (isPaidBackendSuccess(respText)) {
+                    localStorage.setItem(storageKey(id), String(Date.now()));
+                    errorBox.classList.add("hidden");
+                    showDone(false);
+                } else {
+                    showPaidError();
+                }
+            })
+            .catch(function() {
+                if (finished) return;
+                finished = true;
+                clearTimeout(timeoutId);
+                showPaidError();
             });
         }
         let currentFontSize = parseInt(localStorage.getItem("poponew_font_size")) || 16;
