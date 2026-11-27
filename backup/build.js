@@ -321,12 +321,110 @@ function faviconLinkLines() {
             ];
         }
 
-function seoMetaLines(title, description, image) {
+function jpegDimensionsFromFile(filePath) {
+            if (typeof fs === 'undefined' || typeof fs.existsSync !== 'function') return null;
+            try {
+                if (!fs.existsSync(filePath)) return null;
+                var buf = fs.readFileSync(filePath);
+                if (!buf || buf.length < 10 || buf[0] !== 0xFF || buf[1] !== 0xD8) return null;
+                var i = 2;
+                while (i < buf.length - 8) {
+                    if (buf[i] !== 0xFF) { i++; continue; }
+                    var marker = buf[i + 1];
+                    if (marker === 0xC0 || marker === 0xC1 || marker === 0xC2) {
+                        var hh = (buf[i + 5] << 8) + buf[i + 6];
+                        var ww = (buf[i + 7] << 8) + buf[i + 8];
+                        if (ww > 0 && hh > 0) return { width: ww, height: hh };
+                        return null;
+                    }
+                    if (marker === 0xD8 || marker === 0xD9) { i += 2; continue; }
+                    var len = (buf[i + 2] << 8) + buf[i + 3];
+                    if (len < 2) break;
+                    i += 2 + len;
+                }
+            } catch (err) {}
+            return null;
+        }
+
+        var OG_SHARE_DIMS = {
+            'minimix': [1200, 630],
+            'msbg': [1200, 630],
+            'mcyobsk': [1024, 538],
+            'bcbsk': [1200, 630],
+            'blssb': [1024, 538],
+            'lmppbsk': [1024, 538],
+            'cklbsk': [1200, 630],
+            'hjbjbsk': [1200, 630],
+            'classbsk': [1200, 630],
+            'seggbsk': [1200, 630],
+            'lmptbsk': [1024, 538],
+            'nntbsk': [1030, 541],
+            'oreobsk': [1024, 538],
+            'mcbsk': [1024, 538],
+            'bltn': [1200, 630],
+            'bbegg': [1200, 630],
+            'mkroll': [1200, 630],
+            'lmck': [1200, 630],
+            'btck': [1200, 630],
+            'borch': [1024, 538],
+            'obbt': [1024, 538],
+            'lmoreo': [1200, 630],
+            'coal': [1200, 630],
+            'hijt': [1024, 538],
+            'oreoball': [1024, 538],
+            'ccsmj': [1024, 538],
+            'scone': [1200, 630],
+            'sscone': [1024, 538],
+            'sbltn': [1195, 627],
+            'blnball': [1200, 630],
+            'fnc': [1200, 630],
+            'Lotus': [1024, 538],
+            'rgapple': [1024, 538],
+            'oreocup': [1024, 538],
+            'xxmnb': [1024, 538],
+            'nyrlbdg': [1200, 630],
+            'bjcbdg': [1200, 630],
+            'mscone': [1200, 630],
+            'qklbdg': [1200, 630],
+            'qklbln': [1200, 630],
+            'ggbdg': [1200, 630]
+        };
+
+        function productOgShare(pageUrl) {
+            var slug = String(pageUrl || '').replace(/\\/g, '/').split('/').pop().replace(/\.html?$/i, '');
+            if (!slug) return null;
+            var rel = 'images/og/' + slug + '.jpg';
+            var dim = null;
+            var hasFs = (typeof fs !== 'undefined' && typeof fs.existsSync === 'function' && typeof path !== 'undefined' && typeof __dirname !== 'undefined');
+            if (hasFs) {
+                var outDir = path.basename(__dirname).toLowerCase() === 'backup' ? path.join(__dirname, '..') : __dirname;
+                var ogPath = path.join(outDir, rel);
+                if (!fs.existsSync(ogPath)) return null;
+                dim = jpegDimensionsFromFile(ogPath);
+                if (!dim && OG_SHARE_DIMS[slug]) dim = { width: OG_SHARE_DIMS[slug][0], height: OG_SHARE_DIMS[slug][1] };
+                if (!dim) return null;
+                return { rel: rel, width: dim.width, height: dim.height };
+            }
+            if (!OG_SHARE_DIMS[slug]) return null;
+            return { rel: rel, width: OG_SHARE_DIMS[slug][0], height: OG_SHARE_DIMS[slug][1] };
+        }
+
+        function seoMetaLines(title, description, image, pageUrl) {
             var t = escapeAttr(title);
             var d = escapeAttr(description);
             var imgRaw = String(image || 'images/scone.webp');
-            if (!/og-image\.jpe?g(\?.*)?$/i.test(imgRaw)) {
-                imgRaw = imgRaw.replace(/\.jpe?g(\?.*)?$/i, '.webp$1');
+            var shareW = 0;
+            var shareH = 0;
+            var isBrandOg = /(?:^|\/)og-image\.jpe?g(\?.*)?$/i.test(imgRaw);
+            if (!isBrandOg) {
+                var share = productOgShare(pageUrl);
+                if (share) {
+                    imgRaw = share.rel;
+                    shareW = share.width;
+                    shareH = share.height;
+                } else if (!/\.webp(\?.*)?$/i.test(imgRaw) && !/images\/og\/.+\.jpe?g(\?.*)?$/i.test(imgRaw)) {
+                    imgRaw = imgRaw.replace(/\.jpe?g(\?.*)?$/i, '.webp$1');
+                }
             }
             if (!/^https?:\/\//i.test(imgRaw)) imgRaw = siteAbsUrl(imgRaw);
             var img = escapeAttr(imgRaw);
@@ -340,11 +438,15 @@ function seoMetaLines(title, description, image) {
                 '    <meta property="og:description" content="' + d + '">',
                 '    <meta property="og:image" content="' + img + '">'
             ];
-            if (/og-image\.jpe?g(\?.*)?$/i.test(imgRaw)) {
+            if (isBrandOg) {
                 lines.push('    <meta property="og:image:width" content="1200">');
                 lines.push('    <meta property="og:image:height" content="630">');
+            } else if (shareW && shareH) {
+                lines.push('    <meta property="og:image:width" content="' + shareW + '">');
+                lines.push('    <meta property="og:image:height" content="' + shareH + '">');
             }
             lines.push('    <meta name="twitter:card" content="summary_large_image">');
+            lines.push('    <meta name="twitter:image" content="' + img + '">');
             return lines;
         }
 
@@ -1720,7 +1822,7 @@ function buildSinglePageText(groupName, url, img, desc, items, allPriceItems, ta
             h.push('    <meta name="viewport" content="width=device-width, initial-scale=1.0">');
             gaTagLines().forEach(function(line) { h.push(line); });
             h.push('    <title>' + pageTitle + '<\/title>');
-            seoMetaLines(pageTitle, pageDesc, img).forEach(function(line) { h.push(line); });
+            seoMetaLines(pageTitle, pageDesc, img, url).forEach(function(line) { h.push(line); });
             faviconLinkLines().forEach(function(line) { h.push(line); });
             h.push('    <link rel="stylesheet" href="css/tailwind.css">');
             h.push('    <script src="js/shop-settings.js"><\/script>');
